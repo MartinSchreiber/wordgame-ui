@@ -20,5 +20,4 @@ fun main() = application {
     Window(onCloseRequest = ::exitApplication) {
         WordGame(wordGame = wordGame)
     }
-    backgroundJob.cancel(null)
 }

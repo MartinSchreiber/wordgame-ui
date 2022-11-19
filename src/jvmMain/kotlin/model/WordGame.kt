@@ -17,7 +17,7 @@ class WordGame(
     private val specialLetters = Util.getSpecialLetters(language)
 
     val enemiesOnField: SnapshotStateList<Enemy> = mutableStateListOf()
-    val wordQueue = WordQueue()
+    val mutableStateQueue = MutableStateQueue<Word>()
     val wordsTyped: SnapshotStateList<Word> = mutableStateListOf()
     val wordInput = mutableStateOf("")
     val letterChambers = LetterChambers(TOTAL_LETTER_CHAMBERS, OPEN_LETTER_CHAMBERS, specialLetters)
@@ -27,12 +27,12 @@ class WordGame(
             if (wordInput.value.length >= letterChambers.opened.value) {
                 letterChambers.open()
             }
-            clearInput()
-
             val word = buildWord()
 
-            wordQueue.add(word)
+            mutableStateQueue.add(word)
             wordsTyped.add(word)
+
+            clearInput()
 
             //TODO outsource to Logger
             val values = word.letters.map { it.value }

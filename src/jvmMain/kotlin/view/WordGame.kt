@@ -41,7 +41,7 @@ fun WordGame(wordGame: WordGame) {
                 }
             }
             Row {
-                WordQueue(wordGame.wordQueue.getMutableStateList())
+                WordQueue(wordGame.mutableStateQueue.toMutableStateList())
             }
             Row {
                 WordInput(wordGame.wordInput) { ev -> hotkeys(wordGame, ev) }

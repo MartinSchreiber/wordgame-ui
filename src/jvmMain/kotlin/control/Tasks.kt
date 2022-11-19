@@ -15,7 +15,7 @@ suspend fun backgroundTasks(wordGame: WordGame) {
         enemies = wordGame.enemiesOnField
     )
     fireLetters(
-        queue = wordGame.wordQueue,
+        queue = wordGame.mutableStateQueue.toMutableStateList(),
         enemiesOnField = wordGame.enemiesOnField,
         chambers = wordGame.letterChambers
     )
@@ -30,10 +30,10 @@ suspend fun spawnEnemies(enemiesIncoming: MutableList<Enemy>, enemiesOnField: Sn
         //TODO implement
     }
 
-suspend fun fireLetters(queue: WordQueue, enemiesOnField: SnapshotStateList<Enemy>, chambers: LetterChambers) = coroutineScope {
+suspend fun fireLetters(queue: SnapshotStateList<Word>, enemiesOnField: SnapshotStateList<Enemy>, chambers: LetterChambers) = coroutineScope {
     while(true) {
         if (queue.isNotEmpty()) { // && enemiesOnField.isNotEmpty()
-            queue.remove().letters.forEach {
+            queue.removeFirst().letters.forEach {
 
 
                 //TODO implement damage first enemy in line

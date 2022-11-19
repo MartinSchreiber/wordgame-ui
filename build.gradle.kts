@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "de.schreiber"
-version = "0.0.1"
+version = "1.0.0"
 
 repositories {
     google()
@@ -37,7 +37,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "wordgame-ui"
-            packageVersion = "0.0.1"
+            packageVersion = "1.0.0"
         }
     }
 }
