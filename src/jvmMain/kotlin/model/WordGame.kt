@@ -24,9 +24,6 @@ class WordGame(
 
     fun addWord(): Boolean {
         return if (wordInput.value.isNotBlank() && validWords.contains(wordInput.value.uppercase())) {
-            if (wordInput.value.length >= letterChambers.opened.value) {
-                letterChambers.open()
-            }
             val word = buildWord()
 
             mutableStateQueue.add(word)
@@ -37,7 +34,7 @@ class WordGame(
             //TODO outsource to Logger
             val values = word.letters.map { it.value }
             println("$word is a ${word.getTotalValue()} point word ")
-            println("${values.joinToString("+")} +  = ${word.getTotalValue()}")
+            println("${values.joinToString("+")} = ${word.getTotalValue()}")
 
             true
         } else {
@@ -55,13 +52,13 @@ class WordGame(
                 .let { specialLetter ->
                     if (specialLetter != null) {
                         openSpecials.remove(specialLetter)
-                        letterChambers.removeLetters(listOf(specialLetter))
                         specialLetter
                     } else {
                         Letter(letter = char, value = letterValues[char]!!)
                     }
                 }
         }
+        letterChambers.remove(letters)
 
         return Word(letters)
     }

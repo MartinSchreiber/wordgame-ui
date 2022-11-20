@@ -1,6 +1,7 @@
 package util
 
 import constants.Language
+import constants.LetterType
 import constants.LettersEng
 import constants.LettersGer
 import model.Letter
@@ -9,19 +10,6 @@ import kotlin.system.measureTimeMillis
 
 class Util {
     companion object {
-        fun getKeyCodeToCharMap(): Map<Long, Char> {
-            //return (97..122).associate { getKeyCode(it) to Char(it) }
-            return (65..90).associate { getKeyCode(it) to Char(it) }
-        }
-
-        fun getKeyCode(nativeKeyCode: Int) : Long {
-            // First 32 bits are for keycode.
-            val keyCode = nativeKeyCode.toLong().shl(32)
-
-            // Next 3 bits are for location.
-            val location = (java.awt.event.KeyEvent.KEY_LOCATION_STANDARD.toLong() and 0x7).shl(29)
-            return keyCode or location
-        }
 
         fun importWords(language: Language = Language.ENGLISH): Set<String> {
             val words = mutableSetOf<String>()
@@ -61,11 +49,32 @@ class Util {
             letters.forEach {
                 val pickCount = 8 / it.first
                 for (i in 1..pickCount) {
-                    specialLetters.add(Letter(it.second.random(), it.first))
+                    specialLetters.add(
+                        Letter(
+                            letter = it.second.random(),
+                            value = it.first,
+                            type = LetterType.STRONGER,
+                            specialValue = 5.0
+                        )
+                    )
                 }
             }
 
             return specialLetters
         }
+
+        fun getKeyCode(nativeKeyCode: Int): Long {
+            // First 32 bits are for keycode.
+            val keyCode = nativeKeyCode.toLong().shl(32)
+
+            // Next 3 bits are for location.
+            val location = (java.awt.event.KeyEvent.KEY_LOCATION_STANDARD.toLong() and 0x7).shl(29)
+            return keyCode or location
+        }
+
+//        fun getKeyCodeToCharMap(): Map<Long, Char> {
+//            //return (97..122).associate { getKeyCode(it) to Char(it) }
+//            return (65..90).associate { getKeyCode(it) to Char(it) }
+//        }
     }
 }

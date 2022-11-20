@@ -24,5 +24,5 @@ fun WordQueue(queue: SnapshotStateList<Word>) {
 
 @Composable
 fun Word(word: Word) {
-    Text(text = word.toString())
+    Text(text = "-$word-")
 }

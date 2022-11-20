@@ -2,7 +2,12 @@ package constants
 
 import util.Util
 
-enum class LettersGer(val letter: Char, val value: Int, val count: Int, val keyEventCode: Long = Util.getKeyCode(letter.code)) {
+enum class LettersGer(
+    val letter: Char,
+    val value: Int,
+    val count: Int,
+    val keyEventCode: Long = Util.getKeyCode(letter.code)
+) {
     A('A', 1, 5),
     B('B', 3, 2),
     C('C', 4, 2),

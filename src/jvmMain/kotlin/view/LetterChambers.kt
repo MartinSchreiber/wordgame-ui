@@ -18,7 +18,7 @@ Row {
 @Composable
 fun LetterChamber(letter: Letter, open: Boolean) {
     if(open) {
-        Text(text = letter.letter.toString())
+        Text(text = letter.toString())
     }
     else {
         Text(text = "?")

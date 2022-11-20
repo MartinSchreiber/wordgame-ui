@@ -30,8 +30,12 @@ suspend fun spawnEnemies(enemiesIncoming: MutableList<Enemy>, enemiesOnField: Sn
         //TODO implement
     }
 
-suspend fun fireLetters(queue: SnapshotStateList<Word>, enemiesOnField: SnapshotStateList<Enemy>, chambers: LetterChambers) = coroutineScope {
-    while(true) {
+suspend fun fireLetters(
+    queue: SnapshotStateList<Word>,
+    enemiesOnField: SnapshotStateList<Enemy>,
+    chambers: LetterChambers
+) = coroutineScope {
+    while (true) {
         if (queue.isNotEmpty()) { // && enemiesOnField.isNotEmpty()
             queue.removeFirst().letters.forEach {
 

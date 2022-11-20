@@ -10,8 +10,8 @@ class Word(val letters: List<Letter>) {
         letters.forEach {
             when (it.type) {
                 LetterType.BASIC -> total += it.value
-                LetterType.MULTIPLY -> multi *= it.specialValue
                 LetterType.STRONGER -> total += it.value + it.specialValue
+                LetterType.MULTIPLY -> multi *= it.specialValue
             }
         }
 
@@ -19,6 +19,6 @@ class Word(val letters: List<Letter>) {
     }
 
     override fun toString(): String {
-        return letters.map { it.letter }.joinToString("")
+        return letters.joinToString("")
     }
 }

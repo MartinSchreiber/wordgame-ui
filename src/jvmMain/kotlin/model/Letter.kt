@@ -7,4 +7,12 @@ data class Letter(
     val value: Int = 1,
     val type: LetterType = LetterType.BASIC,
     val specialValue: Double = 0.0
-)
+) {
+    override fun toString(): String {
+        return when(type) {
+            LetterType.BASIC -> "($letter)"
+            LetterType.STRONGER -> "[$letter]"
+            LetterType.MULTIPLY -> "{$letter}"
+        }
+    }
+}
