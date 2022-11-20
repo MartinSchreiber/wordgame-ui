@@ -9,6 +9,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.*
 import model.WordGame
 
+//val keyCodes = Util.getKeyCodeToCharMap()
 //TODO generativ erzeugen? Das wär cool
 @OptIn(ExperimentalComposeUiApi::class)
 val hotkeys = { wordGame: WordGame, ev: KeyEvent ->
@@ -23,6 +24,12 @@ val hotkeys = { wordGame: WordGame, ev: KeyEvent ->
             true
         }
 
+//        (keyCodes.keys.contains(ev.key.keyCode) && ev.type == KeyEventType.KeyDown) -> {
+////            wordGame.type(keyCodes[ev.key.keyCode]!!)
+//            println(keyCodes[ev.key.keyCode])
+//            true
+//        }
+
         else -> false
     }
 }
@@ -32,6 +39,7 @@ val hotkeys = { wordGame: WordGame, ev: KeyEvent ->
 fun WordGame(wordGame: WordGame) {
     MaterialTheme {
         Column {
+            LetterChambers(wordGame.letterChambers)
             Row {
                 Column {
                     WordsTyped(wordGame.wordsTyped)

@@ -6,7 +6,6 @@ import kotlinx.coroutines.launch
 import model.WordGame
 import view.WordGame
 
-
 //TODO implement menu, boiler etc.
 fun main() = application {
     val scope = rememberCoroutineScope()

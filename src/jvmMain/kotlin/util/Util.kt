@@ -1,14 +1,28 @@
 package util
 
-import model.Letter
 import constants.Language
 import constants.LettersEng
 import constants.LettersGer
+import model.Letter
 import java.io.File
 import kotlin.system.measureTimeMillis
 
 class Util {
     companion object {
+        fun getKeyCodeToCharMap(): Map<Long, Char> {
+            //return (97..122).associate { getKeyCode(it) to Char(it) }
+            return (65..90).associate { getKeyCode(it) to Char(it) }
+        }
+
+        fun getKeyCode(nativeKeyCode: Int) : Long {
+            // First 32 bits are for keycode.
+            val keyCode = nativeKeyCode.toLong().shl(32)
+
+            // Next 3 bits are for location.
+            val location = (java.awt.event.KeyEvent.KEY_LOCATION_STANDARD.toLong() and 0x7).shl(29)
+            return keyCode or location
+        }
+
         fun importWords(language: Language = Language.ENGLISH): Set<String> {
             val words = mutableSetOf<String>()
 
@@ -17,7 +31,7 @@ class Util {
                 words.addAll(inputStream
                     .bufferedReader()
                     .lineSequence()
-                    .map { it.lowercase() }) //TODO convert files and everything to uppercase
+                    .map { it.uppercase() }) //TODO convert files and everything to uppercase
             }
 
             println("${words.size} words imported in $time ms")

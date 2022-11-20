@@ -23,7 +23,7 @@ class WordGame(
     val letterChambers = LetterChambers(TOTAL_LETTER_CHAMBERS, OPEN_LETTER_CHAMBERS, specialLetters)
 
     fun addWord(): Boolean {
-        return if (wordInput.value.isNotBlank() && validWords.contains(wordInput.value)) {
+        return if (wordInput.value.isNotBlank() && validWords.contains(wordInput.value.uppercase())) {
             if (wordInput.value.length >= letterChambers.opened.value) {
                 letterChambers.open()
             }
@@ -36,7 +36,7 @@ class WordGame(
 
             //TODO outsource to Logger
             val values = word.letters.map { it.value }
-            println("${wordInput.value} is a ${word.getTotalValue()} point word ")
+            println("$word is a ${word.getTotalValue()} point word ")
             println("${values.joinToString("+")} +  = ${word.getTotalValue()}")
 
             true
@@ -49,7 +49,7 @@ class WordGame(
     //TODO use letters from open chambers if possible
     private fun buildWord(): Word {
         val openSpecials = letterChambers.getOpenLetters()
-        val letters = wordInput.value.map { char ->
+        val letters = wordInput.value.uppercase().map { char ->
             openSpecials
                 .firstOrNull { it.letter == char }
                 .let { specialLetter ->
@@ -64,6 +64,10 @@ class WordGame(
         }
 
         return Word(letters)
+    }
+
+    fun type(char: Char) {
+        wordInput.value = wordInput.value + char
     }
 
     fun clearInput() {
