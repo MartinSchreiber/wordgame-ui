@@ -18,8 +18,7 @@ class Util {
                 val inputStream = File(language.file).inputStream()
                 words.addAll(inputStream
                     .bufferedReader()
-                    .lineSequence()
-                    .map { it.uppercase() }) //TODO convert files and everything to uppercase
+                    .lineSequence())
             }
 
             println("${words.size} words imported in $time ms")
