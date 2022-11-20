@@ -22,18 +22,16 @@ class LetterChambers(val visible: Int, opened: Int, letters: List<Letter>) {
     }
 
     fun remove(letters: List<Letter>) {
-        val chambersToRemove = chambers.filter { it.open && letters.contains(it.letter) }.toMutableList()
-        //TODO ordentlich machen und verhindern, dass alle Instanzen des Buchstabens gelöscht werden
-        val openNextChamber = opened.value < visible && chambersToRemove.size == opened.value
-        chambers.filter { it.open }.forEach {
-            if (chambersToRemove.contains(it)) {
-                chambers.remove(it)
-                chambersToRemove.remove(it)
-                open()
-            }
+        val removeInd = letters
+            .map { letter -> chambers.indexOfFirst { it.open && it.letter == letter } }
+            .filter { it >= 0 }.sortedDescending()
+
+        removeInd.forEach {
+            chambers.removeAt(it)
+            open()
         }
 
-        if (openNextChamber) {
+        if (opened.value < visible && removeInd.size >= opened.value) {
             opened.value += 1
             open()
         }
