@@ -8,6 +8,7 @@ data class Letter(
     val type: LetterType = LetterType.BASIC,
     val specialValue: Double = 0.0
 ) {
+    var totalValue: Double = value.toDouble()
     override fun toString(): String {
         return when(type) {
             LetterType.BASIC -> "($letter)"

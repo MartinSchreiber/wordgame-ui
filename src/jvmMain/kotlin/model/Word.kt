@@ -18,6 +18,20 @@ class Word(val letters: List<Letter>) {
         return total * multi
     }
 
+    private fun setTotalValues() {
+        val multi = letters
+            .filter { it.type == LetterType.MULTIPLY }
+            .map { it.specialValue }
+            .fold(1.0) { f1, f2 -> f1 * f2 }
+
+        letters.forEach {
+            when (it.type) {
+                LetterType.STRONGER -> it.totalValue = (it.value + it.specialValue) * multi
+                else -> it.totalValue = it.value * multi
+            }
+        }
+    }
+
     override fun toString(): String {
         return letters.joinToString("")
     }

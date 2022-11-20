@@ -10,7 +10,7 @@ import androidx.compose.ui.input.key.*
 import model.WordGame
 
 //val keyCodes = Util.getKeyCodeToCharMap()
-//TODO generativ erzeugen? Das wär cool
+//TODO generativ erzeugen? Das wär cool (also move back into WordInput)
 @OptIn(ExperimentalComposeUiApi::class)
 val hotkeys = { wordGame: WordGame, ev: KeyEvent ->
     when {
