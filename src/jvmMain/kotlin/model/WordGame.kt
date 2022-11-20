@@ -1,11 +1,11 @@
 package model
 
-import util.Util
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import constants.Language
 import util.Logger
+import util.Util
 
 class WordGame(
     language: Language = Language.ENGLISH,
@@ -23,7 +23,8 @@ class WordGame(
     val letterChambers = LetterChambers(TOTAL_LETTER_CHAMBERS, OPEN_LETTER_CHAMBERS, specialLetters)
 
     fun addWord(): Boolean {
-        return if (wordInput.value.isNotBlank() && validWords.contains(wordInput.value.uppercase())) {
+        wordInput.value = wordInput.value.uppercase()
+        return if (wordInput.value.isNotBlank() && validWords.contains(wordInput.value)) {
             val word = buildWord()
 
             mutableStateQueue.add(word)
@@ -31,22 +32,17 @@ class WordGame(
 
             clearInput()
 
-            //TODO outsource to Logger
-            val values = word.letters.map { it.value }
-            println("$word is a ${word.getTotalValue()} point word ")
-            println("${values.joinToString("+")} = ${word.getTotalValue()}")
-
+            LOGGER.log(word)
             true
         } else {
-            println("${wordInput.value} is not a word")
+            LOGGER.logWordFailure(wordInput.value)
             false
         }
     }
 
-    //TODO use letters from open chambers if possible
     private fun buildWord(): Word {
         val openSpecials = letterChambers.getOpenLetters()
-        val letters = wordInput.value.uppercase().map { char ->
+        val letters = wordInput.value.map { char ->
             openSpecials
                 .firstOrNull { it.letter == char }
                 .let { specialLetter ->
@@ -63,6 +59,7 @@ class WordGame(
         return Word(letters)
     }
 
+    //TODO implement dynamic letter-by-letter display (second field?)
     fun type(char: Char) {
         wordInput.value = wordInput.value + char
     }
@@ -79,6 +76,4 @@ class WordGame(
         const val TOTAL_LETTER_CHAMBERS = 10
         const val OPEN_LETTER_CHAMBERS = 1
     }
-
-    //TODO: create model.view.Word from Input (with potential special letters from list), Fill word list, empty wordlist (but log typed words)
 }

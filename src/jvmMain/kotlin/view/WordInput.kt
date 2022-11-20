@@ -10,7 +10,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 
-//TODO stylen
+//TODO style
 @Composable
 fun WordInput(
     text: MutableState<String>, onKeyEvent: (KeyEvent) -> Boolean

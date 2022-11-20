@@ -1,5 +1,15 @@
 package util
 
+import model.Word
+
 class Logger {
-    //TODO methods to write parameters of functions to the console/log file
+    fun log(word: Word) {
+        val values = word.letters.map { it.value }
+        println("$word is a ${word.getTotalValue()} point word ")
+        println("${values.joinToString("+")} = ${word.getTotalValue()}")
+    }
+
+    fun logWordFailure(input: String) {
+        println("$input is not a word")
+    }
 }
