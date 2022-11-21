@@ -3,7 +3,10 @@ package control
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import model.*
+import model.Enemy
+import model.LetterChambers
+import model.Word
+import model.WordGame
 
 
 suspend fun backgroundTasks(wordGame: WordGame) {
@@ -15,7 +18,7 @@ suspend fun backgroundTasks(wordGame: WordGame) {
         enemies = wordGame.enemiesOnField
     )
     fireLetters(
-        queue = wordGame.mutableStateQueue.toMutableStateList(),
+        queue = wordGame.wordQueue.toMutableStateList(),
         enemiesOnField = wordGame.enemiesOnField,
         chambers = wordGame.letterChambers
     )

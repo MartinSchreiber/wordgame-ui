@@ -15,57 +15,67 @@ class WordGame(
     private val validWords = Util.importWords(language)
     private val letterValues = Util.getLetterValues(language)
     private val specialLetters = Util.getSpecialLetters(language)
+    private val lettersBorrowed = mutableListOf<Pair<Letter, Int>>()
 
     val enemiesOnField: SnapshotStateList<Enemy> = mutableStateListOf()
-    val mutableStateQueue = MutableStateQueue<Word>()
+    val wordQueue = MutableStateQueue<Word>()
     val wordsTyped: SnapshotStateList<Word> = mutableStateListOf()
-    val wordInput = mutableStateOf("")
+    val textInput = mutableStateOf("")
+    val wordInput = mutableStateOf(Word())
     val letterChambers = LetterChambers(TOTAL_LETTER_CHAMBERS, OPEN_LETTER_CHAMBERS, specialLetters)
 
+    fun updateWord(text: String) {
+        textInput.value = text
+
+        if (text.length < wordInput.value.size()) {
+            val removedLetter = wordInput.value.removeLetter()
+            lettersBorrowed.forEach {
+                if (it.first == removedLetter) {
+                    letterChambers.returnLetters(listOf(it))
+                    lettersBorrowed.remove(it)
+                }
+            }
+        } else if (text.length > wordInput.value.size()) {
+            val addedChar = text.last().uppercaseChar()
+
+            val specialLetter = letterChambers.borrowLetter(addedChar)
+            specialLetter?.let { lettersBorrowed.add(it) }
+
+            val addedLetter: Letter = specialLetter?.first ?: Letter(
+                letter = addedChar,
+                value = letterValues[addedChar]!!
+            )
+
+            wordInput.value.addLetter(addedLetter)
+        }
+    }
+
     fun addWord(): Boolean {
-        wordInput.value = wordInput.value.uppercase()
-        return if (wordInput.value.isNotBlank() && validWords.contains(wordInput.value)) {
-            val word = buildWord()
+        textInput.value = textInput.value.uppercase()
+        return if (textInput.value.isNotBlank() && validWords.contains(textInput.value)) {
 
-            mutableStateQueue.add(word)
-            wordsTyped.add(word)
+            wordQueue.add(wordInput.value)
+            wordsTyped.add(wordInput.value)
+            letterChambers.remove(lettersBorrowed.map { it.second })
 
-            clearInput()
+            LOGGER.log(wordInput.value)
+            clearInput(false)
 
-            LOGGER.log(word)
             true
         } else {
-            LOGGER.logWordFailure(wordInput.value)
+            LOGGER.logWordFailure(textInput.value)
             false
         }
     }
 
-    private fun buildWord(): Word {
-        val openSpecials = letterChambers.getOpenLetters()
-        val letters = wordInput.value.map { char ->
-            openSpecials
-                .firstOrNull { it.letter == char }
-                .let { specialLetter ->
-                    if (specialLetter != null) {
-                        openSpecials.remove(specialLetter)
-                        specialLetter
-                    } else {
-                        Letter(letter = char, value = letterValues[char]!!)
-                    }
-                }
+    fun clearInput(returnBorrowed: Boolean = true) {
+        textInput.value = ""
+        wordInput.value = Word()
+
+        if (returnBorrowed) {
+            letterChambers.returnLetters(lettersBorrowed)
         }
-        letterChambers.remove(letters)
-
-        return Word(letters)
-    }
-
-    //TODO implement dynamic letter-by-letter display (second field?)
-    fun type(char: Char) {
-        wordInput.value = wordInput.value + char
-    }
-
-    fun clearInput() {
-        wordInput.value = ""
+        lettersBorrowed.clear()
     }
 
     fun isOver(): Boolean = enemiesIncoming.isEmpty() && enemiesOnField.isEmpty()
@@ -73,6 +83,7 @@ class WordGame(
     companion object {
         val LOGGER = Logger()
         val DEFAULT_INCOMING_ENEMIES = listOf<Enemy>()
+
         const val TOTAL_LETTER_CHAMBERS = 10
         const val OPEN_LETTER_CHAMBERS = 1
     }

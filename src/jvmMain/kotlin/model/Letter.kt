@@ -10,10 +10,14 @@ data class Letter(
 ) {
     var totalValue: Double = value.toDouble()
     override fun toString(): String {
-        return when(type) {
+        return when (type) {
             LetterType.BASIC -> "($letter)"
             LetterType.STRONGER -> "[$letter]"
             LetterType.MULTIPLY -> "{$letter}"
         }
+    }
+
+    fun resetTotalValue() {
+        totalValue = value.toDouble()
     }
 }

@@ -16,11 +16,10 @@ Row {
 }
 
 @Composable
-fun LetterChamber(letter: Letter, open: Boolean) {
-    if(open) {
-        Text(text = letter.toString())
-    }
-    else {
+fun LetterChamber(letter: Letter?, open: Boolean) {
+    if (open) {
+        Text(text = letter?.toString() ?: "=") //TODO why are the "empty" chambers not rendered?
+    } else {
         Text(text = "?")
     }
 }

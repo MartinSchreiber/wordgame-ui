@@ -2,34 +2,28 @@ package model
 
 import constants.LetterType
 
-class Word(val letters: List<Letter>) {
-    fun getTotalValue(): Double {
-        var total = 0.0
-        var multi = 1.0
-
-        letters.forEach {
-            when (it.type) {
-                LetterType.BASIC -> total += it.value
-                LetterType.STRONGER -> total += it.value + it.specialValue
-                LetterType.MULTIPLY -> multi *= it.specialValue
-            }
-        }
-
-        return total * multi
+class Word(val letters: MutableList<Letter> = mutableListOf()) {
+    fun size(): Int {
+        return letters.size
     }
 
-    private fun setTotalValues() {
-        val multi = letters
-            .filter { it.type == LetterType.MULTIPLY }
-            .map { it.specialValue }
-            .fold(1.0) { f1, f2 -> f1 * f2 }
+    fun getTotalValue(): Double {
+        return letters.sumOf { it.totalValue }
+    }
 
-        letters.forEach {
-            when (it.type) {
-                LetterType.STRONGER -> it.totalValue = (it.value + it.specialValue) * multi
-                else -> it.totalValue = it.value * multi
-            }
-        }
+    fun addLetter(letter: Letter) {
+        letters.add(letter)
+        letters
+            .takeIf { letter.type == LetterType.MULTIPLY }
+            ?.forEach { it.totalValue *= letter.specialValue }
+    }
+
+    fun removeLetter(): Letter {
+        val removedLetter = letters.removeLast()
+        letters
+            .takeIf { removedLetter.type == LetterType.MULTIPLY }
+            ?.forEach { it.totalValue /= removedLetter.specialValue }
+        return removedLetter
     }
 
     override fun toString(): String {

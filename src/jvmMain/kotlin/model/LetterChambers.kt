@@ -4,9 +4,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import constants.LetterType
 
-class LetterChambers(val visible: Int, opened: Int, letters: List<Letter>) {
+class LetterChambers(private val visible: Int, opened: Int, letters: List<Letter>) {
 
-    val opened = mutableStateOf(opened)
+    private val opened = mutableStateOf(opened)
     val chambers = letters
         .shuffled()
         .mapIndexed { index, letter -> Chamber(letter, index < opened) }
@@ -21,29 +21,41 @@ class LetterChambers(val visible: Int, opened: Int, letters: List<Letter>) {
         }
     }
 
-    fun remove(letters: List<Letter>) {
-        val removeInd = letters
-            .map { letter -> chambers.indexOfFirst { it.open && it.letter == letter } }
-            .filter { it >= 0 }.sortedDescending()
+    fun remove(indices: List<Int>) {
+        indices
+            .filter { it >= 0 }
+            .sortedDescending()
+            .forEach {
+                chambers.removeAt(it)
+                open()
+            }
 
-        removeInd.forEach {
-            chambers.removeAt(it)
-            open()
-        }
-
-        if (opened.value < visible && removeInd.size >= opened.value) {
+        if (opened.value < visible && indices.size >= opened.value) {
             opened.value += 1
             open()
         }
     }
 
-    fun loadLetters(letters: List<Letter>) {
-        chambers.addAll(letters.filter { it.type != LetterType.BASIC }.map { Chamber(it) })
+    fun borrowLetter(char: Char): Pair<Letter, Int>? {
+        chambers.forEachIndexed { ind, chamber ->
+            if (chamber.open && chamber.letter != null && chamber.letter!!.letter == char) {
+                val retVal = Pair(chamber.letter!!, ind)
+                chamber.letter = null
+                return retVal
+            }
+        }
+        return null
     }
 
-    fun getOpenLetters(): MutableList<Letter> {
-        return chambers.filter { it.open }.map { it.letter }.toMutableList()
+    fun returnLetters(letters: List<Pair<Letter, Int>>) {
+        letters.forEach { chambers[it.second].letter = it.first }
+    }
+
+    fun loadLetters(letters: List<Letter>) {
+        letters.forEach { it.resetTotalValue() }
+
+        chambers.addAll(letters.filter { it.type != LetterType.BASIC }.map { Chamber(it) })
     }
 }
 
-data class Chamber(val letter: Letter, var open: Boolean = false)
+data class Chamber(var letter: Letter?, var open: Boolean = false)

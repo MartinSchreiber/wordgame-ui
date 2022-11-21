@@ -12,7 +12,7 @@ import model.WordGame
 //val keyCodes = Util.getKeyCodeToCharMap()
 //TODO generativ erzeugen? Das wär cool (also move back into WordInput)
 @OptIn(ExperimentalComposeUiApi::class)
-val hotkeys = { wordGame: WordGame, ev: KeyEvent ->
+val onKeyEvent = { wordGame: WordGame, ev: KeyEvent ->
     when {
         (ev.key == Key.Enter && ev.type == KeyEventType.KeyDown) -> {
             wordGame.addWord()
@@ -34,6 +34,8 @@ val hotkeys = { wordGame: WordGame, ev: KeyEvent ->
     }
 }
 
+val onValueChange = { wordGame: WordGame, text: String -> wordGame.updateWord(text) }
+
 @Composable
 @Preview
 fun WordGame(wordGame: WordGame) {
@@ -49,10 +51,14 @@ fun WordGame(wordGame: WordGame) {
                 }
             }
             Row {
-                WordQueue(wordGame.mutableStateQueue.toMutableStateList())
+                WordQueue(wordGame.wordQueue.toMutableStateList())
             }
             Row {
-                WordInput(wordGame.wordInput) { ev -> hotkeys(wordGame, ev) }
+                WordInput(
+                    text = wordGame.textInput,
+                    word = wordGame.wordInput,
+                    onValueChange = { text -> onValueChange(wordGame, text) },
+                    onKeyEvent = { ev -> onKeyEvent(wordGame, ev) })
             }
         }
     }
