@@ -34,7 +34,13 @@ val onKeyEvent = { wordGame: WordGame, ev: KeyEvent ->
     }
 }
 
-val onValueChange = { wordGame: WordGame, text: String -> wordGame.updateWord(text) }
+val onValueChange = { wordGame: WordGame, text: String ->
+    wordGame.updateWord(
+        text
+            .uppercase()
+            .filter { wordGame.allowedLetters.contains(it) }
+    )
+}
 
 @Composable
 @Preview

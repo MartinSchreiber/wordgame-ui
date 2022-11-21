@@ -17,6 +17,7 @@ class WordGame(
     private val specialLetters = Util.getSpecialLetters(language)
     private val lettersBorrowed = mutableListOf<Pair<Letter, Int>>()
 
+    val allowedLetters = letterValues.keys
     val enemiesOnField: SnapshotStateList<Enemy> = mutableStateListOf()
     val wordQueue = MutableStateQueue<Word>()
     val wordsTyped: SnapshotStateList<Word> = mutableStateListOf()
@@ -38,7 +39,7 @@ class WordGame(
             }
             lettersBorrowed.removeAll(returnedLetters)
         } else if (text.length > wordInput.value.size()) {
-            val addedChar = text.last().uppercaseChar()
+            val addedChar = text.last()
 
             val specialLetter = letterChambers.borrowLetter(addedChar)
             specialLetter?.let { lettersBorrowed.add(it) }
@@ -53,7 +54,7 @@ class WordGame(
     }
 
     fun addWord(): Boolean {
-        textInput.value = textInput.value.uppercase()
+        textInput.value = textInput.value
         return if (textInput.value.isNotBlank() && validWords.contains(textInput.value)) {
 
             wordQueue.add(wordInput.value)
