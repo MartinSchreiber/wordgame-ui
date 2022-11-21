@@ -29,12 +29,14 @@ class WordGame(
 
         if (text.length < wordInput.value.size()) {
             val removedLetter = wordInput.value.removeLetter()
+            val returnedLetters: MutableList<Pair<Letter, Int>> = mutableListOf()
             lettersBorrowed.forEach {
                 if (it.first == removedLetter) {
                     letterChambers.returnLetters(listOf(it))
-                    lettersBorrowed.remove(it)
+                    returnedLetters.add(it)
                 }
             }
+            lettersBorrowed.removeAll(returnedLetters)
         } else if (text.length > wordInput.value.size()) {
             val addedChar = text.last().uppercaseChar()
 

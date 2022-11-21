@@ -4,9 +4,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import constants.LetterType
 
-class LetterChambers(private val visible: Int, opened: Int, letters: List<Letter>) {
+class LetterChambers(private val visible: Int, private var opened: Int, letters: List<Letter>) {
 
-    private val opened = mutableStateOf(opened)
     val chambers = letters
         .shuffled()
         .mapIndexed { index, letter -> Chamber(letter, index < opened) }
@@ -30,17 +29,17 @@ class LetterChambers(private val visible: Int, opened: Int, letters: List<Letter
                 open()
             }
 
-        if (opened.value < visible && indices.size >= opened.value) {
-            opened.value += 1
+        if (opened < visible && indices.size >= opened) {
+            opened += 1
             open()
         }
     }
 
     fun borrowLetter(char: Char): Pair<Letter, Int>? {
         chambers.forEachIndexed { ind, chamber ->
-            if (chamber.open && chamber.letter != null && chamber.letter!!.letter == char) {
-                val retVal = Pair(chamber.letter!!, ind)
-                chamber.letter = null
+            if (chamber.open && chamber.letter.value != null && chamber.letter.value!!.letter == char) {
+                val retVal = Pair(chamber.letter.value!!, ind)
+                chamber.letter.value = null
                 return retVal
             }
         }
@@ -48,7 +47,7 @@ class LetterChambers(private val visible: Int, opened: Int, letters: List<Letter
     }
 
     fun returnLetters(letters: List<Pair<Letter, Int>>) {
-        letters.forEach { chambers[it.second].letter = it.first }
+        letters.forEach { chambers[it.second].letter.value = it.first }
     }
 
     fun loadLetters(letters: List<Letter>) {
@@ -58,4 +57,6 @@ class LetterChambers(private val visible: Int, opened: Int, letters: List<Letter
     }
 }
 
-data class Chamber(var letter: Letter?, var open: Boolean = false)
+class Chamber(letter: Letter?, var open: Boolean = false) {
+    var letter = mutableStateOf(letter)
+}
