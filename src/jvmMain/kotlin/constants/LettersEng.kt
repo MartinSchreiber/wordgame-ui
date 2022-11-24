@@ -1,12 +1,9 @@
 package constants
 
-import util.Util
-
 enum class LettersEng(
     val letter: Char,
     val value: Int,
-    val count: Int,
-    val keyEventCode: Long = Util.getKeyCode(letter.code)
+    val count: Int
 ) {
     A('A', 1, 9),
     B('B', 3, 2),

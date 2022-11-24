@@ -19,6 +19,7 @@ class WordGame(
 
     val allowedLetters = letterValues.keys
     val enemiesOnField: SnapshotStateList<Enemy> = mutableStateListOf()
+    val enemyPath: Path = Path()
     val wordQueue = MutableStateQueue<Word>()
     val wordsTyped: SnapshotStateList<Word> = mutableStateListOf()
     val textInput = mutableStateOf("")
@@ -85,7 +86,7 @@ class WordGame(
 
     companion object {
         val LOGGER = Logger()
-        val DEFAULT_INCOMING_ENEMIES = listOf<Enemy>()
+        val DEFAULT_INCOMING_ENEMIES = listOf(Enemy())
 
         const val TOTAL_LETTER_CHAMBERS = 10
         const val OPEN_LETTER_CHAMBERS = 1

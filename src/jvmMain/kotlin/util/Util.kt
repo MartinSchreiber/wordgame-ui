@@ -61,19 +61,5 @@ class Util {
 
             return specialLetters
         }
-
-        fun getKeyCode(nativeKeyCode: Int): Long {
-            // First 32 bits are for keycode.
-            val keyCode = nativeKeyCode.toLong().shl(32)
-
-            // Next 3 bits are for location.
-            val location = (java.awt.event.KeyEvent.KEY_LOCATION_STANDARD.toLong() and 0x7).shl(29)
-            return keyCode or location
-        }
-
-//        fun getKeyCodeToCharMap(): Map<Long, Char> {
-//            //return (97..122).associate { getKeyCode(it) to Char(it) }
-//            return (65..90).associate { getKeyCode(it) to Char(it) }
-//        }
     }
 }
