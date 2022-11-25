@@ -29,8 +29,8 @@ fun GameField(enemies: SnapshotStateList<Enemy>, path: Path) {
         path.getLines().forEach {
 
             drawLine(
-                start = Offset(x = it.first.first.toFloat(), y = it.first.second.toFloat()),
-                end = Offset(x = it.second.first.toFloat(), y = it.second.second.toFloat()),
+                start = Offset(x = it.first.x.toFloat(), y = it.first.y.toFloat()),
+                end = Offset(x = it.second.x.toFloat(), y = it.second.y.toFloat()),
                 color = Color.DarkGray,
                 strokeWidth = 2F
             )
@@ -40,8 +40,8 @@ fun GameField(enemies: SnapshotStateList<Enemy>, path: Path) {
             drawIntoCanvas {
                 it.nativeCanvas.drawString(
                     enemy.toString(),
-                    enemy.position.value.first.dp.toPx(),
-                    enemy.position.value.second.dp.toPx(),
+                    enemy.position.value.x.dp.toPx(),
+                    enemy.position.value.y.dp.toPx(),
                     Font(),
                     textPaint
                 )

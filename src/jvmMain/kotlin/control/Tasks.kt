@@ -6,7 +6,10 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import model.*
+import model.Enemy
+import model.LetterChambers
+import model.Word
+import model.WordGame
 
 
 @Composable
@@ -20,8 +23,7 @@ fun backgroundTasks(wordGame: WordGame) {
     }
     backgroundScope.launch {
         moveEnemies(
-            enemies = wordGame.enemiesOnField,
-            path = wordGame.enemyPath
+            enemies = wordGame.enemiesOnField
         )
     }
     backgroundScope.launch {
@@ -33,18 +35,12 @@ fun backgroundTasks(wordGame: WordGame) {
     }
 }
 
-suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>, path: Path) = coroutineScope {
+suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>) = coroutineScope {
     while (true) {
         enemies.forEach {
-            val newPosition = path.moveFrom(it.position.value.first, it.position.value.second, it.speed)
-            it.moveTo(newPosition.first)
-            it.reachedEnd = newPosition.second
-            println("enemy $it moved to (${newPosition.first.first}|${newPosition.first.second})")
+            it.move()
         }
-        enemies.filter { it.reachedEnd }.forEach {
-            println("enemy $it reached the end!")
-        }
-        enemies.removeIf { it.reachedEnd }
+        enemies.removeIf { it.reachedEnd() }
         delay(100L)
     }
 }

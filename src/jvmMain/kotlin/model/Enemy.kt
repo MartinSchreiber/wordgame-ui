@@ -6,14 +6,25 @@ import androidx.compose.runtime.mutableStateOf
 //TODO: positive interaction/befriending of "enemy"?
 class Enemy(
     var health: MutableState<Double> = mutableStateOf(100.0),
-    var speed: Int = 1,
-    var position: MutableState<Pair<Int, Int>> = mutableStateOf(Pair(20, 20)),
-    val delay: Long = 1000L
+    private var speed: Double = 0.01,
+    var position: MutableState<Path.Point> = mutableStateOf(Path.Point(20, 20)),
+    val delay: Long = 1000L,
+    val path: Path
 ) {
     val maxHealth = health
-    var reachedEnd = false
-    fun moveTo(position: Pair<Int, Int>) {
-        this.position.value = position
+    var distance = 1.0
+
+    fun move() {
+        distance -= speed
+        position.value = path.moveTo(distance)
+        println("enemy $this moved to (${position.value.x}|${position.value.y})")
+        if (reachedEnd()) {
+            println("enemy $this reached the end!")
+        }
+    }
+
+    fun reachedEnd(): Boolean {
+        return distance <= 0
     }
 
     fun damage(damage: Double) {

@@ -85,10 +85,12 @@ class WordGame(
     fun isOver(): Boolean = enemiesIncoming.isEmpty() && enemiesOnField.isEmpty()
 
     companion object {
-        val LOGGER = Logger()
-        val DEFAULT_INCOMING_ENEMIES = listOf(Enemy())
+        private val LOGGER = Logger()
 
-        const val TOTAL_LETTER_CHAMBERS = 10
-        const val OPEN_LETTER_CHAMBERS = 1
+        private val PATH = Path()
+        private val DEFAULT_INCOMING_ENEMIES = listOf(Enemy(path = PATH))
+
+        private const val TOTAL_LETTER_CHAMBERS = 10
+        private const val OPEN_LETTER_CHAMBERS = 1
     }
 }

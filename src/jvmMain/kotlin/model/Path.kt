@@ -1,5 +1,6 @@
 package model
 
+//TODO: Add class Point(int,int) to cut down on Pair-use
 //TODO: Generalise and document
 class Path(
     private val startX: Int = 20,
@@ -11,63 +12,81 @@ class Path(
     private val stepsY = (0..numberOfTurns)
         .toList()
         .map { startY + (stepY * it) }
-    val moveBackwards = { y: Int -> stepsY.indexOf(y) % 2 == 1 }
+    private val length = (maxX - startX) * (1 + numberOfTurns) + stepY * numberOfTurns
 
-    fun moveFrom(x: Int, y: Int, distance: Int): Pair<Pair<Int, Int>, Boolean> {
+    private val effectiveDistanceX = { y: Int, distance: Int ->
+        if (stepsY.indexOf(y) % 2 == 1) {
+            distance * -1
+        } else {
+            distance
+        }
+    }
+
+    fun getLines(): List<Pair<Point, Point>> {
+        val lines = mutableListOf<Pair<Point, Point>>()
+
+        lines.add(
+            Pair(
+                Point(startX, startY),
+                Point(maxX, startY)
+            )
+        )
+
+        stepsY.subList(1, numberOfTurns + 1).forEach { currentY ->
+            lines.add(
+                Pair(
+                    lines.last().second,
+                    Point(lines.last().second.x, currentY)
+                )
+            )
+            lines.add(
+                Pair(
+                    Point(lines.last().second.x, currentY),
+                    Point(
+                        if (lines.last().second.x == maxX) startX else maxX,
+                        currentY
+                    )
+                )
+            )
+        }
+
+        return lines
+    }
+
+    fun moveTo(distance: Double): Point {
+        val effectiveDistance = (length * (1.0 - distance)).toInt()
+        return if (effectiveDistance < length) {
+            moveFrom(
+                startX,
+                startY,
+                (length * (1.0 - distance)).toInt()
+            )
+        } else {
+            Point(maxX, stepsY.last())
+        }
+    }
+
+    private fun moveFrom(x: Int, y: Int, distance: Int): Point {
         var currentX = x
         var currentY = y
         var distanceRemaining = distance
 
         while (distanceRemaining > 0) {
-            val resultX = moveX(x, y, if (moveBackwards(y)) distanceRemaining * -1 else distanceRemaining)
+            val resultX = moveX(
+                currentX,
+                currentY,
+                effectiveDistanceX(currentY, distanceRemaining)
+            )
             currentX = resultX.first
             distanceRemaining = resultX.second
             if (distanceRemaining > 0) {
-                val resultY = moveY(y, distanceRemaining)
+                val resultY = moveY(currentY, distanceRemaining)
                 distanceRemaining = resultY.second
                 currentY = resultY.first
             }
         }
 
-        val reachedEnd = currentY == stepsY.last() && currentX == maxX
-
-        return Pair(Pair(currentX, currentY), reachedEnd)
-    }
-
-    //TODO optimise
-    fun getLines(): List<Pair<Pair<Int, Int>, Pair<Int, Int>>> {
-        val lines = mutableListOf<Pair<Pair<Int, Int>, Pair<Int, Int>>>()
-
-        lines.add(
-            Pair(
-                Pair(startX, startY),
-                Pair(maxX, startY)
-            )
-        )
-
-        stepsY.subList(1, numberOfTurns + 1).forEach {
-            lines.add(
-                Pair(
-                    Pair(lines.last().second.first, lines.last().second.second),
-                    Pair(lines.last().second.first, it)
-                )
-            )
-            lines.add(
-                Pair(
-                    Pair(lines.last().second.first, it),
-                    Pair(startX, it)
-                )
-            )
-        }
-
-        lines.add(
-            Pair(
-                Pair(startX, lines.last().second.second),
-                Pair(maxX, lines.last().second.second)
-            )
-        )
-
-        return lines
+        return Point(currentX, currentY)
     }
 
     private fun moveX(x: Int, y: Int, distance: Int): Pair<Int, Int> {
@@ -89,7 +108,7 @@ class Path(
             maxX
         }
 
-        println("moveX: $xNew \t $distanceRemaining")
+        //println("moveX: $xNew \t $distanceRemaining")
         return Pair(xNew, distanceRemaining)
     }
 
@@ -109,7 +128,9 @@ class Path(
             nextTurnAt
         }
 
-        println("moveY: $yNew \t $distanceRemaining")
+        //println("moveY: $yNew \t $distanceRemaining")
         return Pair(yNew, distanceRemaining)
     }
+
+    data class Point(val x: Int, val y: Int)
 }
