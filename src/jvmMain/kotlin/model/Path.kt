@@ -5,8 +5,8 @@ package model
 class Path(
     private val startX: Int = 20,
     private val startY: Int = 20,
-    private val maxX: Int = 160,
-    private val stepY: Int = 30,
+    private val maxX: Int = 320,
+    private val stepY: Int = 60,
     private val numberOfTurns: Int = 2
 ) {
     private val stepsY = (0..numberOfTurns)

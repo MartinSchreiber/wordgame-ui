@@ -30,7 +30,7 @@ class WordGame(
         textInput.value = text
 
         if (text.length < wordInput.value.size()) {
-            val removedLetter = wordInput.value.removeLetter()
+            val removedLetter = wordInput.value.removeLastLetter()
             val returnedLetters: MutableList<Pair<Letter, Int>> = mutableListOf()
             lettersBorrowed.forEach {
                 if (it.first == removedLetter) {
@@ -59,7 +59,7 @@ class WordGame(
         return if (textInput.value.isNotBlank() && validWords.contains(textInput.value)) {
 
             wordQueue.add(wordInput.value)
-            wordsTyped.add(wordInput.value)
+            wordsTyped.add(wordInput.value.copy())
             letterChambers.remove(lettersBorrowed.map { it.second })
 
             LOGGER.log(wordInput.value)
@@ -88,7 +88,7 @@ class WordGame(
         private val LOGGER = Logger()
 
         private val PATH = Path()
-        private val DEFAULT_INCOMING_ENEMIES = listOf(Enemy(path = PATH))
+        private val DEFAULT_INCOMING_ENEMIES = listOf(Enemy(path = PATH), Enemy(path = PATH, delay = 60000))
 
         private const val TOTAL_LETTER_CHAMBERS = 10
         private const val OPEN_LETTER_CHAMBERS = 1

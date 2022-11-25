@@ -41,17 +41,18 @@ suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>) = coroutineScope {
             it.move()
         }
         enemies.removeIf { it.reachedEnd() }
-        delay(100L)
+        delay(100)
     }
 }
 
 suspend fun spawnEnemies(enemiesIncoming: MutableList<Enemy>, enemiesOnField: SnapshotStateList<Enemy>) =
     coroutineScope {
         while (enemiesIncoming.isNotEmpty()) {
-            enemiesIncoming.removeLastOrNull()?.let {
+            enemiesIncoming.firstOrNull()?.let {
                 delay(it.delay)
                 enemiesOnField.add(it)
             }
+            enemiesIncoming.removeFirst()
         }
     }
 
@@ -61,16 +62,22 @@ suspend fun fireLetters(
     chambers: LetterChambers
 ) = coroutineScope {
     while (true) {
-        if (queue.isNotEmpty()) { // && enemiesOnField.isNotEmpty()
-            queue.removeFirst().letters.forEach {
+        if (queue.isNotEmpty() && enemiesOnField.isNotEmpty()) {
+            val word = queue.removeFirst()
+            while (word.size() > 0) {
+                if (enemiesOnField.isNotEmpty()) {
+                    val letter = word.removeFirstLetter()
+                    enemiesOnField.minBy { it.distance }.damage(letter.totalValue)
+                    enemiesOnField.removeIf { it.health.value <= 0 }
+                    println("########### $letter (${letter.totalValue})")
 
-                //TODO implement "damage" first enemy in line
-                chambers.loadLetters(listOf(it))
-
-                delay(200)
+                    chambers.loadLetters(listOf(letter))
+                }
+                delay(100)
             }
+            delay(1000)
         }
-        delay(1000)
+        delay(250)
     }
 }
 

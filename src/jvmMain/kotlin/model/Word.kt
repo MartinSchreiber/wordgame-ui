@@ -13,17 +13,28 @@ class Word(val letters: MutableList<Letter> = mutableListOf()) {
 
     fun addLetter(letter: Letter) {
         letters.add(letter)
-        letters
-            .takeIf { letter.type == LetterType.MULTIPLY }
-            ?.forEach { it.totalValue *= letter.specialValue }
+
+        if (letter.type == LetterType.MULTIPLY) {
+            letters.forEach { it.totalValue *= letter.specialValue }
+        }
     }
 
-    fun removeLetter(): Letter {
+    fun removeLastLetter(): Letter {
         val removedLetter = letters.removeLast()
-        letters
-            .takeIf { removedLetter.type == LetterType.MULTIPLY }
-            ?.forEach { it.totalValue /= removedLetter.specialValue }
+
+        if (removedLetter.type == LetterType.MULTIPLY) {
+            letters.forEach { it.totalValue /= removedLetter.specialValue }
+        }
+
         return removedLetter
+    }
+
+    fun removeFirstLetter(): Letter {
+        return letters.removeFirst()
+    }
+
+    fun copy(): Word {
+        return Word(letters.map { it }.toMutableList())
     }
 
     override fun toString(): String {
