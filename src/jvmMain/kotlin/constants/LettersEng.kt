@@ -1,10 +1,6 @@
 package constants
 
-enum class LettersEng(
-    val letter: Char,
-    val value: Int,
-    val count: Int
-) {
+enum class LettersEng(val letter: Char, val value: Int, val count: Int) {
     A('A', 1, 9),
     B('B', 3, 2),
     C('C', 3, 2),

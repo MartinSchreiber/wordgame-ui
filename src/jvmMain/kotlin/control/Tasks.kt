@@ -10,6 +10,7 @@ import model.Enemy
 import model.LetterChambers
 import model.Word
 import model.WordGame
+import util.Logger
 
 
 @Composable
@@ -34,6 +35,7 @@ fun backgroundTasks(wordGame: WordGame) {
             chambers = wordGame.letterChambers,
             isOver = wordGame.isOver
         )
+        Logger.LOGGER.logGameOver(wordGame)
     }
 }
 
@@ -70,9 +72,11 @@ suspend fun fireLetters(
             while (word.size() > 0 && !isOver()) {
                 if (enemiesOnField.isNotEmpty()) {
                     val letter = word.removeFirstLetter()
+
                     enemiesOnField.minBy { it.distance }.damage(letter.totalValue)
                     enemiesOnField.removeIf { it.health.value <= 0 }
-                    println("########### $letter (${letter.totalValue})")
+
+                    Logger.LOGGER.logLetterFired(letter)
 
                     chambers.loadLetters(listOf(letter))
                 }
@@ -82,5 +86,4 @@ suspend fun fireLetters(
         }
         delay(250)
     }
-    println("GAME OVER")
 }

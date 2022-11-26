@@ -2,6 +2,7 @@ package model
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import util.Logger
 
 //TODO: positive interaction/befriending of "enemy"?
 //TODO: add "loot"
@@ -18,10 +19,7 @@ class Enemy(
     fun move() {
         distance -= speed
         position.value = path.moveTo(distance)
-//        println("enemy $this moved to (${position.value.x}|${position.value.y})")
-//        if (reachedEnd()) {
-//            println("enemy $this reached the end!")
-//        }
+        Logger.LOGGER.logEnemyMove(this)
     }
 
     fun reachedEnd(): Boolean {

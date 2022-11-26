@@ -34,7 +34,7 @@ class Word(val letters: MutableList<Letter> = mutableListOf()) {
     }
 
     fun copy(): Word {
-        return Word(letters.map { it }.toMutableList())
+        return Word(letters.map { it.copy() }.toMutableList())
     }
 
     override fun toString(): String {

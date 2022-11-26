@@ -4,27 +4,27 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import constants.Language
+import util.EnemyUtil
+import util.ImportUtil
+import util.LetterUtil
 import util.Logger
-import util.Util
 
 class WordGame(
     language: Language = Language.ENGLISH,
     val enemiesIncoming: MutableList<Enemy> = DEFAULT_INCOMING_ENEMIES.toMutableList()
 ) {
     companion object {
-        private val LOGGER = Logger()
-
-        private val PATH = Path()
-        private val DEFAULT_INCOMING_ENEMIES = listOf(Enemy(path = PATH))//, Enemy(path = PATH, delay = 60000))
         //TODO: add default-values for path-creation
+        private val PATH = Path()
+        private val DEFAULT_INCOMING_ENEMIES = EnemyUtil.getDefaultEnemies(path = PATH)
 
         private const val TOTAL_LETTER_CHAMBERS = 10
         private const val OPEN_LETTER_CHAMBERS = 1
     }
 
-    private val validWords = Util.importWords(language)
-    private val letterValues = Util.getLetterValues(language)
-    private val specialLetters = Util.getSpecialLetters(language)
+    private val validWords = ImportUtil.importWords(language)
+    private val letterValues = LetterUtil.getLetterValues(language)
+    private val specialLetters = LetterUtil.getSpecialLetters(language)
     private val lettersBorrowed = mutableListOf<Pair<Letter, Int>>()
 
     val allowedLetters = letterValues.keys
@@ -73,12 +73,12 @@ class WordGame(
             wordsTyped.add(wordInput.value.copy())
             letterChambers.remove(lettersBorrowed.map { it.second })
 
-            LOGGER.log(wordInput.value)
+            Logger.LOGGER.logWordTyped(wordInput.value)
             clearInput(false)
 
             true
         } else {
-            LOGGER.logWordFailure(textInput.value)
+            Logger.LOGGER.logWordFailure(textInput.value)
             false
         }
     }

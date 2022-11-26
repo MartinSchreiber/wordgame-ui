@@ -1,5 +1,7 @@
 package model
 
+import util.Logger
+
 //TODO: Generalise and document
 class Path(
     private val startX: Int = 20,
@@ -53,8 +55,8 @@ class Path(
     }
 
     fun moveTo(distance: Double): Point {
-        val effectiveDistance = (length * (1.0 - distance)).toInt()
-        return if (effectiveDistance < length) {
+        val absoluteDistance = (length * (1.0 - distance)).toInt()
+        return if (absoluteDistance < length) {
             moveFrom(
                 startX,
                 startY,
@@ -68,19 +70,19 @@ class Path(
     private fun moveFrom(x: Int, y: Int, distance: Int): Point {
         var currentX = x
         var currentY = y
-        var distanceRemaining = distance
+        var remainingDistance = distance
 
-        while (distanceRemaining > 0) {
+        while (remainingDistance > 0) {
             val resultX = moveX(
                 currentX,
                 currentY,
-                effectiveDistanceX(currentY, distanceRemaining)
+                effectiveDistanceX(currentY, remainingDistance)
             )
             currentX = resultX.first
-            distanceRemaining = resultX.second
-            if (distanceRemaining > 0) {
-                val resultY = moveY(currentY, distanceRemaining)
-                distanceRemaining = resultY.second
+            remainingDistance = resultX.second
+            if (remainingDistance > 0) {
+                val resultY = moveY(currentY, remainingDistance)
+                remainingDistance = resultY.second
                 currentY = resultY.first
             }
         }
@@ -89,45 +91,45 @@ class Path(
     }
 
     private fun moveX(x: Int, y: Int, distance: Int): Pair<Int, Int> {
-        var distanceRemaining = distance
+        var remainingDistance = distance
 
         if (!stepsY.contains(y)) {
-            return Pair(x, distanceRemaining)
+            return Pair(x, remainingDistance)
         }
 
-        val xNew = if (x + distance in startX..maxX) {
-            distanceRemaining = 0
+        val newX = if (x + distance in startX..maxX) {
+            remainingDistance = 0
             x + distance
         } else if (x + distance < startX) {
-            distanceRemaining += x - startX
-            distanceRemaining *= -1
+            remainingDistance += x - startX
+            remainingDistance *= -1
             startX
         } else {
-            distanceRemaining -= maxX - x
+            remainingDistance -= maxX - x
             maxX
         }
 
-        //println("moveX: $xNew \t $distanceRemaining")
-        return Pair(xNew, distanceRemaining)
+        Logger.LOGGER.logPartialMove(newX = newX, remainingDistance = remainingDistance)
+        return Pair(newX, remainingDistance)
     }
 
     private fun moveY(y: Int, distance: Int): Pair<Int, Int> {
-        var distanceRemaining = distance
+        var remainingDistance = distance
 
         if (y == stepsY.last()) {
             return Pair(y, 0)
         }
 
         val nextTurnAt = stepsY.filter { it > y }.min()
-        val yNew = if (y + distance <= nextTurnAt) {
-            distanceRemaining = 0
+        val newY = if (y + distance <= nextTurnAt) {
+            remainingDistance = 0
             y + distance
         } else {
-            distanceRemaining -= nextTurnAt - y
+            remainingDistance -= nextTurnAt - y
             nextTurnAt
         }
 
-        //println("moveY: $yNew \t $distanceRemaining")
-        return Pair(yNew, distanceRemaining)
+        Logger.LOGGER.logPartialMove(newY = newY, remainingDistance = remainingDistance)
+        return Pair(newY, remainingDistance)
     }
 }

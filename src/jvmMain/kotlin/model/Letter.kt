@@ -8,10 +8,13 @@ data class Letter(
     val type: LetterType = LetterType.BASIC,
     val specialValue: Double = 0.0
 ) {
-    var totalValue: Double = when (type) {
-        LetterType.STRONGER -> value + specialValue
-        else -> value.toDouble()
+    val initTotalValue = {
+        when (type) {
+            LetterType.STRONGER -> value + specialValue
+            else -> value.toDouble()
+        }
     }
+    var totalValue: Double = initTotalValue()
 
     override fun toString(): String {
         return when (type) {
@@ -22,6 +25,6 @@ data class Letter(
     }
 
     fun resetTotalValue() {
-        totalValue = value.toDouble()
+        totalValue = initTotalValue()
     }
 }

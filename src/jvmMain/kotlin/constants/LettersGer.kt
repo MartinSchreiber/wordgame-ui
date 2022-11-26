@@ -1,10 +1,6 @@
 package constants
 
-enum class LettersGer(
-    val letter: Char,
-    val value: Int,
-    val count: Int
-) {
+enum class LettersGer(val letter: Char, val value: Int, val count: Int) {
     A('A', 1, 5),
     B('B', 3, 2),
     C('C', 4, 2),
