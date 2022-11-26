@@ -55,8 +55,8 @@ class LetterChambers(private val visible: Int, private var opened: Int, letters:
 
         chambers.addAll(letters.filter { it.type != LetterType.BASIC }.map { Chamber(it) })
     }
-}
 
-class Chamber(letter: Letter?, var open: Boolean = false) {
-    var letter = mutableStateOf(letter)
+    class Chamber(letter: Letter?, var open: Boolean = false) {
+        var letter = mutableStateOf(letter)
+    }
 }

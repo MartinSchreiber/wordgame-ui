@@ -11,6 +11,16 @@ class WordGame(
     language: Language = Language.ENGLISH,
     val enemiesIncoming: MutableList<Enemy> = DEFAULT_INCOMING_ENEMIES.toMutableList()
 ) {
+    companion object {
+        private val LOGGER = Logger()
+
+        private val PATH = Path()
+        private val DEFAULT_INCOMING_ENEMIES = listOf(Enemy(path = PATH))//, Enemy(path = PATH, delay = 60000))
+        //TODO: add default-values for path-creation
+
+        private const val TOTAL_LETTER_CHAMBERS = 10
+        private const val OPEN_LETTER_CHAMBERS = 1
+    }
 
     private val validWords = Util.importWords(language)
     private val letterValues = Util.getLetterValues(language)
@@ -81,15 +91,5 @@ class WordGame(
             letterChambers.returnLetters(lettersBorrowed)
         }
         lettersBorrowed.clear()
-    }
-
-    companion object {
-        private val LOGGER = Logger()
-
-        private val PATH = Path()
-        private val DEFAULT_INCOMING_ENEMIES = listOf(Enemy(path = PATH))//, Enemy(path = PATH, delay = 60000))
-
-        private const val TOTAL_LETTER_CHAMBERS = 10
-        private const val OPEN_LETTER_CHAMBERS = 1
     }
 }

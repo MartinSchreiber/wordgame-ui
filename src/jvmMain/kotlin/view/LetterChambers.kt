@@ -9,11 +9,11 @@ import model.LetterChambers
 
 @Composable
 fun LetterChambers(letterChambers: LetterChambers) {
-Row {
-    letterChambers.chambers.forEach {
-        LetterChamber(it.letter, it.open)
+    Row {
+        letterChambers.chambers.forEach {
+            LetterChamber(it.letter, it.open)
+        }
     }
-}
 }
 
 @Composable
