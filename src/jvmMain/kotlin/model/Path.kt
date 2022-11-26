@@ -1,6 +1,5 @@
 package model
 
-//TODO: Add class Point(int,int) to cut down on Pair-use
 //TODO: Generalise and document
 class Path(
     private val startX: Int = 20,

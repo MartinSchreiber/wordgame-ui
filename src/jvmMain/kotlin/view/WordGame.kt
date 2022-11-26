@@ -50,7 +50,7 @@ fun WordGame(wordGame: WordGame) {
                 }
             }
             Row {
-                WordQueue(wordGame.wordQueue.toMutableStateList())
+                WordQueue(wordGame.wordQueue)
             }
             Row {
                 WordInput(

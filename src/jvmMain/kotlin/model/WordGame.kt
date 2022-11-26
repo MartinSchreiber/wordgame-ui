@@ -20,12 +20,13 @@ class WordGame(
     val allowedLetters = letterValues.keys
     val enemiesOnField: SnapshotStateList<Enemy> = mutableStateListOf()
     val enemyPath: Path = Path()
-    val wordQueue = MutableStateQueue<Word>()
+    val wordQueue: SnapshotStateList<Word> = mutableStateListOf()
     val wordsTyped: SnapshotStateList<Word> = mutableStateListOf()
     val textInput = mutableStateOf("")
     val wordInput = mutableStateOf(Word())
     val letterChambers = LetterChambers(TOTAL_LETTER_CHAMBERS, OPEN_LETTER_CHAMBERS, specialLetters)
 
+    var isOver = { enemiesIncoming.isEmpty() && enemiesOnField.isEmpty() }
     fun updateWord(text: String) {
         textInput.value = text
 
@@ -82,13 +83,11 @@ class WordGame(
         lettersBorrowed.clear()
     }
 
-    fun isOver(): Boolean = enemiesIncoming.isEmpty() && enemiesOnField.isEmpty()
-
     companion object {
         private val LOGGER = Logger()
 
         private val PATH = Path()
-        private val DEFAULT_INCOMING_ENEMIES = listOf(Enemy(path = PATH), Enemy(path = PATH, delay = 60000))
+        private val DEFAULT_INCOMING_ENEMIES = listOf(Enemy(path = PATH))//, Enemy(path = PATH, delay = 60000))
 
         private const val TOTAL_LETTER_CHAMBERS = 10
         private const val OPEN_LETTER_CHAMBERS = 1

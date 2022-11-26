@@ -23,20 +23,22 @@ fun backgroundTasks(wordGame: WordGame) {
     }
     backgroundScope.launch {
         moveEnemies(
-            enemies = wordGame.enemiesOnField
+            enemies = wordGame.enemiesOnField,
+            isOver = wordGame.isOver
         )
     }
     backgroundScope.launch {
         fireLetters(
-            queue = wordGame.wordQueue.toMutableStateList(),
+            queue = wordGame.wordQueue,
             enemiesOnField = wordGame.enemiesOnField,
-            chambers = wordGame.letterChambers
+            chambers = wordGame.letterChambers,
+            isOver = wordGame.isOver
         )
     }
 }
 
-suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>) = coroutineScope {
-    while (true) {
+suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>, isOver: () -> Boolean) = coroutineScope {
+    while (!isOver()) {
         enemies.forEach {
             it.move()
         }
@@ -59,12 +61,13 @@ suspend fun spawnEnemies(enemiesIncoming: MutableList<Enemy>, enemiesOnField: Sn
 suspend fun fireLetters(
     queue: SnapshotStateList<Word>,
     enemiesOnField: SnapshotStateList<Enemy>,
-    chambers: LetterChambers
+    chambers: LetterChambers,
+    isOver: () -> Boolean
 ) = coroutineScope {
-    while (true) {
+    while (!isOver()) {
         if (queue.isNotEmpty() && enemiesOnField.isNotEmpty()) {
             val word = queue.removeFirst()
-            while (word.size() > 0) {
+            while (word.size() > 0 && !isOver()) {
                 if (enemiesOnField.isNotEmpty()) {
                     val letter = word.removeFirstLetter()
                     enemiesOnField.minBy { it.distance }.damage(letter.totalValue)
@@ -79,6 +82,5 @@ suspend fun fireLetters(
         }
         delay(250)
     }
+    println("GAME OVER")
 }
-
-//TODO drop special letters

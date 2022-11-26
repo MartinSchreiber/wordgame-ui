@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 
 //TODO: positive interaction/befriending of "enemy"?
+//TODO: add "loot"
 class Enemy(
     var health: MutableState<Double> = mutableStateOf(10.0),
     private var speed: Double = 0.001,
