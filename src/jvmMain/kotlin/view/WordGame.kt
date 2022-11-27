@@ -43,10 +43,10 @@ fun WordGame(wordGame: WordGame) {
             LetterChambers(wordGame.letterChambers)
             Row {
                 Column {
-                    WordsTyped(wordGame.wordsTyped)
+                    WordsTyped(wordGame.typedWords)
                 }
                 Column {
-                    GameField(wordGame.enemiesOnField, wordGame.enemyPath)
+                    GameField(wordGame.gameField)
                 }
             }
             Row {

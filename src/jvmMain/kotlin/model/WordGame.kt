@@ -4,20 +4,13 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import constants.Language
-import util.EnemyUtil
+import model.gameField.GameField
 import util.ImportUtil
 import util.LetterUtil
 import util.Logger
 
-class WordGame(
-    language: Language = Language.ENGLISH,
-    val enemiesIncoming: MutableList<Enemy> = DEFAULT_INCOMING_ENEMIES.toMutableList()
-) {
+class WordGame(language: Language = Language.ENGLISH) {
     companion object {
-        //TODO: add default-values for path-creation
-        private val PATH = Path()
-        private val DEFAULT_INCOMING_ENEMIES = EnemyUtil.getDefaultEnemies(path = PATH)
-
         private const val TOTAL_LETTER_CHAMBERS = 10
         private const val OPEN_LETTER_CHAMBERS = 1
     }
@@ -25,36 +18,37 @@ class WordGame(
     private val validWords = ImportUtil.importWords(language)
     private val letterValues = LetterUtil.getLetterValues(language)
     private val specialLetters = LetterUtil.getSpecialLetters(language)
-    private val lettersBorrowed = mutableListOf<Pair<Letter, Int>>()
+    private val borrowedLetters = mutableListOf<Pair<Letter, Int>>()
 
     val allowedLetters = letterValues.keys
-    val enemiesOnField: SnapshotStateList<Enemy> = mutableStateListOf()
-    val enemyPath: Path = Path()
-    val wordQueue: SnapshotStateList<Word> = mutableStateListOf()
-    val wordsTyped: SnapshotStateList<Word> = mutableStateListOf()
+    val typedWords: SnapshotStateList<Word> = mutableStateListOf()
+
     val textInput = mutableStateOf("")
     val wordInput = mutableStateOf(Word())
+    val wordQueue: SnapshotStateList<Word> = mutableStateListOf()
     val letterChambers = LetterChambers(TOTAL_LETTER_CHAMBERS, OPEN_LETTER_CHAMBERS, specialLetters)
 
-    var isOver = { enemiesIncoming.isEmpty() && enemiesOnField.isEmpty() }
+    val gameField = GameField()
+
+    var isOver = { gameField.isOver() }
     fun updateWord(text: String) {
         textInput.value = text
 
         if (text.length < wordInput.value.size()) {
             val removedLetter = wordInput.value.removeLastLetter()
             val returnedLetters: MutableList<Pair<Letter, Int>> = mutableListOf()
-            lettersBorrowed.forEach {
+            borrowedLetters.forEach {
                 if (it.first == removedLetter) {
                     letterChambers.returnLetters(listOf(it))
                     returnedLetters.add(it)
                 }
             }
-            lettersBorrowed.removeAll(returnedLetters)
+            borrowedLetters.removeAll(returnedLetters)
         } else if (text.length > wordInput.value.size()) {
             val addedChar = text.last()
 
             val specialLetter = letterChambers.borrowLetter(addedChar)
-            specialLetter?.let { lettersBorrowed.add(it) }
+            specialLetter?.let { borrowedLetters.add(it) }
 
             val addedLetter: Letter = specialLetter?.first ?: Letter(
                 letter = addedChar,
@@ -69,9 +63,10 @@ class WordGame(
         textInput.value = textInput.value
         return if (textInput.value.isNotBlank() && validWords.contains(textInput.value)) {
 
+
             wordQueue.add(wordInput.value)
-            wordsTyped.add(wordInput.value.copy())
-            letterChambers.remove(lettersBorrowed.map { it.second })
+            typedWords.add(wordInput.value.copy())
+            letterChambers.remove(borrowedLetters.map { it.second })
 
             Logger.LOGGER.logWordTyped(wordInput.value)
             clearInput(false)
@@ -88,8 +83,8 @@ class WordGame(
         wordInput.value = Word()
 
         if (returnBorrowed) {
-            letterChambers.returnLetters(lettersBorrowed)
+            letterChambers.returnLetters(borrowedLetters)
         }
-        lettersBorrowed.clear()
+        borrowedLetters.clear()
     }
 }

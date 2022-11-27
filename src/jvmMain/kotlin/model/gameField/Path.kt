@@ -1,4 +1,4 @@
-package model
+package model.gameField
 
 import util.Logger
 

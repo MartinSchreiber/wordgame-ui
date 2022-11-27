@@ -6,10 +6,11 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import model.Enemy
 import model.LetterChambers
 import model.Word
 import model.WordGame
+import model.gameField.Enemy
+import model.gameField.GameField
 import util.Logger
 
 
@@ -17,21 +18,18 @@ import util.Logger
 fun backgroundTasks(wordGame: WordGame) {
     val backgroundScope = rememberCoroutineScope()
     backgroundScope.launch {
-        spawnEnemies(
-            enemiesIncoming = wordGame.enemiesIncoming,
-            enemiesOnField = wordGame.enemiesOnField
-        )
+        spawnEnemies(gameField = wordGame.gameField)
     }
     backgroundScope.launch {
         moveEnemies(
-            enemies = wordGame.enemiesOnField,
+            enemies = wordGame.gameField.enemiesOnField,
             isOver = wordGame.isOver
         )
     }
     backgroundScope.launch {
         fireLetters(
             queue = wordGame.wordQueue,
-            enemiesOnField = wordGame.enemiesOnField,
+            enemiesOnField = wordGame.gameField.enemiesOnField,
             chambers = wordGame.letterChambers,
             isOver = wordGame.isOver
         )
@@ -49,14 +47,14 @@ suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>, isOver: () -> Boolean
     }
 }
 
-suspend fun spawnEnemies(enemiesIncoming: MutableList<Enemy>, enemiesOnField: SnapshotStateList<Enemy>) =
+suspend fun spawnEnemies(gameField: GameField) =
     coroutineScope {
-        while (enemiesIncoming.isNotEmpty()) {
-            enemiesIncoming.firstOrNull()?.let {
+        while (gameField.enemiesIncoming.isNotEmpty()) {
+            gameField.enemiesIncoming.firstOrNull()?.let {
                 delay(it.delay)
-                enemiesOnField.add(it)
+                gameField.enemiesOnField.add(it)
             }
-            enemiesIncoming.removeFirst()
+            gameField.enemiesIncoming.removeFirst()
         }
     }
 

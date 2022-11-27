@@ -1,9 +1,9 @@
 package util
 
-import model.Enemy
 import model.Letter
 import model.Word
 import model.WordGame
+import model.gameField.Enemy
 
 class Logger {
     fun logWordsImportedIn(numberOfWords: Int, time: Long) {
@@ -41,7 +41,7 @@ class Logger {
     fun logGameOver(wordGame: WordGame) {
         println("GAME OVER")
         println("Typed Words: ")
-        wordGame.wordsTyped.forEach {
+        wordGame.typedWords.forEach {
             println("- $it (${it.getTotalValue()})")
         }
     }
