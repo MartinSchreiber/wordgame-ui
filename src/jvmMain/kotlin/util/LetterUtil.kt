@@ -28,7 +28,7 @@ class LetterUtil {
                             letter = it.second.random(),
                             value = it.first,
                             type = LetterType.STRONGER,
-                            specialValue = 5.0
+                            specialValue = 5f
                         )
                     )
                 }

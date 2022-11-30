@@ -7,8 +7,8 @@ class Word(val letters: MutableList<Letter> = mutableListOf()) {
         return letters.size
     }
 
-    fun getTotalValue(): Double {
-        return letters.sumOf { it.totalValue }
+    fun getTotalValue(): Float {
+        return letters.map { it.totalValue }.sum()
     }
 
     fun addLetter(letter: Letter) {

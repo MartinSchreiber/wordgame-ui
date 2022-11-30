@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.toArgb
 import model.gameField.GameField
 import org.jetbrains.skia.Font
 
-//TODO: draw base
+//TODO: draw base + fix overlay with other elements
 @Composable
 fun GameField(gameField: GameField) {
     val textPaint = Paint().asFrameworkPaint().apply {

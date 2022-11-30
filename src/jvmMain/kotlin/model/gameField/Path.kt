@@ -3,18 +3,19 @@ package model.gameField
 import androidx.compose.ui.geometry.Offset
 import util.Logger
 
-//TODO: Generalise and document
+//TODO: Document
 class Path(
-    private val startX: Float = 20f,
-    private val startY: Float = 20f,
-    private val maxX: Float = 320f,
-    private val stepY: Float = 60f,
-    private val numberOfTurns: Int = 2
+    private val startX: Float,
+    private val startY: Float,
+    private val endX: Float,
+    private val endY: Float,
+    private val numberOfTurns: Int
 ) {
+    private val stepY = (endY - startY) / numberOfTurns
     private val stepsY = (0..numberOfTurns)
         .toList()
         .map { startY + (stepY * it) }
-    private val length = (maxX - startX) * (1 + numberOfTurns) + stepY * numberOfTurns
+    private val length = (endX - startX) * (1 + numberOfTurns) + stepY * numberOfTurns
 
     private val effectiveDistanceX = { y: Float, distance: Float ->
         if (stepsY.indexOf(y) % 2 == 1) {
@@ -30,7 +31,7 @@ class Path(
         lines.add(
             Pair(
                 Offset(startX, startY),
-                Offset(maxX, startY)
+                Offset(endX, startY)
             )
         )
 
@@ -45,7 +46,7 @@ class Path(
                 Pair(
                     Offset(lines.last().second.x, currentY),
                     Offset(
-                        if (lines.last().second.x == maxX) startX else maxX,
+                        if (lines.last().second.x == endX) startX else endX,
                         currentY
                     )
                 )
@@ -64,7 +65,7 @@ class Path(
                 length * (1 - distance)
             )
         } else {
-            Offset(maxX, stepsY.last())
+            Offset(endX, endY)
         }
     }
 
@@ -98,7 +99,7 @@ class Path(
             return Pair(x, remainingDistance)
         }
 
-        val newX = if (x + distance in startX..maxX) {
+        val newX = if (x + distance in startX..endX) {
             remainingDistance = 0f
             x + distance
         } else if (x + distance < startX) {
@@ -106,8 +107,8 @@ class Path(
             remainingDistance *= -1
             startX
         } else {
-            remainingDistance -= maxX - x
-            maxX
+            remainingDistance -= endX - x
+            endX
         }
 
         Logger.LOGGER.logPartialMove(newX = newX, remainingDistance = remainingDistance)

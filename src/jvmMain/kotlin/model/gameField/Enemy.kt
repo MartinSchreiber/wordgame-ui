@@ -10,8 +10,8 @@ import util.Logger
 data class Enemy(
     private val path: Path,
     private val speed: Float = 0.001f,
-    var health: MutableState<Double> = mutableStateOf(10.0),
-    var position: MutableState<Offset> = mutableStateOf(Offset(20f, 20f)),
+    val health: MutableState<Float> = mutableStateOf(10f),
+    val position: MutableState<Offset>,
     val delay: Long = 1000L
 ) {
     //    val maxHealth = health
@@ -27,7 +27,7 @@ data class Enemy(
         return distance <= 0
     }
 
-    fun damage(damage: Double) {
+    fun damage(damage: Float) {
         health.value -= damage
     }
 

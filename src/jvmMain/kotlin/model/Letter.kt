@@ -6,15 +6,15 @@ data class Letter(
     val letter: Char,
     val value: Int = 1,
     val type: LetterType = LetterType.BASIC,
-    val specialValue: Double = 0.0
+    val specialValue: Float = 0f
 ) {
     val initTotalValue = {
         when (type) {
             LetterType.STRONGER -> value + specialValue
-            else -> value.toDouble()
+            else -> value.toFloat()
         }
     }
-    var totalValue: Double = initTotalValue()
+    var totalValue: Float = initTotalValue()
 
     override fun toString(): String {
         return when (type) {
