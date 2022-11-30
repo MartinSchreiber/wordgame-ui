@@ -9,7 +9,7 @@ import util.Logger
 //TODO: add "loot"
 data class Enemy(
     private val path: Path,
-    private val speed: Float = 0.001f,
+    private val speed: Float = 0.01f,
     val health: MutableState<Float> = mutableStateOf(10f),
     val position: MutableState<Offset>,
     val delay: Long = 1000L

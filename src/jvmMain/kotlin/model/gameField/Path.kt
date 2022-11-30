@@ -25,6 +25,14 @@ class Path(
         }
     }
 
+    val base = Base(
+        radius = stepY / 2,
+        center = Offset(
+            endX + (stepY / 2),
+            endY
+        )
+    )
+
     fun getLines(): List<Pair<Offset, Offset>> {
         val lines = mutableListOf<Pair<Offset, Offset>>()
 

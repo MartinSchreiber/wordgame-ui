@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.toArgb
 import model.gameField.GameField
 import org.jetbrains.skia.Font
 
-//TODO: draw base + fix overlay with other elements
+//TODO: fix overlay with other elements
 @Composable
 fun GameField(gameField: GameField) {
     val textPaint = Paint().asFrameworkPaint().apply {
@@ -23,13 +23,25 @@ fun GameField(gameField: GameField) {
     Canvas(modifier = Modifier.fillMaxSize(0.5f)) {
 
         gameField.path.getLines().forEach {
-
             drawLine(
                 start = it.first,
                 end = it.second,
                 color = Color.DarkGray,
                 strokeWidth = 2f
             )
+        }
+
+        gameField.path.base.let { base ->
+            drawCircle(radius = base.radius, center = base.center, color = Color.Gray)
+            drawIntoCanvas {
+                it.nativeCanvas.drawString(
+                    base.health.value.toString(),
+                    base.center.x,
+                    base.center.y,
+                    Font(),
+                    textPaint
+                )
+            }
         }
 
         gameField.enemiesOnField.forEach { enemy ->

@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import model.LetterChambers
 import model.Word
 import model.WordGame
+import model.gameField.Base
 import model.gameField.Enemy
 import model.gameField.GameField
 import util.Logger
@@ -23,6 +24,7 @@ fun backgroundTasks(wordGame: WordGame) {
     backgroundScope.launch {
         moveEnemies(
             enemies = wordGame.gameField.enemiesOnField,
+            base = wordGame.gameField.path.base,
             isOver = wordGame.isOver
         )
     }
@@ -37,10 +39,13 @@ fun backgroundTasks(wordGame: WordGame) {
     }
 }
 
-suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>, isOver: () -> Boolean) = coroutineScope {
+suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>, base: Base, isOver: () -> Boolean) = coroutineScope {
     while (!isOver()) {
         enemies.forEach {
             it.move()
+            if (it.distance <= 0) {
+                base.health.value -= it.health.value
+            }
         }
         enemies.removeIf { it.reachedEnd() }
         delay(100)

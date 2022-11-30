@@ -7,7 +7,7 @@ import view.WordGame
 //TODO implement menu, boiler etc.
 fun main() = application {
 
-    //TODO extract call to background-tasks and Composable into function
+    //TODO extract call to background-tasks and Composable into function?
     val wordGame = WordGame()
     backgroundTasks(wordGame)
 
