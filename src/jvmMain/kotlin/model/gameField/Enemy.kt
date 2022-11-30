@@ -2,19 +2,20 @@ package model.gameField
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.geometry.Offset
 import util.Logger
 
 //TODO: positive interaction/befriending of "enemy"?
 //TODO: add "loot"
 data class Enemy(
     private val path: Path,
-    private val speed: Double = 0.001,
+    private val speed: Float = 0.001f,
     var health: MutableState<Double> = mutableStateOf(10.0),
-    var position: MutableState<Point> = mutableStateOf(Point(20, 20)),
+    var position: MutableState<Offset> = mutableStateOf(Offset(20f, 20f)),
     val delay: Long = 1000L
 ) {
     //    val maxHealth = health
-    var distance = 1.0
+    var distance = 1f
 
     fun move() {
         distance -= speed

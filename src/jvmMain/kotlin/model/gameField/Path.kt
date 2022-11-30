@@ -1,13 +1,14 @@
 package model.gameField
 
+import androidx.compose.ui.geometry.Offset
 import util.Logger
 
 //TODO: Generalise and document
 class Path(
-    private val startX: Int = 20,
-    private val startY: Int = 20,
-    private val maxX: Int = 320,
-    private val stepY: Int = 60,
+    private val startX: Float = 20f,
+    private val startY: Float = 20f,
+    private val maxX: Float = 320f,
+    private val stepY: Float = 60f,
     private val numberOfTurns: Int = 2
 ) {
     private val stepsY = (0..numberOfTurns)
@@ -15,7 +16,7 @@ class Path(
         .map { startY + (stepY * it) }
     private val length = (maxX - startX) * (1 + numberOfTurns) + stepY * numberOfTurns
 
-    private val effectiveDistanceX = { y: Int, distance: Int ->
+    private val effectiveDistanceX = { y: Float, distance: Float ->
         if (stepsY.indexOf(y) % 2 == 1) {
             distance * -1
         } else {
@@ -23,13 +24,13 @@ class Path(
         }
     }
 
-    fun getLines(): List<Pair<Point, Point>> {
-        val lines = mutableListOf<Pair<Point, Point>>()
+    fun getLines(): List<Pair<Offset, Offset>> {
+        val lines = mutableListOf<Pair<Offset, Offset>>()
 
         lines.add(
             Pair(
-                Point(startX, startY),
-                Point(maxX, startY)
+                Offset(startX, startY),
+                Offset(maxX, startY)
             )
         )
 
@@ -37,13 +38,13 @@ class Path(
             lines.add(
                 Pair(
                     lines.last().second,
-                    Point(lines.last().second.x, currentY)
+                    Offset(lines.last().second.x, currentY)
                 )
             )
             lines.add(
                 Pair(
-                    Point(lines.last().second.x, currentY),
-                    Point(
+                    Offset(lines.last().second.x, currentY),
+                    Offset(
                         if (lines.last().second.x == maxX) startX else maxX,
                         currentY
                     )
@@ -54,20 +55,20 @@ class Path(
         return lines
     }
 
-    fun moveTo(distance: Double): Point {
+    fun moveTo(distance: Float): Offset {
         val absoluteDistance = (length * (1.0 - distance)).toInt()
         return if (absoluteDistance < length) {
             moveFrom(
                 startX,
                 startY,
-                (length * (1.0 - distance)).toInt()
+                length * (1 - distance)
             )
         } else {
-            Point(maxX, stepsY.last())
+            Offset(maxX, stepsY.last())
         }
     }
 
-    private fun moveFrom(x: Int, y: Int, distance: Int): Point {
+    private fun moveFrom(x: Float, y: Float, distance: Float): Offset {
         var currentX = x
         var currentY = y
         var remainingDistance = distance
@@ -87,10 +88,10 @@ class Path(
             }
         }
 
-        return Point(currentX, currentY)
+        return Offset(currentX, currentY)
     }
 
-    private fun moveX(x: Int, y: Int, distance: Int): Pair<Int, Int> {
+    private fun moveX(x: Float, y: Float, distance: Float): Pair<Float, Float> {
         var remainingDistance = distance
 
         if (!stepsY.contains(y)) {
@@ -98,7 +99,7 @@ class Path(
         }
 
         val newX = if (x + distance in startX..maxX) {
-            remainingDistance = 0
+            remainingDistance = 0f
             x + distance
         } else if (x + distance < startX) {
             remainingDistance += x - startX
@@ -113,16 +114,16 @@ class Path(
         return Pair(newX, remainingDistance)
     }
 
-    private fun moveY(y: Int, distance: Int): Pair<Int, Int> {
+    private fun moveY(y: Float, distance: Float): Pair<Float, Float> {
         var remainingDistance = distance
 
         if (y == stepsY.last()) {
-            return Pair(y, 0)
+            return Pair(y, 0f)
         }
 
         val nextTurnAt = stepsY.filter { it > y }.min()
         val newY = if (y + distance <= nextTurnAt) {
-            remainingDistance = 0
+            remainingDistance = 0f
             y + distance
         } else {
             remainingDistance -= nextTurnAt - y

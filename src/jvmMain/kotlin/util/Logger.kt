@@ -20,7 +20,7 @@ class Logger {
         println("$input is not a word")
     }
 
-    fun logPartialMove(newX: Int? = null, newY: Int? = null, remainingDistance: Int) {
+    fun logPartialMove(newX: Float? = null, newY: Float? = null, remainingDistance: Float) {
         newY?.let { print("moveY: $it \t ") }
         newX?.let { print("moveX: $it \t ") }
         print("remainingDistance: $remainingDistance")

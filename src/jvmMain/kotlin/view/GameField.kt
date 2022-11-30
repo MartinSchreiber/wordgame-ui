@@ -4,13 +4,11 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.unit.dp
 import model.gameField.GameField
 import org.jetbrains.skia.Font
 
@@ -27,10 +25,10 @@ fun GameField(gameField: GameField) {
         gameField.path.getLines().forEach {
 
             drawLine(
-                start = Offset(x = it.first.x.toFloat(), y = it.first.y.toFloat()),
-                end = Offset(x = it.second.x.toFloat(), y = it.second.y.toFloat()),
+                start = it.first,
+                end = it.second,
                 color = Color.DarkGray,
-                strokeWidth = 2F
+                strokeWidth = 2f
             )
         }
 
@@ -38,8 +36,8 @@ fun GameField(gameField: GameField) {
             drawIntoCanvas {
                 it.nativeCanvas.drawString(
                     enemy.toString(),
-                    enemy.position.value.x.dp.toPx(),
-                    enemy.position.value.y.dp.toPx(),
+                    enemy.position.value.x,
+                    enemy.position.value.y,
                     Font(),
                     textPaint
                 )
