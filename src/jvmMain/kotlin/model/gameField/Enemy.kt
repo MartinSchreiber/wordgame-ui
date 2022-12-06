@@ -9,13 +9,13 @@ import util.Logger
 //TODO: add "loot"
 data class Enemy(
     private val path: Path,
-    private val speed: Float = 0.01f,
-    val health: MutableState<Float> = mutableStateOf(10f),
+    private val speed: Float = 0.002f,
     val position: MutableState<Offset>,
+    val maxHealth: Float,
     val delay: Long = 1000L
 ) {
-    //    val maxHealth = health
     var distance = 1f
+    val health = mutableStateOf(maxHealth)
 
     fun move() {
         distance -= speed
@@ -29,6 +29,12 @@ data class Enemy(
 
     fun damage(damage: Float) {
         health.value -= damage
+    }
+
+    operator fun times(factor: Int): List<Enemy> {
+        return (1..factor)
+            .toList()
+            .map { this.copy(position = mutableStateOf(this.position.value)) }
     }
 
     override fun toString(): String {
