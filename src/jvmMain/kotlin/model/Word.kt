@@ -40,4 +40,8 @@ class Word(val letters: MutableList<Letter> = mutableListOf()) {
     override fun toString(): String {
         return letters.joinToString("")
     }
+
+    fun toPlainString(): String {
+        return letters.joinToString(separator = "", transform = { it.letter.toString() })
+    }
 }

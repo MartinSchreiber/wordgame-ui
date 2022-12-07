@@ -20,6 +20,10 @@ class WordGame(language: Language = Language.ENGLISH) {
     private val specialLetters = LetterUtil.getSpecialLetters(language)
     private val borrowedLetters = mutableListOf<Pair<Letter, Int>>()
 
+    private var alreadyTyped = { word: String ->
+        typedWords.map { it.toPlainString() }.contains(word)
+    }
+
     val allowedLetters = letterValues.keys
     val typedWords: SnapshotStateList<Word> = mutableStateListOf()
 
@@ -61,7 +65,10 @@ class WordGame(language: Language = Language.ENGLISH) {
 
     fun addWord(): Boolean {
         textInput.value = textInput.value
-        return if (textInput.value.isNotBlank() && validWords.contains(textInput.value)) {
+        return if (textInput.value.isNotBlank()
+            && validWords.contains(textInput.value)
+            && !alreadyTyped(textInput.value)
+        ) {
 
 
             wordQueue.add(wordInput.value)
