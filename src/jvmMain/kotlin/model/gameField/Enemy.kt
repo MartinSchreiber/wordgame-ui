@@ -1,6 +1,5 @@
 package model.gameField
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
 import util.Logger
@@ -10,12 +9,13 @@ import util.Logger
 data class Enemy(
     private val path: Path,
     private val speed: Float = 0.002f,
-    val position: MutableState<Offset>,
+    val startPosition: Offset,
     val maxHealth: Float,
     val delay: Long = 1000L
 ) {
     var distance = 1f
     val health = mutableStateOf(maxHealth)
+    val position = mutableStateOf(startPosition)
 
     fun move() {
         distance -= speed
@@ -34,7 +34,7 @@ data class Enemy(
     operator fun times(factor: Int): List<Enemy> {
         return (1..factor)
             .toList()
-            .map { this.copy(position = mutableStateOf(this.position.value)) }
+            .map { this.copy() }
     }
 
     override fun toString(): String {

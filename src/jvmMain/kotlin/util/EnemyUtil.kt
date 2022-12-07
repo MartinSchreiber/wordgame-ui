@@ -1,6 +1,5 @@
 package util
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
 import model.gameField.Enemy
 import model.gameField.Path
@@ -9,17 +8,17 @@ class EnemyUtil(path: Path, position: Offset) {
 
     private val smallEnemy = Enemy(
         path = path,
-        position = mutableStateOf(position),
+        startPosition = position,
         maxHealth = 10f
     )
     private val middleEnemy = Enemy(
         path = path,
-        position = mutableStateOf(position),
+        startPosition = position,
         maxHealth = 25f
     )
     private val bigEnemy = Enemy(
         path = path,
-        position = mutableStateOf(position),
+        startPosition = position,
         maxHealth = 50f
     )
 
