@@ -23,13 +23,10 @@ class EnemyUtil(path: Path, position: Offset) {
     )
 
     fun getDefaultEnemies(): MutableList<Enemy> {
-        val enemies = mutableListOf<Enemy>()
-
-        enemies.addAll(smallEnemy * 10)
-        enemies.addAll(middleEnemy * 5)
-        enemies.addAll(bigEnemy * 1)
-
-        return enemies
+        return ((smallEnemy * 10)
+                + (middleEnemy * 5)
+                + (bigEnemy * 1))
+            .toMutableList()
     }
     //TODO: give Enemy-List for various levels/difficulties
 }

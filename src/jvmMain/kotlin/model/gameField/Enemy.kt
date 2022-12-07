@@ -38,6 +38,6 @@ data class Enemy(
     }
 
     override fun toString(): String {
-        return ")${health.value}("
+        return health.value.toString()
     }
 }
