@@ -4,29 +4,36 @@ import androidx.compose.ui.geometry.Offset
 import model.gameField.Enemy
 import model.gameField.Path
 
-class EnemyUtil(path: Path, position: Offset) {
+class EnemyUtil(val path: Path, val position: Offset) {
+    companion object {
+        const val DEFAULT_DELAY = 1000L
+    }
 
-    private val smallEnemy = Enemy(
-        path = path,
-        startPosition = position,
-        maxHealth = 10f
-    )
-    private val middleEnemy = Enemy(
-        path = path,
-        startPosition = position,
-        maxHealth = 25f
-    )
-    private val bigEnemy = Enemy(
-        path = path,
-        startPosition = position,
-        maxHealth = 50f
-    )
+    inner class EnemyGroup(health: Float, number: Int = 1, delay: Long? = null) {
+        val enemies = Enemy(
+            path = path,
+            maxHealth = health,
+            startPosition = position,
+            delay = delay ?: DEFAULT_DELAY
+        ) * number
 
-    fun getDefaultEnemies(): MutableList<Enemy> {
-        return ((smallEnemy * 10)
-                + (middleEnemy * 5)
-                + (bigEnemy * 1))
+        operator fun plus(enemyGroup: EnemyGroup): List<EnemyGroup> {
+            return listOf(this, enemyGroup)
+        }
+    }
+
+    private val enemies = { groups: List<EnemyGroup> ->
+        groups
+            .map { it.enemies }
+            .flatten()
             .toMutableList()
     }
-    //TODO: give Enemy-List for various levels/difficulties
+
+    fun getDefaultEnemies(): MutableList<Enemy> {
+        return enemies(
+            EnemyGroup(10f, 10) +
+                    EnemyGroup(25f, 5) +
+                    EnemyGroup(50f)
+        )
+    }
 }
