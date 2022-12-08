@@ -15,8 +15,9 @@ class LetterChambers(private val visible: Int, private var opened: Int, letters:
         if (chambers.filter { it.open }.size < visible) {
             chambers
                 .filter { !it.open }
-                .subList(0, number)
-                .forEach { it.open = true }
+                .takeIf { it.isNotEmpty() }
+                ?.subList(0, number)
+                ?.forEach { it.open = true }
         }
     }
 
