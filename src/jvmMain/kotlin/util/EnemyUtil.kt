@@ -6,15 +6,17 @@ import model.gameField.Path
 
 class EnemyUtil(val path: Path, val position: Offset) {
     companion object {
+        const val BASE_SPEED = 0.002f
         const val DEFAULT_DELAY = 1000L
     }
 
-    inner class EnemyGroup(health: Float, number: Int = 1, delay: Long? = null) {
+    inner class EnemyGroup(health: Float, number: Int = 1, delay: Long = DEFAULT_DELAY, speed: Float = BASE_SPEED) {
         val enemies = Enemy(
             path = path,
+            speed = speed,
             maxHealth = health,
             startPosition = position,
-            delay = delay ?: DEFAULT_DELAY
+            delay = delay
         ) * number
 
         operator fun plus(enemyGroup: EnemyGroup): List<EnemyGroup> {

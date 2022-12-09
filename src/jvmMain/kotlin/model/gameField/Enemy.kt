@@ -8,10 +8,10 @@ import util.Logger
 //TODO: add "loot"
 data class Enemy(
     private val path: Path,
-    private val speed: Float = 0.002f,
+    private val speed: Float,
     val startPosition: Offset,
     val maxHealth: Float,
-    val delay: Long = 1000L
+    val delay: Long
 ) {
     var distance = 1f
     val health = mutableStateOf(maxHealth)
