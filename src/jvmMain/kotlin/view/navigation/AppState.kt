@@ -12,14 +12,13 @@ object AppState {
     private var language = mutableStateOf(Language.ENGLISH)
 
     var wordGame: WordGame? = null
-    var level: Level? = null
+    var level: Level = Level.ONE
 
     fun screenState(): ScreenType {
         return screen.value
     }
 
     fun screenState(state: ScreenType) {
-        println("ScreenState is now: $state")
         screen.value = state
     }
 
@@ -28,7 +27,6 @@ object AppState {
     }
 
     fun language(language: Language) {
-        println("Language is now: $language")
         this.language.value = language
     }
 }

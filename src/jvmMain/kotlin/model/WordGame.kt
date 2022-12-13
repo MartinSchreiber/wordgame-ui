@@ -4,12 +4,13 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import constants.Language
+import constants.Level
 import model.gameField.GameField
 import util.ImportUtil
 import util.LetterUtil
 import util.Logger
 
-class WordGame(language: Language = Language.ENGLISH) {
+class WordGame(language: Language = Language.ENGLISH, level: Level = Level.ONE) {
     companion object {
         private const val TOTAL_LETTER_CHAMBERS = 10
         private const val OPEN_LETTER_CHAMBERS = 1
@@ -32,7 +33,7 @@ class WordGame(language: Language = Language.ENGLISH) {
     val wordQueue: SnapshotStateList<Word> = mutableStateListOf()
     val letterChambers = LetterChambers(TOTAL_LETTER_CHAMBERS, OPEN_LETTER_CHAMBERS, specialLetters)
 
-    val gameField = GameField()
+    val gameField = GameField(level = level)
 
     var isOver = { gameField.isOver() }
     fun updateWord(text: String) {

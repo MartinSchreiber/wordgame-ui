@@ -43,7 +43,7 @@ val onGameOver = { AppState.screenState(ScreenType.GameStatistics) }
 @Composable
 @Preview
 fun WordGame() {
-    val wordGame = WordGame(language = AppState.language())
+    val wordGame = WordGame(language = AppState.language(), level = AppState.level)
     AppState.wordGame = wordGame
 
     backgroundTasks(wordGame, onGameOver)
