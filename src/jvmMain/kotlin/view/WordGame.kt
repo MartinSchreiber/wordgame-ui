@@ -57,23 +57,23 @@ fun WordGame() {
             Row {
                 Column {
                     GameField(wordGame.gameField)
+                    Row {
+                        WordQueue(wordGame.wordQueue)
+                    }
+                    Row {
+                        LetterChambers(wordGame.letterChambers)
+                    }
+                    Row {
+                        WordInput(
+                            text = wordGame.textInput,
+                            word = wordGame.wordInput,
+                            onValueChange = { text -> onValueChange(wordGame, text) },
+                            onKeyEvent = { ev -> onKeyEvent(wordGame, ev) })
+                    }
                 }
                 Column {
                     WordsTyped(wordGame.typedWords)
                 }
-            }
-            Row {
-                WordQueue(wordGame.wordQueue)
-            }
-            Row {
-                LetterChambers(wordGame.letterChambers)
-            }
-            Row {
-                WordInput(
-                    text = wordGame.textInput,
-                    word = wordGame.wordInput,
-                    onValueChange = { text -> onValueChange(wordGame, text) },
-                    onKeyEvent = { ev -> onKeyEvent(wordGame, ev) })
             }
         }
     }

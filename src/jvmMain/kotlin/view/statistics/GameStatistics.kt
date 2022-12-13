@@ -13,7 +13,7 @@ import view.statistics.TypedWords
 fun GameStatistics() {
     val wordGame = AppState.wordGame!!
     val timePlayed = (wordGame.endTime!! - wordGame.startTime) / 1000
-    val lettersPerMinute = wordGame.typedWords.sumOf { it.size() } / (timePlayed / 60)
+    val lettersPerMinute = wordGame.typedWords.sumOf { it.size() } / (timePlayed / 60f)
     val totalWordDamage = wordGame.typedWords.sumOf { it.getTotalValue().toDouble() }
     val averageWordDamage = totalWordDamage / wordGame.typedWords.size
     Row {
@@ -54,9 +54,25 @@ fun GameStatistics() {
         }
     }
     Row {
-        SimpleButton(
-            onClick = { AppState.screenState(ScreenType.MainMenu) }, text = "Menu"
-        )
-        //TODO: continue with next level
+        Column {
+            SimpleButton(
+                onClick = { AppState.screenState(ScreenType.MainMenu) }, text = "Menu"
+            )
+        }
+        Column {
+            SimpleButton(
+                onClick = { AppState.screenState(ScreenType.WordGame) }, text = "Replay Level"
+            )
+        }
+        if (wordGame.level.hasNext()) {
+            Column {
+                SimpleButton(
+                    onClick = {
+                        AppState.level = wordGame.level.getNext()
+                        AppState.screenState(ScreenType.WordGame)
+                    }, text = "Next Level"
+                )
+            }
+        }
     }
 }
