@@ -16,7 +16,7 @@ import util.Logger
 
 
 @Composable
-fun backgroundTasks(wordGame: WordGame) {
+fun backgroundTasks(wordGame: WordGame, onGameOver: () -> Unit) {
     val backgroundScope = rememberCoroutineScope()
     backgroundScope.launch {
         spawnEnemies(gameField = wordGame.gameField)
@@ -37,6 +37,19 @@ fun backgroundTasks(wordGame: WordGame) {
         )
         Logger.LOGGER.logGameOver(wordGame)
     }
+    backgroundScope.launch {
+        waitForGameOver(
+            isOver = wordGame.isOver,
+            onGameOver = onGameOver
+        )
+    }
+}
+
+suspend fun waitForGameOver(isOver: () -> Boolean, onGameOver: () -> Unit) = coroutineScope {
+    while (!isOver()) {
+        delay(100)
+    }
+    onGameOver()
 }
 
 suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>, base: Base, isOver: () -> Boolean) = coroutineScope {
