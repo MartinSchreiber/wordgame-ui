@@ -10,7 +10,7 @@ import util.ImportUtil
 import util.LetterUtil
 import util.Logger
 
-class WordGame(language: Language = Language.ENGLISH, level: Level = Level.ONE) {
+class WordGame(val language: Language = Language.ENGLISH, val level: Level = Level.ONE) {
     companion object {
         private const val TOTAL_LETTER_CHAMBERS = 10
         private const val OPEN_LETTER_CHAMBERS = 1
@@ -36,6 +36,10 @@ class WordGame(language: Language = Language.ENGLISH, level: Level = Level.ONE) 
     val gameField = GameField(level = level)
 
     var isOver = { gameField.isOver() }
+
+    val startTime = System.currentTimeMillis()
+    var endTime: Long? = null
+
     fun updateWord(text: String) {
         textInput.value = text
 

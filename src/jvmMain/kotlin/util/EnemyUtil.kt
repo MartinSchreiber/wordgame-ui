@@ -38,7 +38,6 @@ class EnemyUtil(val path: Path, val position: Offset) {
     }
 
     fun getEnemies(level: Level): MutableList<Enemy> {
-        println("Level is: $level")
         val enemyGroups = when (level) {
             Level.ONE -> {
                 listOf(EnemyGroup(10f, 20))

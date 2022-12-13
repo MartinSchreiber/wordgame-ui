@@ -38,7 +38,10 @@ val onValueChange = { wordGame: WordGame, text: String ->
     )
 }
 
-val onGameOver = { AppState.screenState(ScreenType.GameStatistics) }
+val onGameOver = { wordGame: WordGame ->
+    wordGame.endTime = System.currentTimeMillis()
+    AppState.screenState(ScreenType.GameStatistics)
+}
 
 @Composable
 @Preview
@@ -46,9 +49,10 @@ fun WordGame() {
     val wordGame = WordGame(language = AppState.language(), level = AppState.level)
     AppState.wordGame = wordGame
 
-    backgroundTasks(wordGame, onGameOver)
+    backgroundTasks(wordGame) { onGameOver(wordGame) }
 
     MaterialTheme {
+        //TODO: Add Enemy-Counter onField(Incoming)
         Column {
             Row {
                 Column {
