@@ -4,9 +4,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import control.backgroundTasks
-import model.WordGame
+import constants.ScreenType
+import view.GameStatistics
 import view.WordGame
+import view.menu.LevelMenu
 import view.menu.MainMenu
 
 @Composable
@@ -20,12 +21,16 @@ fun AppUI() {
                 MainMenu()
             }
 
-            ScreenType.GameScreen -> {
-                WordGame(language = GameSettings.language())
-                    .let {
-                        backgroundTasks(it, onGameOver = { AppState.screenState(ScreenType.MainMenu) })
-                        WordGame(it)
-                    }
+            ScreenType.WordGame -> {
+                WordGame()
+            }
+
+            ScreenType.GameStatistics -> {
+                GameStatistics()
+            }
+
+            ScreenType.LevelMenu -> {
+                LevelMenu()
             }
         }
     }

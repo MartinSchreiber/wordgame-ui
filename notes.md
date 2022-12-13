@@ -27,3 +27,22 @@ moveY()
 else {
 x + d
 }
+
+# Persistence
+
+- user-data
+  - settings
+    - language
+    - resolution?
+    - sound?
+    - game-play
+      - allow words more than once per game
+      - difficulty? (maybe multiply enemy-health)
+      - number of turns
+- game-data
+  - typed words
+  - game-time
+  - language
+  - startHealth
+  - endHealth
+  - total word-damage

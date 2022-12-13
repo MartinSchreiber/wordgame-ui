@@ -45,13 +45,6 @@ fun backgroundTasks(wordGame: WordGame, onGameOver: () -> Unit) {
     }
 }
 
-suspend fun waitForGameOver(isOver: () -> Boolean, onGameOver: () -> Unit) = coroutineScope {
-    while (!isOver()) {
-        delay(100)
-    }
-    onGameOver()
-}
-
 suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>, base: Base, isOver: () -> Boolean) = coroutineScope {
     while (!isOver()) {
         enemies.forEach {
@@ -76,6 +69,7 @@ suspend fun spawnEnemies(gameField: GameField) =
         }
     }
 
+//TODO: un-nest function
 suspend fun fireLetters(
     queue: SnapshotStateList<Word>,
     enemiesOnField: SnapshotStateList<Enemy>,
@@ -102,4 +96,11 @@ suspend fun fireLetters(
         }
         delay(250)
     }
+}
+
+suspend fun waitForGameOver(isOver: () -> Boolean, onGameOver: () -> Unit) = coroutineScope {
+    while (!isOver()) {
+        delay(100)
+    }
+    onGameOver()
 }

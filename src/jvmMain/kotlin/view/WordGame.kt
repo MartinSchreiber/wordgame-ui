@@ -7,7 +7,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.input.key.*
+import constants.ScreenType
+import control.backgroundTasks
 import model.WordGame
+import view.navigation.AppState
 
 //TODO generativ erzeugen? Das wär cool (also move back into WordInput)
 @OptIn(ExperimentalComposeUiApi::class)
@@ -35,12 +38,18 @@ val onValueChange = { wordGame: WordGame, text: String ->
     )
 }
 
+val onGameOver = { AppState.screenState(ScreenType.GameStatistics) }
+
 @Composable
 @Preview
-fun WordGame(wordGame: WordGame) {
+fun WordGame() {
+    val wordGame = WordGame(language = AppState.language())
+    AppState.wordGame = wordGame
+
+    backgroundTasks(wordGame, onGameOver)
+
     MaterialTheme {
         Column {
-            LetterChambers(wordGame.letterChambers)
             Row {
                 Column {
                     GameField(wordGame.gameField)
@@ -51,6 +60,9 @@ fun WordGame(wordGame: WordGame) {
             }
             Row {
                 WordQueue(wordGame.wordQueue)
+            }
+            Row {
+                LetterChambers(wordGame.letterChambers)
             }
             Row {
                 WordInput(

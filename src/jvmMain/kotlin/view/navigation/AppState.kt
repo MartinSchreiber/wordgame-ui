@@ -3,26 +3,25 @@ package view.navigation
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import constants.Language
-
-enum class ScreenType {
-    MainMenu, GameScreen
-}
+import constants.Level
+import constants.ScreenType
+import model.WordGame
 
 object AppState {
     private var screen: MutableState<ScreenType> = mutableStateOf(ScreenType.MainMenu)
+    private var language = mutableStateOf(Language.ENGLISH)
+
+    var wordGame: WordGame? = null
+    var level: Level? = null
 
     fun screenState(): ScreenType {
         return screen.value
     }
 
     fun screenState(state: ScreenType) {
-        println("ScreenState ist now: $state")
+        println("ScreenState is now: $state")
         screen.value = state
     }
-}
-
-object GameSettings {
-    private var language = mutableStateOf(Language.ENGLISH)
 
     fun language(): Language {
         return language.value

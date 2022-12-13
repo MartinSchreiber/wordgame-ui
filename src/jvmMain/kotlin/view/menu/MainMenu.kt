@@ -3,25 +3,24 @@ package view.menu
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Button
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import constants.Language
+import constants.ScreenType
 import view.navigation.AppState
-import view.navigation.GameSettings
-import view.navigation.ScreenType
 
 @Composable
 fun MainMenu() {
     Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize().align(Alignment.CenterVertically)) {
             Row {
-                TextButton(onClick = {
-                    AppState.screenState(ScreenType.GameScreen)
+                Button(onClick = {
+                    AppState.screenState(ScreenType.LevelMenu)
                 }) {
-                    Text("Start Game!")
+                    Text("Select Level!")
                 }
             }
             Row {
@@ -29,8 +28,8 @@ fun MainMenu() {
             }
             Language.values().forEach { language ->
                 Row {
-                    TextButton(onClick = {
-                        GameSettings.language(language)
+                    Button(onClick = {
+                        AppState.language(language)
                     }) {
                         Text(language.toString())
                     }
