@@ -6,13 +6,20 @@ import constants.Language
 import constants.Level
 import constants.ScreenType
 import model.WordGame
+import persistence.PlayerData
 
 object AppState {
-    private var screen: MutableState<ScreenType> = mutableStateOf(ScreenType.MainMenu)
+    private var screen: MutableState<ScreenType> = mutableStateOf(ScreenType.PlayerMenu)
     private var language = mutableStateOf(Language.ENGLISH)
 
+    var playerData: PlayerData? = null
     var wordGame: WordGame? = null
     var level: Level = Level.ONE
+
+    fun loadPlayerData(playerData: PlayerData) {
+        this.playerData = playerData
+        language = mutableStateOf(playerData.language)
+    }
 
     fun screenState(): ScreenType {
         return screen.value

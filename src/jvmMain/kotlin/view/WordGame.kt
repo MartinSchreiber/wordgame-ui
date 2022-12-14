@@ -12,7 +12,7 @@ import control.backgroundTasks
 import model.WordGame
 import view.navigation.AppState
 
-//TODO generativ erzeugen? Das wär cool (also move back into WordInput)
+//TODO generativ erzeugen? Das wär cool
 @OptIn(ExperimentalComposeUiApi::class)
 val onKeyEvent = { wordGame: WordGame, ev: KeyEvent ->
     when {

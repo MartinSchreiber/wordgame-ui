@@ -16,6 +16,9 @@ import view.navigation.AppState
 fun MainMenu() {
     Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize().align(Alignment.CenterVertically)) {
+            AppState.playerData?.let { playerData ->
+                Text("Greetings ${playerData.name}!")
+            }
             Row {
                 SimpleButton(
                     onClick = { AppState.screenState(ScreenType.LevelMenu) },
@@ -34,6 +37,7 @@ fun MainMenu() {
                 }
             }
 
+            //TODO implement drop-down
 //            Row {
 //                DropdownMenu(expanded = true, onDismissRequest = {}) {
 //                    Language.values().forEach { language ->

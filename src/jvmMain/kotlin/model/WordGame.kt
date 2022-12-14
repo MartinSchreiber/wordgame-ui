@@ -10,6 +10,7 @@ import util.ImportUtil
 import util.LetterUtil
 import util.Logger
 
+//TODO document + simplify somehow (modules?)
 class WordGame(val language: Language = Language.ENGLISH, val level: Level = Level.ONE) {
     companion object {
         private const val TOTAL_LETTER_CHAMBERS = 10

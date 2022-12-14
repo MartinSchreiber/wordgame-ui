@@ -4,7 +4,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
 import util.Logger
 
-//TODO: positive interaction/befriending of "enemy"?
 //TODO: add "loot"
 data class Enemy(
     private val path: Path,

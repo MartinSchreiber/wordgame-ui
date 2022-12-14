@@ -9,6 +9,7 @@ import view.GameStatistics
 import view.WordGame
 import view.menu.LevelMenu
 import view.menu.MainMenu
+import view.menu.PlayerMenu
 
 @Composable
 fun AppUI() {
@@ -21,16 +22,20 @@ fun AppUI() {
                 MainMenu()
             }
 
+            ScreenType.PlayerMenu -> {
+                PlayerMenu()
+            }
+
+            ScreenType.LevelMenu -> {
+                LevelMenu()
+            }
+
             ScreenType.WordGame -> {
                 WordGame()
             }
 
             ScreenType.GameStatistics -> {
                 GameStatistics()
-            }
-
-            ScreenType.LevelMenu -> {
-                LevelMenu()
             }
         }
     }

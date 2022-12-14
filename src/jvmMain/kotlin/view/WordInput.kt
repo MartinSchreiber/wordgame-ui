@@ -13,7 +13,6 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import model.Word
 
-//TODO style
 @Composable
 fun WordInput(
     text: MutableState<String>,

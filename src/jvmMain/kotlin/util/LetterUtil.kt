@@ -15,6 +15,10 @@ class LetterUtil {
             }
         }
 
+        fun getSpecialLetterMap(): Map<Language, List<Letter>> {
+            return Language.values().associateWith { getSpecialLetters(it) }
+        }
+
         fun getSpecialLetters(language: Language = Language.ENGLISH): List<Letter> {
             val specialLetters = mutableListOf<Letter>()
 

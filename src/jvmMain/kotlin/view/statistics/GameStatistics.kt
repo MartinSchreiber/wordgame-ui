@@ -5,31 +5,32 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import constants.ScreenType
+import util.PersistenceUtil
 import view.components.SimpleButton
 import view.navigation.AppState
 import view.statistics.TypedWords
 
 @Composable
 fun GameStatistics() {
-    val wordGame = AppState.wordGame!!
-    val timePlayed = (wordGame.endTime!! - wordGame.startTime) / 1000
-    val lettersPerMinute = wordGame.typedWords.sumOf { it.size() } / (timePlayed / 60f)
-    val totalWordDamage = wordGame.typedWords.sumOf { it.getTotalValue().toDouble() }
-    val averageWordDamage = totalWordDamage / wordGame.typedWords.size
+    val gameData = PersistenceUtil.persistGame(AppState.wordGame!!)
+    val timePlayed = gameData.playTime / 1000
+    val lettersPerMinute = gameData.typedWords.sumOf { it.size() } / (timePlayed / 60f)
+    val totalWordDamage = gameData.typedWords.sumOf { it.getTotalValue().toDouble() }
+    val averageWordDamage = totalWordDamage / gameData.typedWords.size
     Row {
         Column {
             Row {
-                TypedWords(wordGame.typedWords)
+                TypedWords(gameData.typedWords)
             }
             Row {
-                if (wordGame.gameField.path.base.health.value > 0) {
-                    Text(text = "Level ${wordGame.level} Won!")
+                if (gameData.healthRemaining > 0) {
+                    Text(text = "Level ${gameData.level} Won!")
                 } else {
-                    Text(text = "Level ${wordGame.level} Lost!")
+                    Text(text = "Level ${gameData.level} Lost!")
                 }
             }
             Row {
-                Text(text = "Language: ${wordGame.language}")
+                Text(text = "Language: ${gameData.language}")
             }
         }
         Column {
@@ -46,10 +47,10 @@ fun GameStatistics() {
                 Text(text = "Letters per Minute: $lettersPerMinute")
             }
             Row {
-                Text(text = "Enemies remaining: ${wordGame.gameField.enemiesOnField.size}(${wordGame.gameField.enemiesIncoming.size})")
+                Text(text = "Enemies remaining: ${gameData.enemiesRemaining}")
             }
             Row {
-                Text(text = "Health remaining: ${wordGame.gameField.path.base.health.value}")
+                Text(text = "Health remaining: ${gameData.healthRemaining}")
             }
         }
     }
@@ -64,11 +65,11 @@ fun GameStatistics() {
                 onClick = { AppState.screenState(ScreenType.WordGame) }, text = "Replay Level"
             )
         }
-        if (wordGame.level.hasNext()) {
+        if (gameData.level.hasNext()) {
             Column {
                 SimpleButton(
                     onClick = {
-                        AppState.level = wordGame.level.getNext()
+                        AppState.level = gameData.level.getNext()
                         AppState.screenState(ScreenType.WordGame)
                     }, text = "Next Level"
                 )
