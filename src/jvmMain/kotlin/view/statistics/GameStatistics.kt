@@ -12,10 +12,6 @@ import view.navigation.AppState
 @Composable
 fun GameStatistics() {
     val gameData = PersistenceUtil.persistGameData(AppState.wordGame!!, AppState.playerData!!.id)
-    val timePlayed = gameData.playTime / 1000
-    val lettersPerMinute = gameData.typedWords.sumOf { it.size() } / (timePlayed / 60f)
-    val totalWordDamage = gameData.typedWords.sumOf { it.getTotalValue().toDouble() }
-    val averageWordDamage = totalWordDamage / gameData.typedWords.size
     Row {
         Column {
             Row {
@@ -34,16 +30,16 @@ fun GameStatistics() {
         }
         Column {
             Row {
-                Text(text = "Total Word-Damage: $totalWordDamage")
+                Text(text = "Total Word-Damage: ${gameData.totalWordDamage}")
             }
             Row {
-                Text(text = "Average Word-Damage: $averageWordDamage")
+                Text(text = "Average Word-Damage: ${gameData.averageWordDamage}")
             }
             Row {
-                Text(text = "Time Played (Seconds): $timePlayed")
+                Text(text = "Time Played (Seconds): ${gameData.playTime / 1000f}")
             }
             Row {
-                Text(text = "Letters per Minute: $lettersPerMinute")
+                Text(text = "Letters per Minute: ${gameData.lettersPerMinute}")
             }
             Row {
                 Text(text = "Enemies remaining: ${gameData.enemiesRemaining}")

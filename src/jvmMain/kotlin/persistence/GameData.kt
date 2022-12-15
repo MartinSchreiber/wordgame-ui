@@ -10,5 +10,8 @@ data class GameData(
     val typedWords: List<Word>,
     val playTime: Long,
     val healthRemaining: Float,
-    val enemiesRemaining: Int
+    val enemiesRemaining: Int,
+    val lettersPerMinute: Float,
+    val totalWordDamage: Float,
+    val averageWordDamage: Float
 )

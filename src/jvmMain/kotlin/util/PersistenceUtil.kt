@@ -70,14 +70,24 @@ class PersistenceUtil {
         }
 
         private fun convertWordGame(wordGame: WordGame): GameData {
+            val playTime = (wordGame.endTime!! - wordGame.startTime)
+            val lettersPerMinute = wordGame.typedWords.sumOf { it.size() } / (playTime / 60000f)
+            val totalWordDamage = wordGame.typedWords.sumOf { it.getTotalValue().toDouble() }.toFloat()
+            val averageWordDamage = totalWordDamage / wordGame.typedWords.size
+
             return GameData(
                 level = wordGame.level,
                 language = wordGame.language,
                 typedWords = wordGame.typedWords.toList(),
-                playTime = (wordGame.endTime!! - wordGame.startTime),
+                playTime = playTime,
                 healthRemaining = wordGame.gameField.path.base.health.value,
-                enemiesRemaining = wordGame.gameField.enemiesOnField.size + wordGame.gameField.enemiesIncoming.size //TODO move calculations into WordGame-class?
+                enemiesRemaining = wordGame.gameField.enemiesOnField.size + wordGame.gameField.enemiesIncoming.size,
+                lettersPerMinute = lettersPerMinute,
+                totalWordDamage = totalWordDamage,
+                averageWordDamage = averageWordDamage
             )
+
+
         }
     }
 
