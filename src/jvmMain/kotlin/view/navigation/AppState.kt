@@ -35,5 +35,6 @@ object AppState {
 
     fun language(language: Language) {
         this.language.value = language
+        this.playerData?.language = language
     }
 }

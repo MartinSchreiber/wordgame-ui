@@ -6,6 +6,6 @@ import model.Letter
 data class PlayerData(
     val id: Int,
     val name: String,
-    val language: Language,
-    val specialLetters: Map<Language, List<Letter>>
+    var language: Language,
+    var specialLetters: Map<Language, List<Letter>>
 )
