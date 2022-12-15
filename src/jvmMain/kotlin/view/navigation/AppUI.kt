@@ -5,7 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import constants.ScreenType
-import view.WordGame
+import view.Laboratory
+import view.gameplay.WordGame
 import view.menu.LevelMenu
 import view.menu.MainMenu
 import view.menu.PlayerMenu
@@ -41,6 +42,10 @@ fun AppUI() {
 
             ScreenType.GameStatistics -> {
                 GameStatistics()
+            }
+
+            ScreenType.Laboratory -> {
+                Laboratory()
             }
         }
     }

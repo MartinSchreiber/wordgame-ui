@@ -1,4 +1,4 @@
-package view
+package view.gameplay
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text

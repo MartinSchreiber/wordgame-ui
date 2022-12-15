@@ -1,4 +1,4 @@
-package view
+package view.gameplay
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
