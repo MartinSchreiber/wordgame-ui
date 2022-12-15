@@ -26,7 +26,13 @@ fun MainMenu() {
                 )
             }
             Row {
-                Text(text = "Language")
+                SimpleButton(
+                    onClick = { AppState.screenState(ScreenType.PlayerMenu) },
+                    text = "Player Menu"
+                )
+            }
+            Row {
+                Text(text = "Change Language")
             }
             Language.values().forEach { language ->
                 Row {

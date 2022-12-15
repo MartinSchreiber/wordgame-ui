@@ -5,11 +5,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import constants.ScreenType
-import view.GameStatistics
 import view.WordGame
 import view.menu.LevelMenu
 import view.menu.MainMenu
 import view.menu.PlayerMenu
+import view.statistics.GameStatistics
 
 @Composable
 fun AppUI() {

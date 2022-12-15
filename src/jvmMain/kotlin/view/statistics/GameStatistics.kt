@@ -1,4 +1,4 @@
-package view
+package view.statistics
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,11 +8,10 @@ import constants.ScreenType
 import util.PersistenceUtil
 import view.components.SimpleButton
 import view.navigation.AppState
-import view.statistics.TypedWords
 
 @Composable
 fun GameStatistics() {
-    val gameData = PersistenceUtil.persistGame(AppState.wordGame!!)
+    val gameData = PersistenceUtil.persistGameData(AppState.wordGame!!, AppState.playerData!!.id)
     val timePlayed = gameData.playTime / 1000
     val lettersPerMinute = gameData.typedWords.sumOf { it.size() } / (timePlayed / 60f)
     val totalWordDamage = gameData.typedWords.sumOf { it.getTotalValue().toDouble() }
