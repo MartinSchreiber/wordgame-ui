@@ -23,12 +23,16 @@ fun MainMenu() {
                 text = "Select Level!"
             )
             SimpleButton(
-                onClick = { AppState.screenState(ScreenType.PlayerMenu) },
-                text = "Player Menu"
+                onClick = { AppState.screenState(ScreenType.Laboratory) },
+                text = "To The Laboratory!"
             )
             SimpleButton(
                 onClick = { AppState.screenState(ScreenType.Settings) },
                 text = "Settings"
+            )
+            SimpleButton(
+                onClick = { AppState.screenState(ScreenType.PlayerMenu) },
+                text = "Player Menu"
             )
 
         }
