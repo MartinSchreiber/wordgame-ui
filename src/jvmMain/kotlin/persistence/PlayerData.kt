@@ -3,13 +3,13 @@ package persistence
 import constants.Language
 import model.Letter
 
-data class PlayerData(
+class PlayerData(
     val id: Int,
     val name: String,
     var language: Language,
-    var specialLetters: Map<Language, List<Letter>>
+    specialLetters: MutableMap<Language, List<Letter>>
 ) {
-    val laboratory = specialLetters.mapValues { Laboratory(it.value) }
+    val laboratory = specialLetters.mapValues { Laboratory(activeLetters = it.value) }.toMutableMap()
 
     data class Laboratory(
         var activeLetters: List<Letter>,

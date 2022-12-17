@@ -21,20 +21,22 @@ object AppState {
         language = mutableStateOf(playerData.language)
     }
 
-    fun screenState(): ScreenType {
-        return screen.value
-    }
+    fun screenState(): ScreenType = screen.value
 
     fun screenState(state: ScreenType) {
         screen.value = state
     }
 
-    fun language(): Language {
-        return language.value
-    }
+    fun language(): Language = language.value
 
     fun language(language: Language) {
         this.language.value = language
         this.playerData?.language = language
+    }
+
+    fun laboratory(): PlayerData.Laboratory = playerData!!.laboratory[language()]!!
+
+    fun laboratory(laboratory: PlayerData.Laboratory) {
+        playerData?.laboratory?.set(language(), laboratory)
     }
 }

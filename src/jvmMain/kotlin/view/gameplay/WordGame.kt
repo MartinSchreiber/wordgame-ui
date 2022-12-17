@@ -46,7 +46,11 @@ val onGameOver = { wordGame: WordGame ->
 @Composable
 @Preview
 fun WordGame() {
-    val wordGame = WordGame(language = AppState.language(), level = AppState.level)
+    val wordGame = WordGame(
+        language = AppState.language(),
+        level = AppState.level,
+        specialLetters = AppState.laboratory().activeLetters
+    )
     AppState.wordGame = wordGame
 
     backgroundTasks(wordGame) { onGameOver(wordGame) }

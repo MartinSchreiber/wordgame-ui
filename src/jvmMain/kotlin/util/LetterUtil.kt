@@ -8,6 +8,7 @@ import model.Letter
 
 class LetterUtil {
     companion object {
+
         fun getLetterValues(language: Language = Language.ENGLISH): Map<Char, Int> {
             return when (language) {
                 Language.ENGLISH -> LettersEng.values().associate { it.letter to it.value }
@@ -15,11 +16,11 @@ class LetterUtil {
             }
         }
 
-        fun getSpecialLetterMap(): Map<Language, List<Letter>> {
-            return Language.values().associateWith { getSpecialLetters(it) }
+        fun getSpecialLetterMap(): MutableMap<Language, List<Letter>> {
+            return Language.values().associateWith { getSpecialLetters(it) }.toMutableMap()
         }
 
-        fun getSpecialLetters(language: Language = Language.ENGLISH): List<Letter> {
+        private fun getSpecialLetters(language: Language = Language.ENGLISH): List<Letter> {
             val specialLetters = mutableListOf<Letter>()
 
             val letterValueGroups = getLetterValueGroups(language)

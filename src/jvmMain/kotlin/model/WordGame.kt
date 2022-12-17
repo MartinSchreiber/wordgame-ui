@@ -11,7 +11,11 @@ import util.LetterUtil
 import util.Logger
 
 //TODO document + simplify somehow (modules?)
-class WordGame(val language: Language = Language.ENGLISH, val level: Level = Level.ONE) {
+class WordGame(
+    val language: Language = Language.ENGLISH,
+    val level: Level = Level.ONE,
+    specialLetters: List<Letter>
+) {
     companion object {
         private const val TOTAL_LETTER_CHAMBERS = 10
         private const val OPEN_LETTER_CHAMBERS = 1
@@ -19,7 +23,6 @@ class WordGame(val language: Language = Language.ENGLISH, val level: Level = Lev
 
     private val validWords = ImportUtil.importWords(language)
     private val letterValues = LetterUtil.getLetterValues(language)
-    private val specialLetters = LetterUtil.getSpecialLetters(language)
     private val borrowedLetters = mutableListOf<Pair<Letter, Int>>()
 
     private var alreadyTyped = { word: String ->
