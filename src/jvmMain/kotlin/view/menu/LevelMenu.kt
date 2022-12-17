@@ -17,13 +17,10 @@ fun LevelMenu() {
         Column(modifier = Modifier.fillMaxSize().align(Alignment.CenterVertically)) {
             Level.values().forEach { level ->
                 Row {
-                    SimpleButton(
-                        onClick = {
-                            AppState.level = level
-                            AppState.screenState(ScreenType.WordGame)
-                        },
-                        text = level.toString()
-                    )
+                    SimpleButton(text = level.toString()) {
+                        AppState.level = level
+                        AppState.screenState(ScreenType.WordGame)
+                    }
                 }
             }
         }

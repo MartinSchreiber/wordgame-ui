@@ -12,23 +12,24 @@ import view.navigation.AppState
 
 @Composable
 fun Settings() {
+    val languageLabel = { language: Language ->
+        if (AppState.language() == language) {
+            "[$language]"
+        } else {
+            "$language"
+        }
+    }
+
     Column {
         Text(text = "Change Language")
         Row {
             Language.values().forEach { language ->
-                SimpleButton(
-                    onClick = { AppState.language(language) },
-                    text = if (AppState.language() == language) {
-                        "[$language]"
-                    } else {
-                        "$language"
-                    }
-                )
+                SimpleButton(text = languageLabel(language)) { AppState.language(language) }
             }
         }
-        SimpleButton(onClick = {
+        SimpleButton(text = "Main Menu") {
             PersistenceUtil.persistPlayer(AppState.playerData!!)
             AppState.screenState(ScreenType.MainMenu)
-        }, text = "Main Menu")
+        }
     }
 }

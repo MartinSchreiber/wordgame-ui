@@ -7,6 +7,7 @@ import persistence.GameData
 import persistence.PlayerData
 import view.navigation.AppState
 import java.io.File
+import java.time.LocalDateTime
 
 class PersistenceUtil {
     companion object {
@@ -78,8 +79,10 @@ class PersistenceUtil {
             return GameData(
                 level = wordGame.level,
                 language = wordGame.language,
+                specialLetters = wordGame.specialLetters,
                 typedWords = wordGame.typedWords.toList(),
                 playTime = playTime,
+                timeStamp = LocalDateTime.now().toString(),
                 healthRemaining = wordGame.gameField.path.base.health.value,
                 enemiesRemaining = wordGame.gameField.enemiesOnField.size + wordGame.gameField.enemiesIncoming.size,
                 lettersPerMinute = lettersPerMinute,

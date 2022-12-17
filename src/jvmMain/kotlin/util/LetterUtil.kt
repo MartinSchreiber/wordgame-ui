@@ -16,6 +16,18 @@ class LetterUtil {
             }
         }
 
+        fun getLetterValueGroups(language: Language = Language.ENGLISH): List<Pair<Int, List<Char>>> {
+            return when (language) {
+                Language.ENGLISH -> LettersEng.values()
+                    .groupBy { it.value }
+                    .map { it.key to it.value.map { c -> c.letter } }
+
+                Language.GERMAN -> LettersGer.values()
+                    .groupBy { it.value }
+                    .map { it.key to it.value.map { c -> c.letter } }
+            }
+        }
+
         fun getSpecialLetterMap(): MutableMap<Language, List<Letter>> {
             return Language.values().associateWith { getSpecialLetters(it) }.toMutableMap()
         }
@@ -42,16 +54,5 @@ class LetterUtil {
             return specialLetters
         }
 
-        private fun getLetterValueGroups(language: Language = Language.ENGLISH): List<Pair<Int, List<Char>>> {
-            return when (language) {
-                Language.ENGLISH -> LettersEng.values()
-                    .groupBy { it.value }
-                    .map { it.key to it.value.map { c -> c.letter } }
-
-                Language.GERMAN -> LettersGer.values()
-                    .groupBy { it.value }
-                    .map { it.key to it.value.map { c -> c.letter } }
-            }
-        }
     }
 }

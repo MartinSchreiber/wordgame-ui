@@ -10,11 +10,12 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import constants.ScreenType
-import model.Letter
 import util.PersistenceUtil
 import view.components.SimpleButton
 import view.navigation.AppState
 
+//TODO: Implement min length of active letters
+//TODO: Implement combination-logic
 @Composable
 fun Laboratory() {
     val laboratory = AppState.laboratory()
@@ -31,12 +32,13 @@ fun Laboratory() {
                     letters = activeLetters,
                     title = "Active Letters",
                     subTitle = "Left Click: Move to Inactive Letters\nRight Click: Move to Combination Chamber"
-                ) { letter: Letter, rightMouseBtn: Boolean ->
+                ) { letterInd: Int, rightMouseBtn: Boolean ->
                     if (rightMouseBtn) {
-                        combinationChamber.add(letter)
+                        combinationChamber.add(activeLetters[letterInd])
                     } else {
-                        inactiveLetters.add(letter)
+                        inactiveLetters.add(activeLetters[letterInd])
                     }
+                    activeLetters.removeAt(letterInd)
                 }
             }
             Column(modifier = Modifier.fillMaxWidth()) {
@@ -44,12 +46,13 @@ fun Laboratory() {
                     letters = inactiveLetters,
                     title = "Inactive Letters",
                     subTitle = "Left Click: Move to Active Letters\nRight Click: Move to Combination Chamber"
-                ) { letter: Letter, rightMouseBtn: Boolean ->
+                ) { letterInd: Int, rightMouseBtn: Boolean ->
                     if (rightMouseBtn) {
-                        combinationChamber.add(letter)
+                        combinationChamber.add(inactiveLetters[letterInd])
                     } else {
-                        activeLetters.add(letter)
+                        activeLetters.add(inactiveLetters[letterInd])
                     }
+                    inactiveLetters.removeAt(letterInd)
                 }
             }
         }
@@ -59,45 +62,50 @@ fun Laboratory() {
                     letters = combinationChamber,
                     title = "Combination Chamber",
                     subTitle = "Left Click: Move to Inactive Letters\nRight Click: Move to Active Letters"
-                ) { letter: Letter, rightMouseBtn: Boolean ->
+                ) { letterInd: Int, rightMouseBtn: Boolean ->
                     if (rightMouseBtn) {
-                        activeLetters.add(letter)
+                        activeLetters.add(combinationChamber[letterInd])
                     } else {
-                        inactiveLetters.add(letter)
+                        inactiveLetters.add(combinationChamber[letterInd])
                     }
+                    combinationChamber.removeAt(letterInd)
                 }
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                SimpleButton(onClick = {
+                SimpleButton(text = "=>") {
                     resultChamber.addAll(combinationChamber)
                     combinationChamber.clear()
-                }, text = "=>")
+                }
             }
             Column(modifier = Modifier.fillMaxWidth()) {
                 LetterGrid(
                     letters = resultChamber,
                     title = "Result Chamber",
                     subTitle = "Left Click: Move to Active Letters\nRight Click: Move to Inactive Letters"
-                ) { letter: Letter, rightMouseBtn: Boolean ->
+                ) { letterInd: Int, rightMouseBtn: Boolean ->
                     if (rightMouseBtn) {
-                        inactiveLetters.add(letter)
+                        inactiveLetters.add(resultChamber[letterInd])
                     } else {
-                        activeLetters.add(letter)
+                        activeLetters.add(resultChamber[letterInd])
                     }
+                    resultChamber.removeAt(letterInd)
                 }
             }
 
         }
-        SimpleButton(onClick = {
-            laboratory.activeLetters = activeLetters.toList()
-            laboratory.inactiveLetters = inactiveLetters.toList()
-            laboratory.combinationChamber = combinationChamber.toList()
-            laboratory.resultChamber = resultChamber.toList()
+        Row {
+            SimpleButton(text = "Main Menu") {
+                laboratory.activeLetters = activeLetters.toList()
+                laboratory.inactiveLetters = inactiveLetters.toList()
+                laboratory.combinationChamber = combinationChamber.toList()
+                laboratory.resultChamber = resultChamber.toList()
 
-            AppState.laboratory(laboratory)
-            PersistenceUtil.persistPlayer(AppState.playerData!!)
+                AppState.laboratory(laboratory)
+                PersistenceUtil.persistPlayer(AppState.playerData!!)
 
-            AppState.screenState(ScreenType.MainMenu)
-        }, text = "Main Menu")
+                AppState.screenState(ScreenType.MainMenu)
+            }
+            SimpleButton(text = "Letter Overview") { AppState.screenState(ScreenType.LetterOverview) }
+        }
     }
 }

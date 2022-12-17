@@ -51,10 +51,7 @@ fun PlayerMenu() {
         Column(modifier = Modifier.fillMaxSize().align(Alignment.CenterVertically)) {
             PersistenceUtil.getPlayerData().forEach { playerData ->
                 Row {
-                    SimpleButton(
-                        onClick = { redirect(playerData) },
-                        text = playerData.name
-                    )
+                    SimpleButton(text = playerData.name) { redirect(playerData) }
                 }
             }
             Row {
@@ -75,10 +72,7 @@ fun PlayerMenu() {
                 )
             }
             Row {
-                SimpleButton(
-                    onClick = { persistAndRedirect(newPlayerName.value) },
-                    text = "Add Player"
-                )
+                SimpleButton(text = "Add Player") { persistAndRedirect(newPlayerName.value) }
             }
         }
     }

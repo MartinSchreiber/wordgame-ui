@@ -51,23 +51,17 @@ fun GameStatistics() {
     }
     Row {
         Column {
-            SimpleButton(
-                onClick = { AppState.screenState(ScreenType.MainMenu) }, text = "Menu"
-            )
+            SimpleButton(text = "Menu") { AppState.screenState(ScreenType.MainMenu) }
         }
         Column {
-            SimpleButton(
-                onClick = { AppState.screenState(ScreenType.WordGame) }, text = "Replay Level"
-            )
+            SimpleButton(text = "Replay Level") { AppState.screenState(ScreenType.WordGame) }
         }
         if (gameData.level.hasNext()) {
             Column {
-                SimpleButton(
-                    onClick = {
-                        AppState.level = gameData.level.getNext()
-                        AppState.screenState(ScreenType.WordGame)
-                    }, text = "Next Level"
-                )
+                SimpleButton(text = "Next Level") {
+                    AppState.level = gameData.level.getNext()
+                    AppState.screenState(ScreenType.WordGame)
+                }
             }
         }
     }

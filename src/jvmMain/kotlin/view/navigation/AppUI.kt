@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import constants.ScreenType
 import view.Laboratory
+import view.LetterOverview
 import view.gameplay.WordGame
 import view.menu.LevelMenu
 import view.menu.MainMenu
@@ -46,6 +47,10 @@ fun AppUI() {
 
             ScreenType.Laboratory -> {
                 Laboratory()
+            }
+
+            ScreenType.LetterOverview -> {
+                LetterOverview()
             }
         }
     }

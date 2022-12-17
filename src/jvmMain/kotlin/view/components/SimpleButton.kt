@@ -5,7 +5,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun SimpleButton(onClick: () -> Unit, text: String) {
+fun SimpleButton(text: String, onClick: () -> Unit) {
     Button(onClick = onClick) {
         Text(text = text)
     }

@@ -14,7 +14,7 @@ import util.Logger
 class WordGame(
     val language: Language = Language.ENGLISH,
     val level: Level = Level.ONE,
-    specialLetters: List<Letter>
+    val specialLetters: List<Letter>
 ) {
     companion object {
         private const val TOTAL_LETTER_CHAMBERS = 10

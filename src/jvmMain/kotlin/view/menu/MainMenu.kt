@@ -18,23 +18,10 @@ fun MainMenu() {
             AppState.playerData?.let { playerData ->
                 Text("Greetings ${playerData.name}!")
             }
-            SimpleButton(
-                onClick = { AppState.screenState(ScreenType.LevelMenu) },
-                text = "Select Level!"
-            )
-            SimpleButton(
-                onClick = { AppState.screenState(ScreenType.Laboratory) },
-                text = "To The Laboratory!"
-            )
-            SimpleButton(
-                onClick = { AppState.screenState(ScreenType.Settings) },
-                text = "Settings"
-            )
-            SimpleButton(
-                onClick = { AppState.screenState(ScreenType.PlayerMenu) },
-                text = "Player Menu"
-            )
-
+            SimpleButton(text = "Select Level!") { AppState.screenState(ScreenType.LevelMenu) }
+            SimpleButton(text = "To The Laboratory!") { AppState.screenState(ScreenType.Laboratory) }
+            SimpleButton(text = "Settings") { AppState.screenState(ScreenType.Settings) }
+            SimpleButton(text = "Player Menu") { AppState.screenState(ScreenType.PlayerMenu) }
         }
     }
 

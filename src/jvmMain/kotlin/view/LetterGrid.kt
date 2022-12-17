@@ -20,17 +20,14 @@ fun LetterGrid(
     title: String,
     subTitle: String,
     lettersPerRow: Int = 10,
-    onClick: (Letter, Boolean) -> Unit
+    onClick: (Int, Boolean) -> Unit
 ) {
     Text(text = "----$title--------")
     Text(text = "------------------")
     Text(text = "----$subTitle--------")
     LazyVerticalGrid(columns = GridCells.Fixed(lettersPerRow)) {
         items(letters.size) {
-            ClickableLetter(letters[it]) { letter: Letter, rightMouseBtn: Boolean ->
-                onClick(letter, rightMouseBtn)
-                letters.removeAt(it)
-            }
+            ClickableLetter(letters[it]) { rightMouseBtn: Boolean -> onClick(it, rightMouseBtn) }
         }
     }
     Text(text = "------------------")
@@ -38,10 +35,10 @@ fun LetterGrid(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ClickableLetter(letter: Letter, onClick: (Letter, Boolean) -> Unit) {
+fun ClickableLetter(letter: Letter, onClick: (Boolean) -> Unit) {
     Box(modifier = Modifier
-        .onClick(matcher = PointerMatcher.mouse(PointerButton.Secondary), onClick = { onClick(letter, true) })
-        .onClick { onClick(letter, false) }
+        .onClick(matcher = PointerMatcher.mouse(PointerButton.Secondary), onClick = { onClick(true) })
+        .onClick { onClick(false) }
     ) {
         Text(text = letter.toString(), modifier = Modifier.align(Alignment.Center))
     }

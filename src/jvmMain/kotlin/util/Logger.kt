@@ -5,6 +5,7 @@ import model.Word
 import model.WordGame
 import model.gameField.Enemy
 
+//TODO: Remove and replace with native log
 class Logger {
     fun logWordsImportedIn(numberOfWords: Int, time: Long) {
         if (LOGGING) {
