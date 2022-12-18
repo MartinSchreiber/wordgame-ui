@@ -5,6 +5,7 @@ import constants.LetterType
 data class Letter(
     val letter: Char,
     val value: Int = 1,
+    val level: Int = 0,
     val type: LetterType = LetterType.BASIC,
     val specialValue: Float = 0f
 ) {

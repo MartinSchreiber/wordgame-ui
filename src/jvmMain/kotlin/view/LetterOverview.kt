@@ -11,7 +11,6 @@ import view.navigation.AppState
 @Composable
 fun LetterOverview() {
     val letterValueGroups = LetterUtil.getLetterValueGroups(AppState.language())
-        .sortedBy { it.first }
         .map { group ->
             Pair(group.first, group.second.joinToString(separator = " ") { "($it)" })
         }

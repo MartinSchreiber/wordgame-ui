@@ -1,6 +1,10 @@
-package constants
+package constants.lettervalues
 
-enum class LettersGer(val letter: Char, val value: Int, val count: Int) {
+enum class LetterValueGerman(
+    override val letter: Char,
+    override val value: Int,
+    override val count: Int
+) : LetterValue {
     A('A', 1, 5),
     B('B', 3, 2),
     C('C', 4, 2),
