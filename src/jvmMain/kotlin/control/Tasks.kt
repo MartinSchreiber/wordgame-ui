@@ -58,16 +58,15 @@ suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>, base: Base, isOver: (
     }
 }
 
-suspend fun spawnEnemies(gameField: GameField) =
-    coroutineScope {
-        while (gameField.enemiesIncoming.isNotEmpty()) {
-            gameField.enemiesIncoming.firstOrNull()?.let {
-                delay(it.delay)
-                gameField.enemiesOnField.add(it)
-            }
-            gameField.enemiesIncoming.removeFirst()
+suspend fun spawnEnemies(gameField: GameField) = coroutineScope {
+    while (gameField.enemiesIncoming.isNotEmpty()) {
+        gameField.enemiesIncoming.firstOrNull()?.let {
+            delay(it.delay)
+            gameField.enemiesOnField.add(it)
         }
+        gameField.enemiesIncoming.removeFirst()
     }
+}
 
 //TODO: un-nest function
 suspend fun fireLetters(
@@ -90,9 +89,9 @@ suspend fun fireLetters(
 
                     chambers.loadLetters(listOf(letter))
                 }
-                delay(100)
+                delay(300)
             }
-            delay(1000)
+            delay(750)
         }
         delay(250)
     }

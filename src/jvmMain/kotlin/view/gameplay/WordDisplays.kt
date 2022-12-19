@@ -17,6 +17,7 @@ fun WordsTyped(words: SnapshotStateList<Word>) {
 
 @Composable
 fun WordQueue(queue: SnapshotStateList<Word>) {
+    Text(text = "Queue: ")
     queue.forEach {
         Word(it)
     }

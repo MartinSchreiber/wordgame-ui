@@ -21,8 +21,7 @@ fun GameField(gameField: GameField) {
         color = Color.Black.toArgb()
     }
 
-    Canvas(modifier = Modifier.size(500f.dp, 400f.dp)) {
-
+    Canvas(modifier = Modifier.size(width = 500f.dp, height = 400f.dp)) {
         gameField.path.getLines().forEach {
             drawLine(
                 start = it.first,
@@ -36,23 +35,33 @@ fun GameField(gameField: GameField) {
             drawCircle(radius = base.radius, center = base.center, color = Color.Gray)
             drawIntoCanvas {
                 it.nativeCanvas.drawString(
-                    base.health.value.toString(),
-                    base.center.x,
-                    base.center.y,
-                    Font(),
-                    textPaint
+                    s = base.health.value.toString(),
+                    x = base.center.x,
+                    y = base.center.y,
+                    font = Font(),
+                    paint = textPaint
                 )
             }
+        }
+
+        drawIntoCanvas {
+            it.nativeCanvas.drawString(
+                s = "Enemies on Field (Incoming): ${gameField.enemiesOnField.size} (${gameField.enemiesIncoming.size})",
+                x = 100f,
+                y = 20f,
+                font = Font(),
+                paint = textPaint
+            )
         }
 
         gameField.enemiesOnField.forEach { enemy ->
             drawIntoCanvas {
                 it.nativeCanvas.drawString(
-                    enemy.toString(),
-                    enemy.position.value.x,
-                    enemy.position.value.y,
-                    Font(),
-                    textPaint
+                    s = enemy.toString(),
+                    x = enemy.position.value.x,
+                    y = enemy.position.value.y,
+                    font = Font(),
+                    paint = textPaint
                 )
             }
         }

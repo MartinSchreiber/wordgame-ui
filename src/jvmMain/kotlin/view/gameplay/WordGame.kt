@@ -10,6 +10,7 @@ import androidx.compose.ui.input.key.*
 import constants.ScreenType
 import control.backgroundTasks
 import model.WordGame
+import view.components.SimpleButton
 import view.navigation.AppState
 
 //TODO generativ erzeugen? Das wär cool
@@ -57,7 +58,6 @@ fun WordGame() {
     backgroundTasks(wordGame) { onGameOver(wordGame) }
 
     MaterialTheme {
-        //TODO: Add Enemy-Counter onField(Incoming)
         Column {
             Row {
                 Column {
@@ -78,6 +78,11 @@ fun WordGame() {
                 }
                 Column {
                     WordsTyped(wordGame.typedWords)
+                }
+            }
+            Row {
+                SimpleButton(text = "Main Menu") {
+                    AppState.screenState(ScreenType.MainMenu)
                 }
             }
         }

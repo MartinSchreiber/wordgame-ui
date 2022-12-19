@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import constants.LetterType
 
-class LetterChambers(private val visible: Int, private var opened: Int, letters: List<Letter>) {
+class LetterChambers(val visible: Int, var opened: Int, letters: List<Letter>) {
 
     val chambers = letters
         .shuffled()
@@ -54,7 +54,13 @@ class LetterChambers(private val visible: Int, private var opened: Int, letters:
     fun loadLetters(letters: List<Letter>) {
         letters.forEach { it.resetTotalValue() }
 
-        chambers.addAll(letters.filter { it.type != LetterType.BASIC }.map { Chamber(it) })
+        letters
+            .filter { it.type != LetterType.BASIC }
+            .map { Chamber(it) }
+            .forEach {
+                it.open = chambers.size < opened
+                chambers.add(it)
+            }
     }
 
     class Chamber(letter: Letter?, var open: Boolean = false) {

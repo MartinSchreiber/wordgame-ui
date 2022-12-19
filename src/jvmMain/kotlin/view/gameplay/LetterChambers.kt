@@ -4,14 +4,19 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import model.Letter
 import model.LetterChambers
 
 @Composable
 fun LetterChambers(letterChambers: LetterChambers) {
     Row {
-        letterChambers.chambers.forEach {
-            LetterChamber(it.letter, it.open)
+        for (i in 0 until letterChambers.visible) {
+            if (letterChambers.chambers.size > i) {
+                LetterChamber(letterChambers.chambers[i].letter, letterChambers.chambers[i].open)
+            } else {
+                LetterChamber(letter = mutableStateOf(null), open = i < letterChambers.opened)
+            }
         }
     }
 }

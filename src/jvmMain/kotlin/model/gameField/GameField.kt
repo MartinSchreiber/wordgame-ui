@@ -8,7 +8,7 @@ import constants.Level
 import util.EnemyUtil
 
 class GameField(
-    start: Offset = Offset(20f, 20f),
+    start: Offset = Offset(20f, 50f),
     end: Offset = Offset(400f, 350f),
     numberOfTurns: Int = 4,
     level: Level
