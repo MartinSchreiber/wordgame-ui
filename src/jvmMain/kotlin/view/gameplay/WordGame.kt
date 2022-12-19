@@ -40,6 +40,7 @@ val onValueChange = { wordGame: WordGame, text: String ->
 
 val onGameOver = { wordGame: WordGame ->
     wordGame.endTime = System.currentTimeMillis()
+    AppState.loot()
     AppState.screenState(ScreenType.GameStatistics)
 }
 

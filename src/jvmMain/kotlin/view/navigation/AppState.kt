@@ -5,8 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import constants.Language
 import constants.Level
 import constants.ScreenType
+import model.Letter
 import model.WordGame
 import persistence.PlayerData
+import util.LetterUtil
 
 object AppState {
     private var screen: MutableState<ScreenType> = mutableStateOf(ScreenType.PlayerMenu)
@@ -15,6 +17,7 @@ object AppState {
     var playerData: PlayerData? = null
     var wordGame: WordGame? = null
     var level: Level = Level.ONE
+    var loot: List<Letter> = listOf()
 
     fun loadPlayerData(playerData: PlayerData) {
         this.playerData = playerData
@@ -38,5 +41,10 @@ object AppState {
 
     fun laboratory(laboratory: PlayerData.Laboratory) {
         playerData?.laboratory?.set(language(), laboratory)
+    }
+
+    fun loot() {
+        loot = LetterUtil.getLootedLetters(level, language())
+        playerData?.laboratory?.get(language())?.inactiveLetters?.addAll(loot)
     }
 }

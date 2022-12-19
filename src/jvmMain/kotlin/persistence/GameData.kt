@@ -9,6 +9,7 @@ data class GameData(
     val level: Level,
     val language: Language,
     val specialLetters: List<Letter>,
+    val lootedLetters: List<Letter>,
     val typedWords: List<Word>,
     val playTime: Long,
     val timeStamp: String,

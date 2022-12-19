@@ -2,6 +2,7 @@ package util
 
 import constants.Language
 import constants.LetterType
+import constants.Level
 import constants.lettervalues.LetterValue
 import constants.lettervalues.LetterValueEnglish
 import constants.lettervalues.LetterValueGerman
@@ -14,14 +15,29 @@ class LetterUtil {
         }
 
         private fun getSpecialLetters(language: Language): List<Letter> {
-            val specialLetters = mutableListOf<Letter>()
+            return getRandomLetters(pickValue = 8, language = language)
+        }
+
+        //TODO: refine logic
+        fun getLootedLetters(level: Level, language: Language): List<Letter> {
+            val randomLetters = getRandomLetters(pickValue = level.ordinal + 1, language = language)
+            val letters = mutableListOf<Letter>()
+            for (i in 0..level.ordinal) {
+                letters.add(randomLetters.random())
+            }
+            return letters
+        }
+
+        //TODO: refine logic
+        private fun getRandomLetters(pickValue: Int? = null, language: Language): List<Letter> {
+            val letters = mutableListOf<Letter>()
 
             val letterValueGroups = getLetterValueGroups(language)
 
             letterValueGroups.forEachIndexed { ind, group ->
-                val pickCount = 8 / group.first
+                val pickCount = (pickValue ?: letterValueGroups.maxOf { it.first }) / group.first
                 for (i in 1..pickCount) {
-                    specialLetters.add(
+                    letters.add(
                         Letter(
                             letter = group.second.random(),
                             value = group.first,
@@ -33,7 +49,7 @@ class LetterUtil {
                 }
             }
 
-            return specialLetters
+            return letters
         }
 
         fun getLetterValues(language: Language): Map<Char, Int> {

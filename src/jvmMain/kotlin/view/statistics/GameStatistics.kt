@@ -11,7 +11,11 @@ import view.navigation.AppState
 
 @Composable
 fun GameStatistics() {
-    val gameData = PersistenceUtil.persistGameData(AppState.wordGame!!, AppState.playerData!!.id)
+    val gameData = PersistenceUtil.persistGameData(
+        wordGame = AppState.wordGame!!,
+        lootedLetters = AppState.loot,
+        playerId = AppState.playerData!!.id
+    )
     Row {
         Column {
             Row {
@@ -46,6 +50,9 @@ fun GameStatistics() {
             }
             Row {
                 Text(text = "Health remaining: ${gameData.healthRemaining}")
+            }
+            Row {
+                Text(text = "Looted Letters: ${AppState.loot.joinToString(" ")}")
             }
         }
     }

@@ -13,7 +13,7 @@ class PlayerData(
 
     data class Laboratory(
         var activeLetters: List<Letter>,
-        var inactiveLetters: List<Letter> = listOf(),
+        var inactiveLetters: MutableList<Letter> = mutableListOf(),
         var combinationChamber: List<Letter> = listOf(),
         var resultChamber: List<Letter> = listOf()
     )

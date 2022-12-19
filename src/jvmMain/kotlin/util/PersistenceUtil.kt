@@ -2,6 +2,7 @@ package util
 
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import model.Letter
 import model.WordGame
 import persistence.GameData
 import persistence.PlayerData
@@ -49,8 +50,8 @@ class PersistenceUtil {
             File(PLAYER_DATA_FILE).writeText(GSON.toJson(playerDataList))
         }
 
-        fun persistGameData(wordGame: WordGame, playerId: Int): GameData {
-            val gameData = convertWordGame(wordGame)
+        fun persistGameData(wordGame: WordGame, lootedLetters: List<Letter>, playerId: Int): GameData {
+            val gameData = convertWordGame(wordGame, lootedLetters)
             persistGameData(gameData, playerId)
             return gameData
         }
@@ -70,7 +71,7 @@ class PersistenceUtil {
             )
         }
 
-        private fun convertWordGame(wordGame: WordGame): GameData {
+        private fun convertWordGame(wordGame: WordGame, lootedLetters: List<Letter>): GameData {
             val playTime = (wordGame.endTime!! - wordGame.startTime)
             val lettersPerMinute = wordGame.typedWords.sumOf { it.size() } / (playTime / 60000f)
             val totalWordDamage = wordGame.typedWords.sumOf { it.getTotalValue().toDouble() }.toFloat()
@@ -80,6 +81,7 @@ class PersistenceUtil {
                 level = wordGame.level,
                 language = wordGame.language,
                 specialLetters = wordGame.specialLetters,
+                lootedLetters = lootedLetters,
                 typedWords = wordGame.typedWords.toList(),
                 playTime = playTime,
                 timeStamp = LocalDateTime.now().toString(),

@@ -6,6 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import constants.ScreenType
 import util.LetterUtil
 import util.PersistenceUtil
@@ -16,24 +17,26 @@ import view.navigation.AppState
 fun Laboratory() {
     val laboratory = AppState.laboratory()
 
-    val activeLetters = remember { laboratory.activeLetters.toMutableStateList() }
-    val inactiveLetters = remember { laboratory.inactiveLetters.toMutableStateList() }
-    val combinationChamber = remember { laboratory.combinationChamber.toMutableStateList() }
-    val resultChamber = remember { laboratory.resultChamber.toMutableStateList() }
+    val activeLetters = remember { laboratory.activeLetters.sortedBy { it.level }.toMutableStateList() }
+    val inactiveLetters = remember { laboratory.inactiveLetters.sortedBy { it.level }.toMutableStateList() }
+    val combinationChamber = remember { laboratory.combinationChamber.sortedBy { it.level }.toMutableStateList() }
+    val resultChamber = remember { laboratory.resultChamber.sortedBy { it.level }.toMutableStateList() }
 
     Column {
         Row {
-            Column(modifier = Modifier.fillMaxWidth(0.5f).fillMaxHeight(0.5f)) {
+            Column(modifier = Modifier.fillMaxWidth(0.5f).fillMaxHeight(0.5f).padding(end = 20f.dp)) {
                 LetterGrid(
                     letters = activeLetters,
                     title = "Active Letters (Must contain at least 12 Letters)",
                     subTitle = "Left Click: Move to Inactive Letters\nRight Click: Move to Combination Chamber"
                 ) { letterInd: Int, rightMouseBtn: Boolean ->
-                    if (activeLetters.size >= 12) {
+                    if (activeLetters.size > 12) {
                         if (rightMouseBtn) {
                             combinationChamber.add(activeLetters[letterInd])
+                            combinationChamber.sortBy { it.level }
                         } else {
                             inactiveLetters.add(activeLetters[letterInd])
+                            inactiveLetters.sortBy { it.level }
                         }
                         activeLetters.removeAt(letterInd)
                     }
@@ -47,8 +50,10 @@ fun Laboratory() {
                 ) { letterInd: Int, rightMouseBtn: Boolean ->
                     if (rightMouseBtn) {
                         combinationChamber.add(inactiveLetters[letterInd])
+                        combinationChamber.sortBy { it.level }
                     } else {
                         activeLetters.add(inactiveLetters[letterInd])
+                        activeLetters.sortBy { it.level }
                     }
                     inactiveLetters.removeAt(letterInd)
                 }
@@ -63,8 +68,10 @@ fun Laboratory() {
                 ) { letterInd: Int, rightMouseBtn: Boolean ->
                     if (rightMouseBtn) {
                         activeLetters.add(combinationChamber[letterInd])
+                        activeLetters.sortBy { it.level }
                     } else {
                         inactiveLetters.add(combinationChamber[letterInd])
+                        inactiveLetters.sortBy { it.level }
                     }
                     combinationChamber.removeAt(letterInd)
                 }
@@ -87,8 +94,10 @@ fun Laboratory() {
                 ) { letterInd: Int, rightMouseBtn: Boolean ->
                     if (rightMouseBtn) {
                         inactiveLetters.add(resultChamber[letterInd])
+                        inactiveLetters.sortBy { it.level }
                     } else {
                         activeLetters.add(resultChamber[letterInd])
+                        activeLetters.sortBy { it.level }
                     }
                     resultChamber.removeAt(letterInd)
                 }
@@ -98,7 +107,7 @@ fun Laboratory() {
         Row {
             SimpleButton(text = "Main Menu") {
                 laboratory.activeLetters = activeLetters.toList()
-                laboratory.inactiveLetters = inactiveLetters.toList()
+                laboratory.inactiveLetters = inactiveLetters.toMutableList()
                 laboratory.combinationChamber = combinationChamber.toList()
                 laboratory.resultChamber = resultChamber.toList()
 
