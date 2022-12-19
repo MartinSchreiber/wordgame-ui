@@ -40,6 +40,6 @@ fun ClickableLetter(letter: Letter, onClick: (Boolean) -> Unit) {
         .onClick(matcher = PointerMatcher.mouse(PointerButton.Secondary), onClick = { onClick(true) })
         .onClick { onClick(false) }
     ) {
-        Text(text = letter.toString(), modifier = Modifier.align(Alignment.Center))
+        Text(text = letter.toExtendedString(), modifier = Modifier.align(Alignment.Center))
     }
 }

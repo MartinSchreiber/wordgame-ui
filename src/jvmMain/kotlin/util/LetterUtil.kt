@@ -54,5 +54,56 @@ class LetterUtil {
                 Language.ENGLISH -> LetterValueEnglish.values().toList()
             }
         }
+
+        fun combine(letters: List<Letter>, language: Language): List<Letter> {
+            val lettersMutable = letters.toMutableList()
+            val sameTypeAndLevel =
+                letters.map { it.type }.distinct().size == 1 && letters.map { it.level }.distinct().size == 1
+            val combinedLetters = mutableListOf<Letter>()
+
+            if (sameTypeAndLevel && letters.size % 2 == 0) {
+                while (lettersMutable.isNotEmpty()) {
+                    lettersMutable.removeFirst()
+                    lettersMutable.removeFirst()
+                    combine(letters.first().level, letters.first().type, language)?.let { combinedLetters.add(it) }
+                }
+            }
+
+            return combinedLetters
+        }
+
+        private fun combine(letterLevel: Int, letterType: LetterType, language: Language): Letter? {
+            val letterValueGroups = getLetterValueGroups(language)
+
+            return if (letterLevel < letterValueGroups.size) {
+                val specialValue = when (letterType) {
+                    LetterType.BASIC -> 0f
+                    LetterType.STRONGER -> 5f
+                    LetterType.MULTIPLY -> 2f
+                }
+                Letter(
+                    letter = letterValueGroups[letterLevel].second.random(),
+                    value = letterValueGroups[letterLevel].first,
+                    level = letterLevel + 1,
+                    type = letterType,
+                    specialValue = specialValue
+                )
+            } else if (letterType.getNextType() != null) {
+                val specialValue = when (letterType.getNextType()!!) {
+                    LetterType.BASIC -> 0f
+                    LetterType.STRONGER -> 5f
+                    LetterType.MULTIPLY -> 2f
+                }
+                Letter(
+                    letter = letterValueGroups[0].second.random(),
+                    value = letterValueGroups[0].first,
+                    level = 1,
+                    type = letterType.getNextType()!!,
+                    specialValue = specialValue
+                )
+            } else {
+                null
+            }
+        }
     }
 }

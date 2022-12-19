@@ -6,14 +6,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.*
 import constants.ScreenType
 import persistence.PlayerData
@@ -46,7 +43,6 @@ val onKeyEvent = { newPlayerName: String, ev: KeyEvent ->
 @Composable
 fun PlayerMenu() {
     val newPlayerName = remember { mutableStateOf("") }
-    val focusRequester = FocusRequester()
     Row(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize().align(Alignment.CenterVertically)) {
             PersistenceUtil.getPlayerData().forEach { playerData ->
@@ -63,7 +59,7 @@ fun PlayerMenu() {
                     onValueChange = { newPlayerName.value = it },
                     label = { Text("Enter Name") },
                     singleLine = true,
-                    modifier = Modifier.focusRequester(focusRequester).onPreviewKeyEvent { ev ->
+                    modifier = Modifier.onPreviewKeyEvent { ev ->
                         onKeyEvent(
                             newPlayerName.value,
                             ev
@@ -75,10 +71,5 @@ fun PlayerMenu() {
                 SimpleButton(text = "Add Player") { persistAndRedirect(newPlayerName.value) }
             }
         }
-    }
-
-    DisposableEffect(Unit) {
-        focusRequester.requestFocus()
-        onDispose { }
     }
 }

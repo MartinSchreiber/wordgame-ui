@@ -19,6 +19,14 @@ data class Letter(
         }
     }
 
+    fun toExtendedString(): String {
+        return when (type) {
+            LetterType.BASIC -> "($letter|$level)"
+            LetterType.STRONGER -> "[$letter|$level]"
+            LetterType.MULTIPLY -> "{$letter|$level}"
+        }
+    }
+
     fun resetTotalValue() {
         totalValue = initTotalValue()
     }

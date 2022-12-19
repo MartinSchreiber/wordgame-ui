@@ -1,21 +1,17 @@
 package view
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import constants.ScreenType
+import util.LetterUtil
 import util.PersistenceUtil
 import view.components.SimpleButton
 import view.navigation.AppState
 
-//TODO: Implement min length of active letters
-//TODO: Implement combination-logic
 @Composable
 fun Laboratory() {
     val laboratory = AppState.laboratory()
@@ -27,21 +23,23 @@ fun Laboratory() {
 
     Column {
         Row {
-            Column(modifier = Modifier.fillMaxWidth(0.5f)) {
+            Column(modifier = Modifier.fillMaxWidth(0.5f).fillMaxHeight(0.5f)) {
                 LetterGrid(
                     letters = activeLetters,
-                    title = "Active Letters",
+                    title = "Active Letters (Must contain at least 12 Letters)",
                     subTitle = "Left Click: Move to Inactive Letters\nRight Click: Move to Combination Chamber"
                 ) { letterInd: Int, rightMouseBtn: Boolean ->
-                    if (rightMouseBtn) {
-                        combinationChamber.add(activeLetters[letterInd])
-                    } else {
-                        inactiveLetters.add(activeLetters[letterInd])
+                    if (activeLetters.size >= 12) {
+                        if (rightMouseBtn) {
+                            combinationChamber.add(activeLetters[letterInd])
+                        } else {
+                            inactiveLetters.add(activeLetters[letterInd])
+                        }
+                        activeLetters.removeAt(letterInd)
                     }
-                    activeLetters.removeAt(letterInd)
                 }
             }
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.5f)) {
                 LetterGrid(
                     letters = inactiveLetters,
                     title = "Inactive Letters",
@@ -57,7 +55,7 @@ fun Laboratory() {
             }
         }
         Row {
-            Column(modifier = Modifier.fillMaxWidth(0.47f)) {
+            Column(modifier = Modifier.fillMaxWidth(0.47f).fillMaxHeight(0.7f)) {
                 LetterGrid(
                     letters = combinationChamber,
                     title = "Combination Chamber",
@@ -73,11 +71,15 @@ fun Laboratory() {
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
                 SimpleButton(text = "=>") {
-                    resultChamber.addAll(combinationChamber)
-                    combinationChamber.clear()
+                    LetterUtil.combine(combinationChamber, AppState.language())
+                        .takeIf { it.isNotEmpty() }
+                        ?.let {
+                            resultChamber.addAll(it)
+                            combinationChamber.clear()
+                        }
                 }
             }
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.7f)) {
                 LetterGrid(
                     letters = resultChamber,
                     title = "Result Chamber",
