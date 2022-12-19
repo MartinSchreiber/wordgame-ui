@@ -16,12 +16,12 @@ fun LetterOverview() {
         }
 
     Column {
-        Text(text = "Letter Values Overview\n")
+        Text(text = AppState.translate("letter_overview_title"))
         letterValueGroups.forEach {
-            Text(text = "${it.first} Points: ${it.second}")
+            Text(text = AppState.translate("letter_overview_points_label").format(it.first, it.second))
             Text(text = "---")
         }
-        SimpleButton(text = "Laboratory") {
+        SimpleButton(text = AppState.translate("laboratory_button")) {
             AppState.screenState(ScreenType.Laboratory)
         }
     }

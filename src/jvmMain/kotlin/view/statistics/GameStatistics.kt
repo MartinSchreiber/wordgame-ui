@@ -23,49 +23,49 @@ fun GameStatistics() {
             }
             Row {
                 if (gameData.healthRemaining > 0) {
-                    Text(text = "Level ${gameData.level} Won!")
+                    Text(text = AppState.translate("stat_level_won").format(gameData.level.ordinal + 1))
                 } else {
-                    Text(text = "Level ${gameData.level} Lost!")
+                    Text(text = AppState.translate("stat_level_lost").format(gameData.level.ordinal + 1))
                 }
             }
             Row {
-                Text(text = "Language: ${gameData.language}")
+                Text(text = AppState.translate("stat_language").format(AppState.translate(gameData.language.name)))
             }
         }
         Column {
             Row {
-                Text(text = "Total Word-Damage: ${gameData.totalWordDamage}")
+                Text(text = AppState.translate("stat_total_word_damage").format(gameData.totalWordDamage))
             }
             Row {
-                Text(text = "Average Word-Damage: ${gameData.averageWordDamage}")
+                Text(text = AppState.translate("stat_average_word_damage").format(gameData.averageWordDamage))
             }
             Row {
-                Text(text = "Time Played (Seconds): ${gameData.playTime / 1000f}")
+                Text(text = AppState.translate("stat_time_played").format(gameData.playTime / 1000f))
             }
             Row {
-                Text(text = "Letters per Minute: ${gameData.lettersPerMinute}")
+                Text(text = AppState.translate("stat_letters_per_minute").format(gameData.lettersPerMinute))
             }
             Row {
-                Text(text = "Enemies remaining: ${gameData.enemiesRemaining}")
+                Text(text = AppState.translate("stat_enemies_remaining").format(gameData.enemiesRemaining))
             }
             Row {
-                Text(text = "Health remaining: ${gameData.healthRemaining}")
+                Text(text = AppState.translate("stat_health_remaining").format(gameData.healthRemaining))
             }
             Row {
-                Text(text = "Looted Letters: ${AppState.loot.joinToString(" ")}")
+                Text(text = AppState.translate("stat_looted_letters").format(AppState.loot.joinToString(" ")))
             }
         }
     }
     Row {
         Column {
-            SimpleButton(text = "Menu") { AppState.screenState(ScreenType.MainMenu) }
+            SimpleButton(text = AppState.translate("main_menu_button")) { AppState.screenState(ScreenType.MainMenu) }
         }
         Column {
-            SimpleButton(text = "Replay Level") { AppState.screenState(ScreenType.WordGame) }
+            SimpleButton(text = AppState.translate("replay_level_button")) { AppState.screenState(ScreenType.WordGame) }
         }
         if (gameData.level.hasNext()) {
             Column {
-                SimpleButton(text = "Next Level") {
+                SimpleButton(text = AppState.translate("next_level_button")) {
                     AppState.level = gameData.level.getNext()
                     AppState.screenState(ScreenType.WordGame)
                 }

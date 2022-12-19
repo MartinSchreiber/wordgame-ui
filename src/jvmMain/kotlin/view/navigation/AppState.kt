@@ -8,12 +8,14 @@ import constants.ScreenType
 import model.Letter
 import model.WordGame
 import persistence.PlayerData
+import util.LanguageUtil
 import util.LetterUtil
 
 object AppState {
     private var screen: MutableState<ScreenType> = mutableStateOf(ScreenType.PlayerMenu)
     private var language = mutableStateOf(Language.ENGLISH)
 
+    var languageUtil = LanguageUtil(language())
     var playerData: PlayerData? = null
     var wordGame: WordGame? = null
     var level: Level = Level.ONE
@@ -21,7 +23,7 @@ object AppState {
 
     fun loadPlayerData(playerData: PlayerData) {
         this.playerData = playerData
-        language = mutableStateOf(playerData.language)
+        language(playerData.language)
     }
 
     fun screenState(): ScreenType = screen.value
@@ -34,7 +36,9 @@ object AppState {
 
     fun language(language: Language) {
         this.language.value = language
-        this.playerData?.language = language
+
+        playerData?.language = language
+        languageUtil = LanguageUtil(language)
     }
 
     fun laboratory(): PlayerData.Laboratory = playerData!!.laboratory[language()]!!
@@ -43,8 +47,19 @@ object AppState {
         playerData?.laboratory?.set(language(), laboratory)
     }
 
+    fun newGame(): WordGame {
+        wordGame = WordGame(
+            language = language(),
+            level = level,
+            specialLetters = laboratory().activeLetters.shuffled()
+        )
+        return wordGame!!
+    }
+
     fun loot() {
         loot = LetterUtil.getLootedLetters(level, language())
         playerData?.laboratory?.get(language())?.inactiveLetters?.addAll(loot)
     }
+
+    fun translate(label: String) = languageUtil.translate(label)
 }

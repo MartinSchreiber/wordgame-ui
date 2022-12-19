@@ -15,14 +15,14 @@ fun LevelMenu() {
     Column(modifier = Modifier.fillMaxSize()) {
         Level.values().forEach { level ->
             Row {
-                SimpleButton(text = level.toString()) {
+                SimpleButton(text = (level.ordinal + 1).toString()) {
                     AppState.level = level
                     AppState.screenState(ScreenType.WordGame)
                 }
             }
         }
         Row {
-            SimpleButton(text = "Main Menu") { AppState.screenState(ScreenType.MainMenu) }
+            SimpleButton(text = AppState.translate("main_menu_button")) { AppState.screenState(ScreenType.MainMenu) }
         }
     }
 

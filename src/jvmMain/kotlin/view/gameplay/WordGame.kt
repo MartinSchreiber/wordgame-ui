@@ -48,12 +48,7 @@ val onGameOver = { wordGame: WordGame ->
 @Composable
 @Preview
 fun WordGame() {
-    val wordGame = WordGame(
-        language = AppState.language(),
-        level = AppState.level,
-        specialLetters = AppState.laboratory().activeLetters
-    )
-    AppState.wordGame = wordGame
+    val wordGame = AppState.newGame()
 
     backgroundTasks(wordGame) { onGameOver(wordGame) }
 
@@ -81,7 +76,7 @@ fun WordGame() {
                 }
             }
             Row {
-                SimpleButton(text = "Main Menu") {
+                SimpleButton(text = AppState.translate("main_menu_button")) {
                     AppState.screenState(ScreenType.MainMenu)
                 }
             }

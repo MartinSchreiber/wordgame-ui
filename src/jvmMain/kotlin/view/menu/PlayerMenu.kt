@@ -51,24 +51,21 @@ fun PlayerMenu() {
                 }
             }
             Row {
-                Text(text = "New Player")
+                Text(text = AppState.translate("new_player_title"))
             }
             Row {
                 TextField(
                     value = newPlayerName.value,
                     onValueChange = { newPlayerName.value = it },
-                    label = { Text("Enter Name") },
+                    label = { Text(AppState.translate("new_player_input_label")) },
                     singleLine = true,
                     modifier = Modifier.onPreviewKeyEvent { ev ->
-                        onKeyEvent(
-                            newPlayerName.value,
-                            ev
-                        )
+                        onKeyEvent(newPlayerName.value, ev)
                     }
                 )
             }
             Row {
-                SimpleButton(text = "Add Player") { persistAndRedirect(newPlayerName.value) }
+                SimpleButton(text = AppState.translate("add_player_button")) { persistAndRedirect(newPlayerName.value) }
             }
         }
     }

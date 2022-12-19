@@ -27,8 +27,8 @@ fun Laboratory() {
             Column(modifier = Modifier.fillMaxWidth(0.5f).fillMaxHeight(0.5f).padding(end = 20f.dp)) {
                 LetterGrid(
                     letters = activeLetters,
-                    title = "Active Letters (Must contain at least 12 Letters)",
-                    subTitle = "Left Click: Move to Inactive Letters\nRight Click: Move to Combination Chamber"
+                    title = AppState.translate("active_letters_title"),
+                    subTitle = AppState.translate("active_letters_sub_title")
                 ) { letterInd: Int, rightMouseBtn: Boolean ->
                     if (activeLetters.size > 12) {
                         if (rightMouseBtn) {
@@ -45,8 +45,8 @@ fun Laboratory() {
             Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.5f)) {
                 LetterGrid(
                     letters = inactiveLetters,
-                    title = "Inactive Letters",
-                    subTitle = "Left Click: Move to Active Letters\nRight Click: Move to Combination Chamber"
+                    title = AppState.translate("inactive_letters_title"),
+                    subTitle = AppState.translate("inactive_letters_sub_title")
                 ) { letterInd: Int, rightMouseBtn: Boolean ->
                     if (rightMouseBtn) {
                         combinationChamber.add(inactiveLetters[letterInd])
@@ -63,8 +63,8 @@ fun Laboratory() {
             Column(modifier = Modifier.fillMaxWidth(0.47f).fillMaxHeight(0.7f)) {
                 LetterGrid(
                     letters = combinationChamber,
-                    title = "Combination Chamber",
-                    subTitle = "Left Click: Move to Inactive Letters\nRight Click: Move to Active Letters"
+                    title = AppState.translate("combination_chamber_title"),
+                    subTitle = AppState.translate("combination_chamber_sub_title")
                 ) { letterInd: Int, rightMouseBtn: Boolean ->
                     if (rightMouseBtn) {
                         activeLetters.add(combinationChamber[letterInd])
@@ -89,8 +89,8 @@ fun Laboratory() {
             Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.7f)) {
                 LetterGrid(
                     letters = resultChamber,
-                    title = "Result Chamber",
-                    subTitle = "Left Click: Move to Active Letters\nRight Click: Move to Inactive Letters"
+                    title = AppState.translate("result_chamber_title"),
+                    subTitle = AppState.translate("result_chamber_sub_title")
                 ) { letterInd: Int, rightMouseBtn: Boolean ->
                     if (rightMouseBtn) {
                         inactiveLetters.add(resultChamber[letterInd])
@@ -105,7 +105,7 @@ fun Laboratory() {
 
         }
         Row {
-            SimpleButton(text = "Main Menu") {
+            SimpleButton(text = AppState.translate("main_menu_button")) {
                 laboratory.activeLetters = activeLetters.toList()
                 laboratory.inactiveLetters = inactiveLetters.toMutableList()
                 laboratory.combinationChamber = combinationChamber.toList()
@@ -116,7 +116,7 @@ fun Laboratory() {
 
                 AppState.screenState(ScreenType.MainMenu)
             }
-            SimpleButton(text = "Letter Overview") { AppState.screenState(ScreenType.LetterOverview) }
+            SimpleButton(text = AppState.translate("letter_overview_button")) { AppState.screenState(ScreenType.LetterOverview) }
         }
     }
 }

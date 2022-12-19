@@ -11,7 +11,7 @@ class ImportUtil {
 
             val time = measureTimeMillis {
                 words.addAll(
-                    File(language.file)
+                    File(language.wordFile)
                         .inputStream()
                         .bufferedReader()
                         .lineSequence()

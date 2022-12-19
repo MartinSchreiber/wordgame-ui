@@ -14,20 +14,20 @@ import view.navigation.AppState
 fun Settings() {
     val languageLabel = { language: Language ->
         if (AppState.language() == language) {
-            "[$language]"
+            "[${AppState.translate(language.name)}]"
         } else {
-            "$language"
+            AppState.translate(language.name)
         }
     }
 
     Column {
-        Text(text = "Change Language")
+        Text(text = AppState.translate("change_language"))
         Row {
             Language.values().forEach { language ->
                 SimpleButton(text = languageLabel(language)) { AppState.language(language) }
             }
         }
-        SimpleButton(text = "Main Menu") {
+        SimpleButton(text = AppState.translate("main_menu_button")) {
             PersistenceUtil.persistPlayer(AppState.playerData!!)
             AppState.screenState(ScreenType.MainMenu)
         }

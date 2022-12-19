@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import model.gameField.GameField
 import org.jetbrains.skia.Font
+import view.navigation.AppState
 
 //TODO: fix overlay with other elements
 @Composable
@@ -46,7 +47,8 @@ fun GameField(gameField: GameField) {
 
         drawIntoCanvas {
             it.nativeCanvas.drawString(
-                s = "Enemies on Field (Incoming): ${gameField.enemiesOnField.size} (${gameField.enemiesIncoming.size})",
+                s = AppState.translate("enemy_counter")
+                    .format(gameField.enemiesOnField.size, gameField.enemiesIncoming.size),
                 x = 100f,
                 y = 20f,
                 font = Font(),

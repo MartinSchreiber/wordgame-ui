@@ -5,6 +5,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import model.Word
+import view.navigation.AppState
 
 @Composable
 fun WordsTyped(words: SnapshotStateList<Word>) {
@@ -17,7 +18,7 @@ fun WordsTyped(words: SnapshotStateList<Word>) {
 
 @Composable
 fun WordQueue(queue: SnapshotStateList<Word>) {
-    Text(text = "Queue: ")
+    Text(text = AppState.translate("word_queue_label"))
     queue.forEach {
         Word(it)
     }
