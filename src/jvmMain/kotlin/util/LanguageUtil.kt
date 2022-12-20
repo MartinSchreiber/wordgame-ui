@@ -15,4 +15,14 @@ class LanguageUtil(language: Language) {
     fun translate(label: String): String {
         return labels[label] ?: label
     }
+
+    companion object {
+        fun importWords(language: Language = Language.ENGLISH): Set<String> {
+            return File(language.wordFile)
+                .inputStream()
+                .bufferedReader()
+                .lineSequence()
+                .toSet()
+        }
+    }
 }

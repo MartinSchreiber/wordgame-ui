@@ -6,7 +6,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import constants.Language
 import constants.Level
 import model.gameField.GameField
-import util.ImportUtil
+import util.LanguageUtil
 import util.LetterUtil
 
 //TODO document + simplify somehow (modules?)
@@ -20,7 +20,7 @@ class WordGame(
         private const val OPEN_LETTER_CHAMBERS = 1
     }
 
-    private val validWords = ImportUtil.importWords(language)
+    private val validWords = LanguageUtil.importWords(language)
     private val letterValues = LetterUtil.getLetterValues(language)
     private val borrowedLetters = mutableListOf<Pair<Letter, Int>>()
 
