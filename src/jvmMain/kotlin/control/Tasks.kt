@@ -12,7 +12,6 @@ import model.WordGame
 import model.gameField.Base
 import model.gameField.Enemy
 import model.gameField.GameField
-import util.Logger
 
 
 @Composable
@@ -35,7 +34,6 @@ fun backgroundTasks(wordGame: WordGame, onGameOver: () -> Unit) {
             chambers = wordGame.letterChambers,
             isOver = wordGame.isOver
         )
-        Logger.LOGGER.logGameOver(wordGame)
     }
     backgroundScope.launch {
         waitForGameOver(
@@ -85,15 +83,13 @@ suspend fun fireLetters(
                     enemiesOnField.minBy { it.distance }.damage(letter.totalValue)
                     enemiesOnField.removeIf { it.health.value <= 0 }
 
-                    Logger.LOGGER.logLetterFired(letter)
-
                     chambers.loadLetters(listOf(letter))
                 }
-                delay(300)
+                delay(360)
             }
-            delay(750)
+            delay(420)
         }
-        delay(250)
+        delay(100)
     }
 }
 

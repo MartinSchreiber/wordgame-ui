@@ -1,7 +1,6 @@
 package model.gameField
 
 import androidx.compose.ui.geometry.Offset
-import util.Logger
 
 //TODO: Document
 class Path(
@@ -119,7 +118,6 @@ class Path(
             endX
         }
 
-        Logger.LOGGER.logPartialMove(newX = newX, remainingDistance = remainingDistance)
         return Pair(newX, remainingDistance)
     }
 
@@ -139,7 +137,6 @@ class Path(
             nextTurnAt
         }
 
-        Logger.LOGGER.logPartialMove(newY = newY, remainingDistance = remainingDistance)
         return Pair(newY, remainingDistance)
     }
 }

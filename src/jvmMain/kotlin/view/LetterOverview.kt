@@ -1,6 +1,5 @@
 package view
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import constants.ScreenType
@@ -15,15 +14,13 @@ fun LetterOverview() {
             Pair(group.first, group.second.joinToString(separator = " ") { "($it)" })
         }
 
-    Column {
-        Text(text = AppState.translate("letter_overview_title"))
-        letterValueGroups.forEach {
-            Text(text = AppState.translate("letter_overview_points_label").format(it.first, it.second))
-            Text(text = "---")
-        }
-        SimpleButton(text = AppState.translate("laboratory_button")) {
-            AppState.screenState(ScreenType.Laboratory)
-        }
+    Text(text = AppState.translate("letter_overview_title"))
+    letterValueGroups.forEach {
+        Text(text = AppState.translate("letter_overview_points_label").format(it.first, it.second))
+        Text(text = "---")
+    }
+    SimpleButton(text = AppState.translate("laboratory_button")) {
+        AppState.screenState(ScreenType.Laboratory)
     }
 
 }

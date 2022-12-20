@@ -42,6 +42,7 @@ fun Laboratory() {
                     }
                 }
             }
+
             Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.5f)) {
                 LetterGrid(
                     letters = inactiveLetters,
@@ -59,6 +60,7 @@ fun Laboratory() {
                 }
             }
         }
+
         Row {
             Column(modifier = Modifier.fillMaxWidth(0.47f).fillMaxHeight(0.7f)) {
                 LetterGrid(
@@ -76,6 +78,7 @@ fun Laboratory() {
                     combinationChamber.removeAt(letterInd)
                 }
             }
+
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
                 SimpleButton(text = "=>") {
                     LetterUtil.combine(combinationChamber, AppState.language())
@@ -86,6 +89,7 @@ fun Laboratory() {
                         }
                 }
             }
+
             Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.7f)) {
                 LetterGrid(
                     letters = resultChamber,
@@ -104,6 +108,7 @@ fun Laboratory() {
             }
 
         }
+
         Row {
             SimpleButton(text = AppState.translate("main_menu_button")) {
                 laboratory.activeLetters = activeLetters.toList()
@@ -116,6 +121,7 @@ fun Laboratory() {
 
                 AppState.screenState(ScreenType.MainMenu)
             }
+
             SimpleButton(text = AppState.translate("letter_overview_button")) { AppState.screenState(ScreenType.LetterOverview) }
         }
     }

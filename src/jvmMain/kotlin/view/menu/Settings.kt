@@ -1,6 +1,5 @@
 package view.menu
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -12,24 +11,22 @@ import view.navigation.AppState
 
 @Composable
 fun Settings() {
-    val languageLabel = { language: Language ->
-        if (AppState.language() == language) {
-            "[${AppState.translate(language.name)}]"
-        } else {
-            AppState.translate(language.name)
+    Text(text = AppState.translate("change_language"))
+    Row {
+        Language.values().forEach { language ->
+            SimpleButton(text = languageLabel(language)) { AppState.language(language) }
         }
     }
+    SimpleButton(text = AppState.translate("main_menu_button")) {
+        PersistenceUtil.persistPlayer(AppState.playerData!!)
+        AppState.screenState(ScreenType.MainMenu)
+    }
+}
 
-    Column {
-        Text(text = AppState.translate("change_language"))
-        Row {
-            Language.values().forEach { language ->
-                SimpleButton(text = languageLabel(language)) { AppState.language(language) }
-            }
-        }
-        SimpleButton(text = AppState.translate("main_menu_button")) {
-            PersistenceUtil.persistPlayer(AppState.playerData!!)
-            AppState.screenState(ScreenType.MainMenu)
-        }
+fun languageLabel(language: Language): String {
+    return if (AppState.language() == language) {
+        "[${AppState.translate(language.name)}]"
+    } else {
+        AppState.translate(language.name)
     }
 }

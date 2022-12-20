@@ -8,7 +8,6 @@ import constants.Level
 import model.gameField.GameField
 import util.ImportUtil
 import util.LetterUtil
-import util.Logger
 
 //TODO document + simplify somehow (modules?)
 class WordGame(
@@ -50,12 +49,14 @@ class WordGame(
         if (text.length < wordInput.value.size()) {
             val removedLetter = wordInput.value.removeLastLetter()
             val returnedLetters: MutableList<Pair<Letter, Int>> = mutableListOf()
+
             borrowedLetters.forEach {
                 if (it.first == removedLetter) {
                     letterChambers.returnLetters(listOf(it))
                     returnedLetters.add(it)
                 }
             }
+
             borrowedLetters.removeAll(returnedLetters)
         } else if (text.length > wordInput.value.size()) {
             val addedChar = text.last()
@@ -78,18 +79,14 @@ class WordGame(
             && validWords.contains(textInput.value)
             && !alreadyTyped(textInput.value)
         ) {
-
-
             wordQueue.add(wordInput.value)
             typedWords.add(wordInput.value.copy())
             letterChambers.remove(borrowedLetters.map { it.second })
 
-            Logger.LOGGER.logWordTyped(wordInput.value)
             clearInput(false)
 
             true
         } else {
-            Logger.LOGGER.logWordFailure(textInput.value)
             false
         }
     }
@@ -101,6 +98,7 @@ class WordGame(
         if (returnBorrowed) {
             letterChambers.returnLetters(borrowedLetters)
         }
+
         borrowedLetters.clear()
     }
 }

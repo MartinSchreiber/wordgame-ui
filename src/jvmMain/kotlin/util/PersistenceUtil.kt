@@ -24,7 +24,8 @@ class PersistenceUtil {
         fun getPlayerData(): List<PlayerData> {
             val file = File(PLAYER_DATA_FILE)
             if (file.isFile) {
-                return GSON.fromJson(file.readText(), genericType<List<PlayerData>>())
+                return GSON.fromJson<List<PlayerData>?>(file.readText(), genericType<List<PlayerData>>())
+                    .sortedBy { it.id }
             }
             return listOf()
         }

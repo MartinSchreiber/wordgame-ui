@@ -1,14 +1,10 @@
 package view.menu
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.*
@@ -43,30 +39,22 @@ val onKeyEvent = { newPlayerName: String, ev: KeyEvent ->
 @Composable
 fun PlayerMenu() {
     val newPlayerName = remember { mutableStateOf("") }
-    Row(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize().align(Alignment.CenterVertically)) {
-            PersistenceUtil.getPlayerData().forEach { playerData ->
-                Row {
-                    SimpleButton(text = playerData.name) { redirect(playerData) }
-                }
-            }
-            Row {
-                Text(text = AppState.translate("new_player_title"))
-            }
-            Row {
-                TextField(
-                    value = newPlayerName.value,
-                    onValueChange = { newPlayerName.value = it },
-                    label = { Text(AppState.translate("new_player_input_label")) },
-                    singleLine = true,
-                    modifier = Modifier.onPreviewKeyEvent { ev ->
-                        onKeyEvent(newPlayerName.value, ev)
-                    }
-                )
-            }
-            Row {
-                SimpleButton(text = AppState.translate("add_player_button")) { persistAndRedirect(newPlayerName.value) }
-            }
-        }
+
+    PersistenceUtil.getPlayerData().forEach { playerData ->
+        SimpleButton(text = playerData.name) { redirect(playerData) }
     }
+
+    Text(text = AppState.translate("new_player_title"))
+
+    TextField(
+        value = newPlayerName.value,
+        onValueChange = { newPlayerName.value = it },
+        label = { Text(AppState.translate("new_player_input_label")) },
+        singleLine = true,
+        modifier = Modifier.onPreviewKeyEvent { ev ->
+            onKeyEvent(newPlayerName.value, ev)
+        }
+    )
+
+    SimpleButton(text = AppState.translate("add_player_button")) { persistAndRedirect(newPlayerName.value) }
 }

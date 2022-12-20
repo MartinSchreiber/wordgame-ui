@@ -1,6 +1,5 @@
 package view.gameplay
 
-import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
@@ -22,14 +21,13 @@ fun WordInput(
 ) {
     val focusRequester = FocusRequester()
 
-    Row {
-        TextField(
-            value = text.value,
-            onValueChange = { onValueChange(it) },
-            modifier = Modifier.onPreviewKeyEvent(onKeyEvent).focusRequester(focusRequester)
-        )
-        Text(text = word.value.toString())
-    }
+    Text(text = word.value.toString())
+
+    TextField(
+        value = text.value,
+        onValueChange = { onValueChange(it) },
+        modifier = Modifier.onPreviewKeyEvent(onKeyEvent).focusRequester(focusRequester)
+    )
 
     DisposableEffect(Unit) {
         focusRequester.requestFocus()

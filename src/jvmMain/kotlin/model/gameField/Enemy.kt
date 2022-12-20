@@ -2,9 +2,7 @@ package model.gameField
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.Offset
-import util.Logger
 
-//TODO: add "loot"
 data class Enemy(
     private val path: Path,
     private val speed: Float,
@@ -19,7 +17,6 @@ data class Enemy(
     fun move() {
         distance -= speed
         position.value = path.moveTo(distance)
-        Logger.LOGGER.logEnemyMove(this)
     }
 
     fun reachedEnd(): Boolean {
