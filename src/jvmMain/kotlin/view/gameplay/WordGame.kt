@@ -27,6 +27,16 @@ val onKeyEvent = { wordGame: WordGame, ev: KeyEvent ->
             true
         }
 
+        // disable text selection
+        (ev.key == Key.A && ev.type == KeyEventType.KeyDown && ev.isCtrlPressed) -> {
+            true
+        }
+
+        // disable test pasting
+        (ev.key == Key.V && ev.type == KeyEventType.KeyDown && ev.isCtrlPressed) -> {
+            true
+        }
+
         else -> false
     }
 }
@@ -34,8 +44,14 @@ val onKeyEvent = { wordGame: WordGame, ev: KeyEvent ->
 val onValueChange = { wordGame: WordGame, text: String ->
     wordGame.updateWord(
         text
-            .uppercase()
+            .map {
+                when (it) {
+                    'ß' -> 'ß'
+                    else -> it.uppercaseChar()
+                }
+            }
             .filter { wordGame.allowedLetters.contains(it) }
+            .joinToString(separator = "")
     )
 }
 

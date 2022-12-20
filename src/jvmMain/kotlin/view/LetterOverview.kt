@@ -9,6 +9,7 @@ import view.navigation.AppState
 
 @Composable
 fun LetterOverview() {
+    //TODO: Add explanation of Letter-Types and combination-logic
     val letterValueGroups = LetterUtil.getLetterValueGroups(AppState.language())
         .map { group ->
             Pair(group.first, group.second.joinToString(separator = " ") { "($it)" })
