@@ -14,6 +14,7 @@ fun MainMenu() {
 
     SimpleButton(text = AppState.translate("level_menu_button")) { AppState.screenState(ScreenType.LevelMenu) }
     SimpleButton(text = AppState.translate("laboratory_button")) { AppState.screenState(ScreenType.Laboratory) }
+    SimpleButton(text = AppState.translate("statistics_board_button")) { AppState.screenState(ScreenType.StatisticsBoard) }
     SimpleButton(text = AppState.translate("setting_button")) { AppState.screenState(ScreenType.Settings) }
     SimpleButton(text = AppState.translate("player_menu_button")) { AppState.screenState(ScreenType.PlayerMenu) }
 }

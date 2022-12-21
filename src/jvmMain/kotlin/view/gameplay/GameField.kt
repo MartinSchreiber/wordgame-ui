@@ -14,7 +14,6 @@ import model.gameField.GameField
 import org.jetbrains.skia.Font
 import view.navigation.AppState
 
-//TODO: fix overlay with other elements
 @Composable
 fun GameField(gameField: GameField) {
     val textPaint = Paint().asFrameworkPaint().apply {

@@ -2,6 +2,7 @@ package util
 
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import constants.Language
 import model.Letter
 import model.WordGame
 import persistence.GameData
@@ -30,12 +31,8 @@ class PersistenceUtil {
             return listOf()
         }
 
-        fun getGameData(playerId: Int): List<GameData> {
-            val file = File(GAME_DATA_PATH.format(playerId))
-            if (file.isFile) {
-                return GSON.fromJson(file.readText(), genericType<List<GameData>>())
-            }
-            return listOf()
+        fun getGameData(playerId: Int, language: Language): List<GameData> {
+            return getGameData(playerId)[language] ?: listOf()
         }
 
         fun persistPlayer(name: String): PlayerData {
@@ -57,10 +54,30 @@ class PersistenceUtil {
             return gameData
         }
 
+        fun getLabels(language: Language): Map<String, String> {
+            val file = File(language.labelFile)
+            if (file.isFile) {
+                return GSON.fromJson(file.readText(), genericType<Map<String, String>>())
+            }
+            return mapOf()
+        }
+
+        private fun getGameData(playerId: Int): Map<Language, List<GameData>> {
+            val file = File(GAME_DATA_PATH.format(playerId))
+            if (file.isFile) {
+                return GSON.fromJson(file.readText(), genericType<Map<Language, List<GameData>>>())
+            }
+            return mapOf()
+        }
+
         private fun persistGameData(gameData: GameData, playerId: Int) {
-            val gameDataList = getGameData(playerId).toMutableList()
-            gameDataList.add(gameData)
-            File(GAME_DATA_PATH.format(playerId)).writeText(GSON.toJson(gameDataList))
+            val gameDataMap = getGameData(playerId).mapValues { it.value.toMutableList() }.toMutableMap()
+            if (gameDataMap.containsKey(AppState.language())) {
+                gameDataMap[AppState.language()]!!.add(gameData)
+            } else {
+                gameDataMap[AppState.language()] = mutableListOf(gameData)
+            }
+            File(GAME_DATA_PATH.format(playerId)).writeText(GSON.toJson(gameDataMap))
         }
 
         private fun createPlayer(name: String): PlayerData {
@@ -80,7 +97,6 @@ class PersistenceUtil {
 
             return GameData(
                 level = wordGame.level,
-                language = wordGame.language,
                 specialLetters = wordGame.specialLetters,
                 lootedLetters = lootedLetters,
                 typedWords = wordGame.typedWords.toList(),

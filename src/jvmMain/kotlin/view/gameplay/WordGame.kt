@@ -13,7 +13,6 @@ import model.WordGame
 import view.components.SimpleButton
 import view.navigation.AppState
 
-//TODO generativ erzeugen? Das wär cool
 @OptIn(ExperimentalComposeUiApi::class)
 val onKeyEvent = { wordGame: WordGame, ev: KeyEvent ->
     when {

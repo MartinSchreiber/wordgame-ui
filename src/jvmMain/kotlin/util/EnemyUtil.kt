@@ -39,35 +39,35 @@ class EnemyUtil(val path: Path, val position: Offset) {
 
     fun getEnemies(level: Level): MutableList<Enemy> {
         val enemyGroups = when (level) {
-            Level.ONE -> {
+            Level.L1 -> {
                 listOf(EnemyGroup(10f, 20))
             }
 
-            Level.TWO -> {
+            Level.L2 -> {
                 EnemyGroup(10f, 10) +
                         EnemyGroup(20f, 10)
             }
 
-            Level.THREE -> {
+            Level.L3 -> {
                 EnemyGroup(10f, 10) +
                         EnemyGroup(20f, 5) +
                         EnemyGroup(10f, 10)
             }
 
-            Level.FOUR -> {
+            Level.L4 -> {
                 EnemyGroup(10f, 10) +
                         EnemyGroup(20f, 5) +
                         EnemyGroup(50f, 1)
             }
 
-            Level.FIVE -> {
+            Level.L5 -> {
                 EnemyGroup(10f, 5, 2f) +
                         EnemyGroup(20f, 5) +
                         EnemyGroup(10f, 5, 2f) +
                         EnemyGroup(50f, 1)
             }
 
-            Level.SIX -> {
+            Level.L6 -> {
                 EnemyGroup(20f, 5) +
                         EnemyGroup(50f, 1) +
                         EnemyGroup(20f, 5) +
@@ -75,7 +75,7 @@ class EnemyUtil(val path: Path, val position: Offset) {
                         EnemyGroup(10f, 5, 2f)
             }
 
-            Level.SEVEN -> {
+            Level.L7 -> {
                 EnemyGroup(20f, 5, 2f) +
                         EnemyGroup(50f, 1) +
                         EnemyGroup(20f, 5, 2f) +
@@ -83,21 +83,21 @@ class EnemyUtil(val path: Path, val position: Offset) {
                         EnemyGroup(10f, 5, 2f)
             }
 
-            Level.EIGHT -> {
+            Level.L8 -> {
                 EnemyGroup(10f, 10, 2f) +
                         EnemyGroup(50f, 1, 2f) +
                         EnemyGroup(10f, 10, 2f) +
                         EnemyGroup(50f, 1, 2f)
             }
 
-            Level.NINE -> {
+            Level.L9 -> {
                 EnemyGroup(10f, 10, 2f) +
                         EnemyGroup(50f, 1, 2f) +
                         EnemyGroup(20f, 5, 2.5f) +
                         EnemyGroup(50f, 1, 2f)
             }
 
-            Level.TEN -> {
+            Level.L10 -> {
                 EnemyGroup(10f, 10, 2.5f) +
                         EnemyGroup(50f, 2, 2f) +
                         EnemyGroup(20f, 5, 2.5f) +

@@ -12,7 +12,7 @@ import util.LetterUtil
 //TODO document + simplify somehow (modules?)
 class WordGame(
     val language: Language = Language.ENGLISH,
-    val level: Level = Level.ONE,
+    val level: Level = Level.L1,
     val specialLetters: List<Letter>
 ) {
     companion object {
