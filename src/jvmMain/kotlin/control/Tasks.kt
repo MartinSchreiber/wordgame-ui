@@ -66,7 +66,6 @@ suspend fun spawnEnemies(gameField: GameField) = coroutineScope {
     }
 }
 
-//TODO: un-nest function
 suspend fun fireLetters(
     queue: SnapshotStateList<Word>,
     enemiesOnField: SnapshotStateList<Enemy>,
@@ -75,21 +74,20 @@ suspend fun fireLetters(
 ) = coroutineScope {
     while (!isOver()) {
         if (queue.isNotEmpty() && enemiesOnField.isNotEmpty()) {
-            val word = queue.removeFirst()
-            while (word.size() > 0 && !isOver()) {
-                if (enemiesOnField.isNotEmpty()) {
-                    val letter = word.removeFirstLetter()
-
+            queue
+                .firstOrNull()
+                ?.letters
+                ?.removeFirstOrNull()
+                ?.let { letter ->
                     enemiesOnField.minBy { it.distance }.damage(letter.totalValue)
+
                     enemiesOnField.removeIf { it.health.value <= 0 }
+                    queue.removeIf { it.letters.isEmpty() }
 
                     chambers.loadLetters(listOf(letter))
                 }
-                delay(360)
-            }
-            delay(420)
         }
-        delay(100)
+        delay(360)
     }
 }
 
