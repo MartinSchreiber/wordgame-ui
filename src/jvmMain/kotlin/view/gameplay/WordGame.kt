@@ -42,15 +42,10 @@ val onKeyEvent = { wordGame: WordGame, ev: KeyEvent ->
 
 val onValueChange = { wordGame: WordGame, text: String ->
     wordGame.updateWord(
-        text
-            .map {
-                when (it) {
-                    'ß' -> 'ß'
-                    else -> it.uppercaseChar()
-                }
-            }
+        text.replace(oldChar = 'ß', newChar = '*')
+            .uppercase()
+            .replace(oldChar = '*', newChar = 'ß')
             .filter { wordGame.allowedLetters.contains(it) }
-            .joinToString(separator = "")
     )
 }
 
