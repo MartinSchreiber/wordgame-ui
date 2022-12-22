@@ -35,7 +35,7 @@ class Converter {
                 id = PlayerDataRepo.getList().size + 1,
                 name = name,
                 language = language,
-                specialLetters = LetterUtil.getSpecialLetterMap()
+                specialLetters = mutableMapOf(Pair(language, LetterUtil.getSpecialLetters(language)))
             )
         }
     }

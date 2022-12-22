@@ -10,12 +10,7 @@ import model.Letter
 
 class LetterUtil {
     companion object {
-        //TODO: filter by language (at first only one set is filled)
-        fun getSpecialLetterMap(): MutableMap<Language, List<Letter>> {
-            return Language.values().associateWith { getSpecialLetters(it) }.toMutableMap()
-        }
-
-        private fun getSpecialLetters(language: Language): List<Letter> {
+        fun getSpecialLetters(language: Language): List<Letter> {
             return getRandomLetters(pickValue = 8, language = language)
         }
 
@@ -27,6 +22,36 @@ class LetterUtil {
                 letters.add(randomLetters.random())
             }
             return letters
+        }
+
+
+        fun getLetterValues(language: Language): Map<Char, Int> {
+            return letterValuesOf(language)
+                .associate { it.letter to it.value }
+        }
+
+        fun getLetterValueGroups(language: Language): List<Pair<Int, List<Char>>> {
+            return letterValuesOf(language)
+                .groupBy { it.value }
+                .map { it.key to it.value.map { c -> c.letter } }
+                .sortedBy { it.first }
+        }
+
+        fun combine(letters: List<Letter>, language: Language): List<Letter> {
+            val lettersMutable = letters.toMutableList()
+            val sameTypeAndLevel =
+                letters.map { it.type }.distinct().size == 1 && letters.map { it.level }.distinct().size == 1
+            val combinedLetters = mutableListOf<Letter>()
+
+            if (sameTypeAndLevel && letters.size % 2 == 0) {
+                while (lettersMutable.isNotEmpty()) {
+                    lettersMutable.removeFirst()
+                    lettersMutable.removeFirst()
+                    combine(letters.first().level, letters.first().type, language)?.let { combinedLetters.add(it) }
+                }
+            }
+
+            return combinedLetters
         }
 
         //TODO: refine logic
@@ -53,40 +78,11 @@ class LetterUtil {
             return letters
         }
 
-        fun getLetterValues(language: Language): Map<Char, Int> {
-            return letterValuesOf(language)
-                .associate { it.letter to it.value }
-        }
-
-        fun getLetterValueGroups(language: Language): List<Pair<Int, List<Char>>> {
-            return letterValuesOf(language)
-                .groupBy { it.value }
-                .map { it.key to it.value.map { c -> c.letter } }
-                .sortedBy { it.first }
-        }
-
         private fun letterValuesOf(language: Language): List<LetterValue> {
             return when (language) {
                 Language.GERMAN -> LetterValueGerman.values().toList()
                 Language.ENGLISH -> LetterValueEnglish.values().toList()
             }
-        }
-
-        fun combine(letters: List<Letter>, language: Language): List<Letter> {
-            val lettersMutable = letters.toMutableList()
-            val sameTypeAndLevel =
-                letters.map { it.type }.distinct().size == 1 && letters.map { it.level }.distinct().size == 1
-            val combinedLetters = mutableListOf<Letter>()
-
-            if (sameTypeAndLevel && letters.size % 2 == 0) {
-                while (lettersMutable.isNotEmpty()) {
-                    lettersMutable.removeFirst()
-                    lettersMutable.removeFirst()
-                    combine(letters.first().level, letters.first().type, language)?.let { combinedLetters.add(it) }
-                }
-            }
-
-            return combinedLetters
         }
 
         private fun combine(letterLevel: Int, letterType: LetterType, language: Language): Letter? {

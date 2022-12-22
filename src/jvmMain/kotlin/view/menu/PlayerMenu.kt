@@ -43,7 +43,7 @@ fun PlayerMenu() {
     val newPlayerName = remember { mutableStateOf("") }
 
     PlayerDataRepo.getList().forEach { playerData ->
-        SimpleButton(text = playerData.name) { redirect(playerData) }
+        SimpleButton(text = "${playerData.id} - ${playerData.name}") { redirect(playerData) }
     }
 
     Text(text = AppState.translate("new_player_title"))
