@@ -17,9 +17,11 @@ import model.gameField.GameField
 @Composable
 fun backgroundTasks(wordGame: WordGame, onGameOver: () -> Unit) {
     val backgroundScope = rememberCoroutineScope()
+
     backgroundScope.launch {
         spawnEnemies(gameField = wordGame.gameField)
     }
+
     backgroundScope.launch {
         moveEnemies(
             enemies = wordGame.gameField.enemiesOnField,
@@ -27,6 +29,7 @@ fun backgroundTasks(wordGame: WordGame, onGameOver: () -> Unit) {
             isOver = wordGame.isOver
         )
     }
+
     backgroundScope.launch {
         fireLetters(
             queue = wordGame.wordQueue,
@@ -35,6 +38,7 @@ fun backgroundTasks(wordGame: WordGame, onGameOver: () -> Unit) {
             isOver = wordGame.isOver
         )
     }
+
     backgroundScope.launch {
         waitForGameOver(
             isOver = wordGame.isOver,
@@ -51,7 +55,9 @@ suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>, base: Base, isOver: (
                 base.health.value -= it.health.value
             }
         }
+
         enemies.removeIf { it.reachedEnd() }
+
         delay(100)
     }
 }
@@ -60,8 +66,10 @@ suspend fun spawnEnemies(gameField: GameField) = coroutineScope {
     while (gameField.enemiesIncoming.isNotEmpty()) {
         gameField.enemiesIncoming.firstOrNull()?.let {
             delay(it.delay)
+
             gameField.enemiesOnField.add(it)
         }
+
         gameField.enemiesIncoming.removeFirst()
     }
 }
@@ -95,5 +103,6 @@ suspend fun waitForGameOver(isOver: () -> Boolean, onGameOver: () -> Unit) = cor
     while (!isOver()) {
         delay(100)
     }
+
     onGameOver()
 }

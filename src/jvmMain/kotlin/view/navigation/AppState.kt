@@ -7,11 +7,13 @@ import constants.Level
 import constants.ScreenType
 import model.Letter
 import model.WordGame
+import persistence.Converter
 import persistence.GameData
 import persistence.PlayerData
+import persistence.repos.AbstractJsonRepo
+import persistence.repos.GameDataRepo
 import util.LanguageUtil
 import util.LetterUtil
-import util.PersistenceUtil
 
 object AppState {
     private var screen: MutableState<ScreenType> = mutableStateOf(ScreenType.PlayerMenu)
@@ -23,11 +25,11 @@ object AppState {
     var level: Level = Level.L1
     var loot: List<Letter> = listOf()
 
-    fun loadPlayerData(playerData: PlayerData) {
-        this.playerData = playerData
-        language(playerData.language)
+    init {
+        AbstractJsonRepo.initDir()
     }
 
+    // access to vars
     fun screenState(): ScreenType = screen.value
 
     fun screenState(state: ScreenType) {
@@ -46,6 +48,21 @@ object AppState {
     fun laboratory(): PlayerData.Laboratory = playerData!!.laboratory[language()]!!
     fun laboratory(laboratory: PlayerData.Laboratory) = playerData?.laboratory?.set(language(), laboratory)
 
+    fun playerData(playerData: PlayerData) {
+        this.playerData = playerData
+        language(playerData.language)
+    }
+
+    // access to virtual vars
+    fun gameDataList(): List<GameData> = GameDataRepo.getList(playerData!!.id, language())
+
+    fun gameData(): GameData {
+        val gameData = Converter.toGameData(wordGame!!, loot)
+        gameData.persist(playerData!!.id, language())
+        return gameData
+    }
+
+    // game-functions
     fun newGame(): WordGame {
         wordGame = WordGame(
             language = language(),
@@ -60,14 +77,6 @@ object AppState {
         playerData?.laboratory?.get(language())?.inactiveLetters?.addAll(loot)
     }
 
-    fun gameDataList(): List<GameData> = PersistenceUtil.getGameData(playerData!!.id, language())
-
-    fun persistCurrentGameData(): GameData =
-        PersistenceUtil.persistGameData(
-            wordGame = wordGame!!,
-            lootedLetters = loot,
-            playerId = playerData!!.id
-        )
-
+    // ui-functions
     fun translate(label: String) = languageUtil.translate(label)
 }

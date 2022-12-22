@@ -1,8 +1,10 @@
 package persistence
 
+import constants.Language
 import constants.Level
 import model.Letter
 import model.Word
+import persistence.repos.GameDataRepo
 
 data class GameData(
     val level: Level,
@@ -16,4 +18,8 @@ data class GameData(
     val lettersPerMinute: Float,
     val totalWordDamage: Float,
     val averageWordDamage: Float
-)
+) {
+    fun persist(playerId: Int, language: Language) {
+        GameDataRepo.persist(this, playerId, language)
+    }
+}

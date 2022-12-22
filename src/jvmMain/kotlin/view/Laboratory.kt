@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import constants.ScreenType
 import util.LetterUtil
-import util.PersistenceUtil
 import view.components.SimpleButton
 import view.navigation.AppState
 
@@ -117,7 +116,7 @@ fun Laboratory() {
                 laboratory.resultChamber = resultChamber.toList()
 
                 AppState.laboratory(laboratory)
-                PersistenceUtil.persistPlayer(AppState.playerData!!)
+                AppState.playerData?.persist()
 
                 AppState.screenState(ScreenType.MainMenu)
             }

@@ -5,7 +5,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import constants.Language
 import constants.ScreenType
-import util.PersistenceUtil
 import view.components.SimpleButton
 import view.navigation.AppState
 
@@ -18,7 +17,7 @@ fun Settings() {
         }
     }
     SimpleButton(text = AppState.translate("main_menu_button")) {
-        PersistenceUtil.persistPlayer(AppState.playerData!!)
+        AppState.playerData?.persist()
         AppState.screenState(ScreenType.MainMenu)
     }
 }

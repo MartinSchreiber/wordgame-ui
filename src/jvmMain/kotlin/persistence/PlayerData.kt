@@ -2,6 +2,7 @@ package persistence
 
 import constants.Language
 import model.Letter
+import persistence.repos.PlayerDataRepo
 
 class PlayerData(
     val id: Int,
@@ -10,6 +11,10 @@ class PlayerData(
     specialLetters: MutableMap<Language, List<Letter>>
 ) {
     val laboratory = specialLetters.mapValues { Laboratory(activeLetters = it.value) }.toMutableMap()
+
+    fun persist() {
+        PlayerDataRepo.persist(entity = this)
+    }
 
     data class Laboratory(
         var activeLetters: List<Letter>,

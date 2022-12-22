@@ -9,18 +9,20 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.*
 import constants.ScreenType
+import persistence.Converter
 import persistence.PlayerData
-import util.PersistenceUtil
+import persistence.repos.PlayerDataRepo
 import view.components.SimpleButton
 import view.navigation.AppState
 
 
 val redirect = { playerData: PlayerData ->
-    AppState.loadPlayerData(playerData)
+    AppState.playerData(playerData)
     AppState.screenState(ScreenType.MainMenu)
 }
 val persistAndRedirect = { newPlayerName: String ->
-    val playerData = PersistenceUtil.persistPlayer(newPlayerName)
+    val playerData = Converter.toPlayerData(name = newPlayerName)
+    playerData.persist()
     redirect(playerData)
 }
 
@@ -40,7 +42,7 @@ val onKeyEvent = { newPlayerName: String, ev: KeyEvent ->
 fun PlayerMenu() {
     val newPlayerName = remember { mutableStateOf("") }
 
-    PersistenceUtil.getPlayerData().forEach { playerData ->
+    PlayerDataRepo.getList().forEach { playerData ->
         SimpleButton(text = playerData.name) { redirect(playerData) }
     }
 

@@ -10,6 +10,7 @@ import model.Letter
 
 class LetterUtil {
     companion object {
+        //TODO: filter by language (at first only one set is filled)
         fun getSpecialLetterMap(): MutableMap<Language, List<Letter>> {
             return Language.values().associateWith { getSpecialLetters(it) }.toMutableMap()
         }

@@ -9,7 +9,7 @@ import view.navigation.AppState
 
 @Composable
 fun GameStatistics() {
-    val gameData = AppState.persistCurrentGameData()
+    val gameData = AppState.gameData()
 
     GameData(gameData)
 
