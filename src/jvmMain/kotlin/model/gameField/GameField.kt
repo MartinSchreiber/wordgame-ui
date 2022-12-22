@@ -5,7 +5,6 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.geometry.Offset
 import constants.Level
-import util.EnemyUtil
 
 class GameField(
     start: Offset = Offset(20f, 50f),
@@ -14,8 +13,10 @@ class GameField(
     level: Level
 ) {
     val path = Path(startX = start.x, startY = start.y, endX = end.x, endY = end.y, numberOfTurns = numberOfTurns)
-    val enemiesIncoming = EnemyUtil(path, start).getEnemies(level).toMutableStateList()
+
+    val enemiesIncoming = EnemyGroup.enemyList(level.enemyGroups, path, start).toMutableStateList()
     val enemiesOnField: SnapshotStateList<Enemy> = mutableStateListOf()
+
 
     fun isOver() = (enemiesIncoming.isEmpty() && enemiesOnField.isEmpty())
             || path.base.health.value <= 0
