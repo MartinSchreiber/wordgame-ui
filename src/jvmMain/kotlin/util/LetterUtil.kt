@@ -7,116 +7,119 @@ import constants.lettervalues.LetterValue
 import constants.lettervalues.LetterValueEnglish
 import constants.lettervalues.LetterValueGerman
 import model.Letter
+import java.util.*
 
 class LetterUtil {
     companion object {
-        fun getSpecialLetters(language: Language): List<Letter> {
-            return getRandomLetters(pickValue = 8, language = language)
-        }
+        fun getSpecialLetters(language: Language): List<Letter> = drawLetters(number = 18, language = language)
 
-        //TODO: refine logic
-        fun getLootedLetters(level: Level, language: Language): List<Letter> {
-            val randomLetters = getRandomLetters(pickValue = level.ordinal + 1, language = language)
-            val letters = mutableListOf<Letter>()
-            for (i in 0..level.ordinal) {
-                letters.add(randomLetters.random())
-            }
-            return letters
-        }
+        fun getLootedLetters(level: Level, language: Language): List<Letter> =
+            drawLetters(
+                number = (0..3).random(), language = language, maxLevel = (level.ordinal / 10) + 1
+            )
 
+        fun getLetterValues(language: Language): Map<Char, Int> =
+            getLetterValueObjects(language).associate { it.letter to it.value }
 
-        fun getLetterValues(language: Language): Map<Char, Int> {
-            return letterValuesOf(language)
-                .associate { it.letter to it.value }
-        }
-
-        fun getLetterValueGroups(language: Language): List<Pair<Int, List<Char>>> {
-            return letterValuesOf(language)
-                .groupBy { it.value }
-                .map { it.key to it.value.map { c -> c.letter } }
-                .sortedBy { it.first }
-        }
+        fun getLetterValueMap(language: Language): SortedMap<Int, List<LetterValue>> =
+            getLetterValueObjects(language).groupBy { it.value }.toSortedMap()
 
         fun combine(letters: List<Letter>, language: Language): List<Letter> {
-            val lettersMutable = letters.toMutableList()
-            val sameTypeAndLevel =
+            val lettersHaveSameTypeAndLevel =
                 letters.map { it.type }.distinct().size == 1 && letters.map { it.level }.distinct().size == 1
+
+            val lettersMutable = letters.toMutableList()
             val combinedLetters = mutableListOf<Letter>()
 
-            if (sameTypeAndLevel && letters.size % 2 == 0) {
+            if (lettersHaveSameTypeAndLevel && letters.size % 2 == 0) {
                 while (lettersMutable.isNotEmpty()) {
-                    lettersMutable.removeFirst()
-                    lettersMutable.removeFirst()
-                    combine(letters.first().level, letters.first().type, language)?.let { combinedLetters.add(it) }
+                    val oldLetters = listOf(lettersMutable.removeFirst(), lettersMutable.removeFirst())
+
+                    val newLetter = combine(letters.first().level, letters.first().type, language)
+
+                    // if letters couldn't be combined return original letters
+                    if (newLetter != null) {
+                        combinedLetters.add(newLetter)
+                    } else {
+                        combinedLetters.addAll(oldLetters)
+                    }
                 }
             }
 
             return combinedLetters
         }
 
-        //TODO: refine logic
-        private fun getRandomLetters(pickValue: Int? = null, language: Language): List<Letter> {
-            val letters = mutableListOf<Letter>()
-
-            val letterValueGroups = getLetterValueGroups(language)
-
-            letterValueGroups.forEachIndexed { ind, group ->
-                val pickCount = (pickValue ?: letterValueGroups.maxOf { it.first }) / group.first
-                for (i in 1..pickCount) {
-                    letters.add(
-                        Letter(
-                            letter = group.second.random(),
-                            value = group.first,
-                            level = ind + 1,
-                            type = LetterType.STRONGER,
-                            specialValue = 5f
-                        )
-                    )
-                }
-            }
-
-            return letters
-        }
-
-        private fun letterValuesOf(language: Language): List<LetterValue> {
-            return when (language) {
-                Language.GERMAN -> LetterValueGerman.values().toList()
-                Language.ENGLISH -> LetterValueEnglish.values().toList()
-            }
-        }
-
         private fun combine(letterLevel: Int, letterType: LetterType, language: Language): Letter? {
-            val letterValueGroups = getLetterValueGroups(language)
+            val letterValueMap = getLetterValueMap(language)
+            val letterLevelValues = letterValueMap.keys.sortedDescending()
 
-            return if (letterLevel < letterValueGroups.size) {
-                val specialValue = when (letterType) {
-                    LetterType.BASIC -> 0f
-                    LetterType.STRONGER -> 5f
-                    LetterType.MULTIPLY -> 1.5f
-                }
+            return if (letterLevel < letterValueMap.size) {
                 Letter(
-                    letter = letterValueGroups[letterLevel].second.random(),
-                    value = letterValueGroups[letterLevel].first,
+                    letter = letterValueMap[letterLevelValues[letterLevel - 1]]!!.random().letter,
+                    value = letterLevelValues[letterLevel - 1],
                     level = letterLevel + 1,
-                    type = letterType,
-                    specialValue = specialValue
+                    type = letterType
                 )
             } else if (letterType.getNextType() != null) {
-                val specialValue = when (letterType.getNextType()!!) {
-                    LetterType.BASIC -> 0f
-                    LetterType.STRONGER -> 5f
-                    LetterType.MULTIPLY -> 1.5f
-                }
                 Letter(
-                    letter = letterValueGroups[0].second.random(),
-                    value = letterValueGroups[0].first,
+                    letter = letterValueMap.values.first().random().letter,
+                    value = letterLevelValues[0],
                     level = 1,
-                    type = letterType.getNextType()!!,
-                    specialValue = specialValue
+                    type = letterType.getNextType()!!
                 )
             } else {
                 null
             }
+        }
+
+        private fun drawLetters(
+            number: Int,
+            language: Language,
+            maxLevel: Int = -1,
+            type: LetterType = LetterType.STRONGER
+        ): List<Letter> {
+            val letters = mutableListOf<Letter>()
+
+            var fullLetterList = getFullLetterList(language, type)
+
+            if (maxLevel > 0) {
+                fullLetterList = fullLetterList.filter { it.level <= maxLevel }
+            }
+
+            repeat(number) { _ -> letters.add(fullLetterList.random()) }
+
+            getLetterValueObjects(language)
+
+            return letters
+        }
+
+        private fun getFullLetterList(language: Language, type: LetterType = LetterType.BASIC): List<Letter> {
+            val letterList = mutableListOf<Letter>()
+
+            val letterValueMap = getLetterValueMap(language)
+            val letterLevelValues = letterValueMap.keys.sorted()
+
+            letterValueMap.forEach {
+                it.value.forEach { value ->
+                    repeat(value.count) { _ ->
+                        letterList.add(
+                            Letter(
+                                letter = value.letter,
+                                value = it.key,
+                                level = letterLevelValues.indexOf(it.key) + 1,
+                                type = type
+                            )
+                        )
+                    }
+                }
+            }
+
+            return letterList
+        }
+
+        private fun getLetterValueObjects(language: Language): List<LetterValue> = when (language) {
+            Language.GERMAN -> LetterValueGerman.values().toList()
+            Language.ENGLISH -> LetterValueEnglish.values().toList()
         }
     }
 }

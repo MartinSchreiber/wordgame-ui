@@ -10,13 +10,13 @@ import view.navigation.AppState
 @Composable
 fun LetterOverview() {
     //TODO: Add explanation of Letter-Types and combination-logic
-    val letterValueGroups = LetterUtil.getLetterValueGroups(AppState.language())
+    val letterValueMap = LetterUtil.getLetterValueMap(AppState.language())
         .map { group ->
-            Pair(group.first, group.second.joinToString(separator = " ") { "($it)" })
+            Pair(group.key, group.value.joinToString(separator = " ") { "(${it.letter})" })
         }
 
     Text(text = AppState.translate("letter_overview_title"))
-    letterValueGroups.forEach {
+    letterValueMap.forEach {
         Text(text = AppState.translate("letter_overview_points_label").format(it.first, it.second))
         Text(text = "---")
     }

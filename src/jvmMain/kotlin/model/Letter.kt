@@ -7,8 +7,16 @@ data class Letter(
     val value: Int = 1,
     val level: Int = 0,
     val type: LetterType = LetterType.BASIC,
-    val specialValue: Float = 0f
+    val specialValue: Float = initSpecialValue(level, type)
 ) {
+    companion object {
+        private fun initSpecialValue(level: Int, type: LetterType): Float = when (type) {
+            LetterType.BASIC -> 0f
+            LetterType.STRONGER -> 5f + (1f * level)
+            LetterType.MULTIPLY -> 1.4f + (0.1f * level)
+        }
+    }
+
     var totalValue: Float = initTotalValue()
 
     override fun toString(): String {
