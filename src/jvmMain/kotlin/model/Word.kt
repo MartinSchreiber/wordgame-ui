@@ -3,45 +3,27 @@ package model
 import constants.LetterType
 
 class Word(val letters: MutableList<Letter> = mutableListOf()) {
-    fun size(): Int {
-        return letters.size
+    fun prepareForFiring() {
+        var factor = 1f
+
+        letters.filter { it.type == LetterType.MULTIPLY }.forEach { factor *= it.specialValue }
+
+        letters.forEach { it.totalValue *= factor }
     }
 
-    fun getTotalValue(): Float {
-        return letters.map { it.totalValue }.sum()
-    }
+    fun size(): Int = letters.size
 
-    fun addLetter(letter: Letter) {
-        letters.add(letter)
+    fun totalValue(): Float = letters.map { it.totalValue }.sum()
 
-        if (letter.type == LetterType.MULTIPLY) {
-            letters.forEach { it.totalValue *= letter.specialValue }
-        }
-    }
+    fun addLetter(letter: Letter) = letters.add(letter)
 
-    fun removeLastLetter(): Letter {
-        val removedLetter = letters.removeLast()
+    fun removeLastLetter(): Letter = letters.removeLast()
 
-        if (removedLetter.type == LetterType.MULTIPLY) {
-            letters.forEach { it.totalValue /= removedLetter.specialValue }
-        }
+    fun removeFirstLetterOrNull(): Letter? = letters.removeFirstOrNull()
 
-        return removedLetter
-    }
+    fun copy(): Word = Word(letters.map { it.copy() }.toMutableList())
 
-    fun removeFirstLetter(): Letter {
-        return letters.removeFirst()
-    }
+    fun toPlainString(): String = letters.joinToString(separator = "", transform = { it.letter.toString() })
 
-    fun copy(): Word {
-        return Word(letters.map { it.copy() }.toMutableList())
-    }
-
-    override fun toString(): String {
-        return letters.joinToString("")
-    }
-
-    fun toPlainString(): String {
-        return letters.joinToString(separator = "", transform = { it.letter.toString() })
-    }
+    override fun toString(): String = letters.joinToString("")
 }

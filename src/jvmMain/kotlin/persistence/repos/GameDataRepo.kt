@@ -6,7 +6,7 @@ import java.io.File
 
 object GameDataRepo : AbstractJsonRepo<GameData>() {
     override val filePath: String
-        get() = "$basePath/gameData%d.json"
+        get() = "$BASE_PATH/gameData%d.json"
 
     override fun getList(vararg keys: Any): List<GameData> {
         val playerId = keys[0] as Int

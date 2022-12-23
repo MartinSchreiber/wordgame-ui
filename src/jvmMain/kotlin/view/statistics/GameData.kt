@@ -24,8 +24,8 @@ fun GameData(gameData: GameData) {
     Row {
         Column(modifier = Modifier.fillMaxWidth(0.5f)) {
             Row {
-                TypedWordList(gameData.typedWords.sortedByDescending { it.getTotalValue() })
-                { _: Int, word: Word -> "${word.getTotalValue()} - $word" }
+                TypedWordList(gameData.typedWords.sortedByDescending { it.totalValue() })
+                { _: Int, word: Word -> "${word.totalValue()} - $word" }
             }
         }
         Column {

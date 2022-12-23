@@ -19,7 +19,5 @@ data class GameData(
     val totalWordDamage: Float,
     val averageWordDamage: Float
 ) {
-    fun persist(playerId: Int, language: Language) {
-        GameDataRepo.persist(this, playerId, language)
-    }
+    fun persist(playerId: Int, language: Language) = GameDataRepo.persist(this, playerId, language)
 }

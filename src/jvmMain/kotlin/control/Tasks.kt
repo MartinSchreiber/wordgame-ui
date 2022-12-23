@@ -58,7 +58,7 @@ suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>, base: Base, isOver: (
 
         enemies.removeIf { it.reachedEnd() }
 
-        delay(100)
+        delay(50)
     }
 }
 
@@ -84,8 +84,7 @@ suspend fun fireLetters(
         if (queue.isNotEmpty() && enemiesOnField.isNotEmpty()) {
             queue
                 .firstOrNull()
-                ?.letters
-                ?.removeFirstOrNull()
+                ?.removeFirstLetterOrNull()
                 ?.let { letter ->
                     enemiesOnField.minBy { it.distance }.damage(letter.totalValue)
 

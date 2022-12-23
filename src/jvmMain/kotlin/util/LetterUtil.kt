@@ -92,7 +92,7 @@ class LetterUtil {
                 val specialValue = when (letterType) {
                     LetterType.BASIC -> 0f
                     LetterType.STRONGER -> 5f
-                    LetterType.MULTIPLY -> 2f
+                    LetterType.MULTIPLY -> 1.5f
                 }
                 Letter(
                     letter = letterValueGroups[letterLevel].second.random(),
@@ -105,7 +105,7 @@ class LetterUtil {
                 val specialValue = when (letterType.getNextType()!!) {
                     LetterType.BASIC -> 0f
                     LetterType.STRONGER -> 5f
-                    LetterType.MULTIPLY -> 2f
+                    LetterType.MULTIPLY -> 1.5f
                 }
                 Letter(
                     letter = letterValueGroups[0].second.random(),

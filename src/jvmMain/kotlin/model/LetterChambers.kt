@@ -11,15 +11,6 @@ class LetterChambers(val visible: Int, var opened: Int, letters: List<Letter>) {
         .mapIndexed { index, letter -> Chamber(letter, index < opened) }
         .toMutableStateList()
 
-    private fun open(number: Int = 1) {
-        if (chambers.filter { it.open }.size < visible) {
-            chambers
-                .filter { !it.open }
-                .takeIf { it.isNotEmpty() }
-                ?.subList(0, number)
-                ?.forEach { it.open = true }
-        }
-    }
 
     fun remove(indices: List<Int>) {
         indices
@@ -61,6 +52,16 @@ class LetterChambers(val visible: Int, var opened: Int, letters: List<Letter>) {
                 it.open = chambers.size < opened
                 chambers.add(it)
             }
+    }
+
+    private fun open(number: Int = 1) {
+        if (chambers.filter { it.open }.size < visible) {
+            chambers
+                .filter { !it.open }
+                .takeIf { it.isNotEmpty() }
+                ?.subList(0, number)
+                ?.forEach { it.open = true }
+        }
     }
 
     class Chamber(letter: Letter?, var open: Boolean = false) {

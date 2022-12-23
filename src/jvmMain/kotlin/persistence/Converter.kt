@@ -12,7 +12,7 @@ class Converter {
         fun toGameData(wordGame: WordGame, lootedLetters: List<Letter>): GameData {
             val playTime = (wordGame.endTime!! - wordGame.startTime)
             val lettersPerMinute = wordGame.typedWords.sumOf { it.size() } / (playTime / 60000f)
-            val totalWordDamage = wordGame.typedWords.sumOf { it.getTotalValue().toDouble() }.toFloat()
+            val totalWordDamage = wordGame.typedWords.sumOf { it.totalValue().toDouble() }.toFloat()
             val averageWordDamage = totalWordDamage / wordGame.typedWords.size
 
             return GameData(

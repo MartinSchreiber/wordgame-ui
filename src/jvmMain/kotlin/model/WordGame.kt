@@ -9,85 +9,64 @@ import model.gameField.GameField
 import util.LanguageUtil
 import util.LetterUtil
 
-//TODO document + simplify somehow (modules?)
 class WordGame(
-    val language: Language = Language.ENGLISH,
-    val level: Level = Level.L1,
-    val specialLetters: List<Letter>
+    val language: Language = Language.ENGLISH, val level: Level = Level.L1, val specialLetters: List<Letter>
 ) {
     companion object {
         private const val TOTAL_LETTER_CHAMBERS = 10
         private const val OPEN_LETTER_CHAMBERS = 1
     }
 
+    // words and letters for evaluation
     private val validWords = LanguageUtil.importWords(language)
     private val letterValues = LetterUtil.getLetterValues(language)
+    private val allowedLetters = letterValues.keys
+
+    // mutable states (partially capsuled in custom classes) for view
     private val borrowedLetters = mutableListOf<Pair<Letter, Int>>()
-
-    private var alreadyTyped = { word: String ->
-        typedWords.map { it.toPlainString() }.contains(word)
-    }
-
-    val allowedLetters = letterValues.keys
-    val typedWords: SnapshotStateList<Word> = mutableStateListOf()
 
     val textInput = mutableStateOf("")
     val wordInput = mutableStateOf(Word())
-    val wordQueue: SnapshotStateList<Word> = mutableStateListOf()
-    val letterChambers = LetterChambers(TOTAL_LETTER_CHAMBERS, OPEN_LETTER_CHAMBERS, specialLetters)
 
+    val typedWords: SnapshotStateList<Word> = mutableStateListOf()
+    val wordQueue: SnapshotStateList<Word> = mutableStateListOf()
+
+    val letterChambers = LetterChambers(TOTAL_LETTER_CHAMBERS, OPEN_LETTER_CHAMBERS, specialLetters)
     val gameField = GameField(level = level)
+
+    // statistical fields and end-condition
+    val startTime = System.currentTimeMillis()
+    var endTime: Long? = null
 
     var isOver = { gameField.isOver() }
 
-    val startTime = System.currentTimeMillis()
-    var endTime: Long? = null
+    fun isAllowedLetter(char: Char): Boolean = allowedLetters.contains(char)
 
     fun updateWord(text: String) {
         textInput.value = text
 
-        if (text.length < wordInput.value.size()) {
-            val removedLetter = wordInput.value.removeLastLetter()
-            val returnedLetters: MutableList<Pair<Letter, Int>> = mutableListOf()
 
-            borrowedLetters.forEach {
-                if (it.first == removedLetter) {
-                    letterChambers.returnLetters(listOf(it))
-                    returnedLetters.add(it)
-                }
-            }
-
-            borrowedLetters.removeAll(returnedLetters)
-        } else if (text.length > wordInput.value.size()) {
-            val addedChar = text.last()
-
-            val specialLetter = letterChambers.borrowLetter(addedChar)
-            specialLetter?.let { borrowedLetters.add(it) }
-
-            val addedLetter: Letter = specialLetter?.first ?: Letter(
-                letter = addedChar,
-                value = letterValues[addedChar]!!
-            )
-
-            wordInput.value.addLetter(addedLetter)
+        if (text.length > wordInput.value.size()) {
+            addChar(text.last())
+        } else if (text.length < wordInput.value.size()) {
+            removeLastLetter()
         }
     }
 
-    fun addWord(): Boolean {
+    fun enqueueWord() {
         textInput.value = textInput.value
-        return if (textInput.value.isNotBlank()
+
+        if (textInput.value.isNotBlank()
             && validWords.contains(textInput.value)
             && !alreadyTyped(textInput.value)
         ) {
+            wordInput.value.prepareForFiring()
+
             wordQueue.add(wordInput.value)
             typedWords.add(wordInput.value.copy())
             letterChambers.remove(borrowedLetters.map { it.second })
 
             clearInput(false)
-
-            true
-        } else {
-            false
         }
     }
 
@@ -101,4 +80,33 @@ class WordGame(
 
         borrowedLetters.clear()
     }
+
+    private fun addChar(char: Char) {
+        // borrow special letter if possible
+        val specialLetter = letterChambers.borrowLetter(char)
+        specialLetter?.let { borrowedLetters.add(it) }
+
+        val addedLetter: Letter = specialLetter?.first ?: Letter(
+            letter = char, value = letterValues[char]!!
+        )
+
+        wordInput.value.addLetter(addedLetter)
+    }
+
+    private fun removeLastLetter() {
+        val removedLetter = wordInput.value.removeLastLetter()
+        val returnedLetters: MutableList<Pair<Letter, Int>> = mutableListOf()
+
+        // return to special letters if it was borrowed
+        borrowedLetters.forEach {
+            if (it.first == removedLetter) {
+                letterChambers.returnLetters(listOf(it))
+                returnedLetters.add(it)
+            }
+        }
+
+        borrowedLetters.removeAll(returnedLetters)
+    }
+
+    private fun alreadyTyped(word: String) = typedWords.map { it.toPlainString() }.contains(word)
 }

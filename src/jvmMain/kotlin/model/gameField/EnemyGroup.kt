@@ -3,10 +3,13 @@ package model.gameField
 import androidx.compose.ui.geometry.Offset
 
 class EnemyGroup(
-    val maxHealth: Float, val number: Int = 1, val speed: Float = 1f, val delay: Long = (DEFAULT_DELAY / speed).toLong()
+    private val maxHealth: Float,
+    private val number: Int = 1,
+    private val speed: Float = 1f,
+    private val delay: Long = (DEFAULT_DELAY / speed).toLong()
 ) {
     companion object {
-        const val BASE_SPEED = 0.001f
+        const val BASE_SPEED = 0.0005f
         const val DEFAULT_DELAY = 2000L
 
         fun enemyList(groups: List<EnemyGroup>, path: Path, startPosition: Offset): List<Enemy> =

@@ -6,7 +6,7 @@ import java.io.File
 
 object PlayerDataRepo : AbstractJsonRepo<PlayerData>() {
     override val filePath: String
-        get() = "$basePath/playerData.json"
+        get() = "$BASE_PATH/playerData.json"
 
     override fun getList(vararg keys: Any): List<PlayerData> {
         val file = File(filePath)

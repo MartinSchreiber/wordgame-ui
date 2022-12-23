@@ -12,9 +12,7 @@ class PlayerData(
 ) {
     val laboratory = specialLetters.mapValues { Laboratory(activeLetters = it.value) }.toMutableMap()
 
-    fun persist() {
-        PlayerDataRepo.persist(entity = this)
-    }
+    fun persist() = PlayerDataRepo.persist(entity = this)
 
     data class Laboratory(
         var activeLetters: List<Letter>,

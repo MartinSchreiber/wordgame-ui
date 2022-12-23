@@ -17,7 +17,7 @@ import view.navigation.AppState
 val onKeyEvent = { wordGame: WordGame, ev: KeyEvent ->
     when {
         (ev.key == Key.Enter && ev.type == KeyEventType.KeyDown) -> {
-            wordGame.addWord()
+            wordGame.enqueueWord()
             true
         }
 
@@ -45,7 +45,7 @@ val onValueChange = { wordGame: WordGame, text: String ->
         text.replace(oldChar = 'ß', newChar = '*')
             .uppercase()
             .replace(oldChar = '*', newChar = 'ß')
-            .filter { wordGame.allowedLetters.contains(it) }
+            .filter { wordGame.isAllowedLetter(it) }
     )
 }
 

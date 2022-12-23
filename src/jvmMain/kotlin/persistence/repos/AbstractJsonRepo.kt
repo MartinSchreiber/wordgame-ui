@@ -6,15 +6,16 @@ import java.io.File
 
 abstract class AbstractJsonRepo<T> {
     companion object {
+        const val BASE_PATH = "./wordGameData"
+
         fun initDir() {
-            File("./wordGameData").mkdir()
+            File(BASE_PATH).mkdir()
         }
     }
 
     protected inline fun <reified T> genericType() = object : TypeToken<T>() {}.type!!
 
     protected val gson = GsonBuilder().create()!!
-    protected val basePath = "./wordGameData"
     abstract val filePath: String
 
     abstract fun getList(vararg keys: Any): List<T>
