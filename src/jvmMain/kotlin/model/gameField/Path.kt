@@ -2,7 +2,6 @@ package model.gameField
 
 import androidx.compose.ui.geometry.Offset
 
-//TODO: Document
 class Path(
     private val startX: Float,
     private val startY: Float,
@@ -10,52 +9,35 @@ class Path(
     private val endY: Float,
     private val numberOfTurns: Int
 ) {
-    private val stepY = (endY - startY) / numberOfTurns
-    private val stepsY = (0..numberOfTurns)
-        .toList()
-        .map { startY + (stepY * it) }
-    private val length = (endX - startX) * (1 + numberOfTurns) + stepY * numberOfTurns
-
-    private val effectiveDistanceX = { y: Float, distance: Float ->
-        if (stepsY.indexOf(y) % 2 == 1) {
-            distance * -1
-        } else {
-            distance
-        }
-    }
+    private val lengthStepY = (endY - startY) / numberOfTurns
+    private val numberOfStepsY = (0..numberOfTurns).toList().map { startY + (lengthStepY * it) }
+    private val totalLength = (endX - startX) * (1 + numberOfTurns) + lengthStepY * numberOfTurns
 
     val base = Base(
-        radius = stepY / 2,
-        center = Offset(
-            endX + (stepY / 2),
-            endY
+        radius = lengthStepY / 2, center = Offset(
+            endX + (lengthStepY / 2), endY
         )
     )
 
-    fun getLines(): List<Pair<Offset, Offset>> {
-        val lines = mutableListOf<Pair<Offset, Offset>>()
+    fun getLines(): List<Line> {
+        val lines = mutableListOf<Line>()
 
         lines.add(
-            Pair(
-                Offset(startX, startY),
-                Offset(endX, startY)
+            Line(
+                Offset(startX, startY), Offset(endX, startY)
             )
         )
 
-        stepsY.subList(1, numberOfTurns + 1).forEach { currentY ->
+        numberOfStepsY.subList(1, numberOfTurns + 1).forEach { currentY ->
             lines.add(
-                Pair(
-                    lines.last().second,
-                    Offset(lines.last().second.x, currentY)
+                Line(
+                    lines.last().end, Offset(lines.last().end.x, currentY)
                 )
             )
             lines.add(
-                Pair(
-                    Offset(lines.last().second.x, currentY),
-                    Offset(
-                        if (lines.last().second.x == endX) startX else endX,
-                        currentY
-                    )
+                Line(
+                    Offset(lines.last().end.x, currentY),
+                    Offset(if (lines.last().end.x == endX) startX else endX, currentY)
                 )
             )
         }
@@ -63,13 +45,11 @@ class Path(
         return lines
     }
 
-    fun moveTo(distance: Float): Offset {
-        val absoluteDistance = (length * (1.0 - distance)).toInt()
-        return if (absoluteDistance < length) {
+    fun moveTo(distanceFromBase: Float): Offset {
+        val absoluteDistance = (totalLength * (1.0 - distanceFromBase)).toInt()
+        return if (absoluteDistance < totalLength) {
             moveFrom(
-                startX,
-                startY,
-                length * (1 - distance)
+                startX, startY, totalLength * (1 - distanceFromBase)
             )
         } else {
             Offset(endX, endY)
@@ -82,61 +62,71 @@ class Path(
         var remainingDistance = distance
 
         while (remainingDistance > 0) {
-            val resultX = moveX(
-                currentX,
-                currentY,
-                effectiveDistanceX(currentY, remainingDistance)
+            val afterHorizontalMove = moveHorizontally(
+                currentX, currentY, effectiveDistanceX(currentY, remainingDistance)
             )
-            currentX = resultX.first
-            remainingDistance = resultX.second
+
+            currentX = afterHorizontalMove.coordinate
+            remainingDistance = afterHorizontalMove.remainingDistance
+
             if (remainingDistance > 0) {
-                val resultY = moveY(currentY, remainingDistance)
-                remainingDistance = resultY.second
-                currentY = resultY.first
+                val afterVerticalMove = moveVertically(currentY, remainingDistance)
+                currentY = afterVerticalMove.coordinate
+                remainingDistance = afterVerticalMove.remainingDistance
             }
         }
 
         return Offset(currentX, currentY)
     }
 
-    private fun moveX(x: Float, y: Float, distance: Float): Pair<Float, Float> {
+    private fun moveHorizontally(currentX: Float, currentY: Float, distance: Float): MoveResult {
         var remainingDistance = distance
 
-        if (!stepsY.contains(y)) {
-            return Pair(x, remainingDistance)
+        if (!numberOfStepsY.contains(currentY)) {
+            return MoveResult(currentX, remainingDistance)
         }
 
-        val newX = if (x + distance in startX..endX) {
+        val newX = if (currentX + distance in startX..endX) {
             remainingDistance = 0f
-            x + distance
-        } else if (x + distance < startX) {
-            remainingDistance += x - startX
+            currentX + distance
+        } else if (currentX + distance < startX) {
+            remainingDistance += currentX - startX
             remainingDistance *= -1
             startX
         } else {
-            remainingDistance -= endX - x
+            remainingDistance -= endX - currentX
             endX
         }
 
-        return Pair(newX, remainingDistance)
+        return MoveResult(newX, remainingDistance)
     }
 
-    private fun moveY(y: Float, distance: Float): Pair<Float, Float> {
+    private fun moveVertically(currentY: Float, distance: Float): MoveResult {
         var remainingDistance = distance
 
-        if (y == stepsY.last()) {
-            return Pair(y, 0f)
+        if (currentY == numberOfStepsY.last()) {
+            return MoveResult(currentY, 0f)
         }
 
-        val nextTurnAt = stepsY.filter { it > y }.min()
-        val newY = if (y + distance <= nextTurnAt) {
+        val nextTurnAt = numberOfStepsY.filter { it > currentY }.min()
+        val newY = if (currentY + distance <= nextTurnAt) {
             remainingDistance = 0f
-            y + distance
+            currentY + distance
         } else {
-            remainingDistance -= nextTurnAt - y
+            remainingDistance -= nextTurnAt - currentY
             nextTurnAt
         }
 
-        return Pair(newY, remainingDistance)
+        return MoveResult(newY, remainingDistance)
     }
+
+    private fun effectiveDistanceX(y: Float, distance: Float) = if (numberOfStepsY.indexOf(y) % 2 == 1) {
+        distance * -1
+    } else {
+        distance
+    }
+
+    data class Line(val start: Offset, val end: Offset)
+
+    inner class MoveResult(val coordinate: Float, val remainingDistance: Float)
 }

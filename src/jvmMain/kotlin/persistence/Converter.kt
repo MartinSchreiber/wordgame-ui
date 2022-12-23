@@ -32,7 +32,7 @@ class Converter {
 
         fun toPlayerData(name: String, language: Language = Language.ENGLISH): PlayerData {
             return PlayerData(
-                id = PlayerDataRepo.getList().size + 1,
+                id = PlayerDataRepo.getList().maxOf { it.id } + 1,
                 name = name,
                 language = language,
                 specialLetters = mutableMapOf(Pair(language, LetterUtil.getSpecialLetters(language)))

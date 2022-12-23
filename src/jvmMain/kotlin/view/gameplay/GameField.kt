@@ -24,8 +24,8 @@ fun GameField(gameField: GameField) {
     Canvas(modifier = Modifier.size(width = 500f.dp, height = 400f.dp)) {
         gameField.path.getLines().forEach {
             drawLine(
-                start = it.first,
-                end = it.second,
+                start = it.start,
+                end = it.end,
                 color = Color.DarkGray,
                 strokeWidth = 2f
             )

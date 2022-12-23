@@ -19,11 +19,12 @@ object AppState {
     private var screen: MutableState<ScreenType> = mutableStateOf(ScreenType.PlayerMenu)
     private var language = mutableStateOf(Language.ENGLISH)
 
-    var languageUtil = LanguageUtil(language())
+    private var languageUtil = LanguageUtil(language())
+    private var wordGame: WordGame? = null
+    private var loot: List<Letter> = listOf()
+
     var playerData: PlayerData? = null
-    var wordGame: WordGame? = null
     var level: Level = Level.L1
-    var loot: List<Letter> = listOf()
 
     init {
         AbstractJsonRepo.initDir()
@@ -65,9 +66,7 @@ object AppState {
     // game-functions
     fun newGame(): WordGame {
         wordGame = WordGame(
-            language = language(),
-            level = level,
-            specialLetters = laboratory().activeLetters.shuffled()
+            language = language(), level = level, specialLetters = laboratory().activeLetters.shuffled()
         )
         return wordGame!!
     }
