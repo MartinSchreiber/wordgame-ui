@@ -1,4 +1,4 @@
-package view
+package view.laboratory
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable

@@ -1,4 +1,4 @@
-package view
+package view.laboratory
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

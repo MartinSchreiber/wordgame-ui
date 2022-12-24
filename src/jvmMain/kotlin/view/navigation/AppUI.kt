@@ -5,9 +5,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import constants.ScreenType
-import view.Laboratory
-import view.LetterOverview
 import view.gameplay.WordGame
+import view.laboratory.Laboratory
+import view.laboratory.LetterOverview
 import view.menu.LevelMenu
 import view.menu.MainMenu
 import view.menu.PlayerMenu

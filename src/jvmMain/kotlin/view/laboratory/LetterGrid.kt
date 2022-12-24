@@ -1,4 +1,4 @@
-package view
+package view.laboratory
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.PointerMatcher
