@@ -16,11 +16,13 @@ import view.navigation.AppState
 @OptIn(ExperimentalComposeUiApi::class)
 val onKeyEvent = { wordGame: WordGame, ev: KeyEvent ->
     when {
+        // add word to queue
         (ev.key == Key.Enter && ev.type == KeyEventType.KeyDown) -> {
             wordGame.enqueueWord()
             true
         }
 
+        // clear input
         (ev.key == Key.Escape && ev.type == KeyEventType.KeyDown) -> {
             wordGame.clearInput()
             true
@@ -41,6 +43,7 @@ val onKeyEvent = { wordGame: WordGame, ev: KeyEvent ->
 }
 
 val onValueChange = { wordGame: WordGame, text: String ->
+    // prevent 'ß' from being converted to 'SS'
     wordGame.updateWord(
         text.replace(oldChar = 'ß', newChar = '*')
             .uppercase()
@@ -49,9 +52,8 @@ val onValueChange = { wordGame: WordGame, text: String ->
     )
 }
 
-val onGameOver = { wordGame: WordGame ->
-    wordGame.endTime = System.currentTimeMillis()
-    AppState.loot()
+val onGameOver = {
+    AppState.gameOver()
     AppState.screenState(ScreenType.GameStatistics)
 }
 
@@ -60,7 +62,7 @@ val onGameOver = { wordGame: WordGame ->
 fun WordGame() {
     val wordGame = AppState.newGame()
 
-    backgroundTasks(wordGame) { onGameOver(wordGame) }
+    backgroundTasks(wordGame) { onGameOver() }
 
     MaterialTheme {
         Row {

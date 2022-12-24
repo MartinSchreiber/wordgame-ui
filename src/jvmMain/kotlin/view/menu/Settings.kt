@@ -11,11 +11,13 @@ import view.navigation.AppState
 @Composable
 fun Settings() {
     Text(text = AppState.translate("change_language"))
+
     Row {
         Language.values().forEach { language ->
             SimpleButton(text = languageLabel(language)) { AppState.language(language) }
         }
     }
+
     SimpleButton(text = AppState.translate("main_menu_button")) {
         AppState.playerData?.persist()
         AppState.screenState(ScreenType.MainMenu)

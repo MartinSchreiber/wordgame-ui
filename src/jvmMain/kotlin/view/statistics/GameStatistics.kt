@@ -17,9 +17,11 @@ fun GameStatistics() {
         Column {
             SimpleButton(text = AppState.translate("main_menu_button")) { AppState.screenState(ScreenType.MainMenu) }
         }
+
         Column {
             SimpleButton(text = AppState.translate("replay_level_button")) { AppState.screenState(ScreenType.WordGame) }
         }
+
         if (gameData.level.hasNext()) {
             Column {
                 SimpleButton(text = AppState.translate("next_level_button")) {

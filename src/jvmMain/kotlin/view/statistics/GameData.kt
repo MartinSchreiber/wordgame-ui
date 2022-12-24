@@ -28,13 +28,20 @@ fun GameData(gameData: GameData) {
                 { _: Int, word: Word -> "${word.totalValue()} - $word" }
             }
         }
+
         Column {
             Text(text = AppState.translate("stat_total_word_damage").format(gameData.totalWordDamage))
+
             Text(text = AppState.translate("stat_average_word_damage").format(gameData.averageWordDamage))
+
             Text(text = AppState.translate("stat_time_played").format(gameData.playTime / 1000f))
+
             Text(text = AppState.translate("stat_letters_per_minute").format(gameData.lettersPerMinute))
+
             Text(text = AppState.translate("stat_enemies_remaining").format(gameData.enemiesRemaining))
+
             Text(text = AppState.translate("stat_health_remaining").format(gameData.healthRemaining))
+
             Text(text = AppState.translate("stat_looted_letters").format(gameData.lootedLetters.joinToString(" ")))
         }
     }

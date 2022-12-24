@@ -71,8 +71,10 @@ object AppState {
         return wordGame!!
     }
 
-    fun loot() {
+    fun gameOver() {
+        wordGame!!.endTime = System.currentTimeMillis()
         loot = LetterUtil.getLootedLetters(level, language())
+
         playerData?.laboratory?.get(language())?.inactiveLetters?.addAll(loot)
     }
 

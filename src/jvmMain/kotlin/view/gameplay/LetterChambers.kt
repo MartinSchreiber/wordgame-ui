@@ -24,6 +24,7 @@ fun LetterChambers(letterChambers: LetterChambers) {
 @Composable
 fun LetterChamber(letter: MutableState<Letter?>, open: Boolean) {
     if (open) {
+        // on null letter is borrowed (in currently typed word)
         Text(text = letter.value?.toString() ?: "(=)")
     } else {
         Text(text = "(?)")

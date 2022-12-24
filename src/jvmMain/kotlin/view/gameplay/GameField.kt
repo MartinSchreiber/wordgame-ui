@@ -22,6 +22,19 @@ fun GameField(gameField: GameField) {
     }
 
     Canvas(modifier = Modifier.size(width = 500f.dp, height = 400f.dp)) {
+        // enemy-counter
+        drawIntoCanvas {
+            it.nativeCanvas.drawString(
+                s = AppState.translate("enemy_counter")
+                    .format(gameField.enemiesOnField.size, gameField.enemiesIncoming.size),
+                x = 100f,
+                y = 20f,
+                font = Font(),
+                paint = textPaint
+            )
+        }
+
+        // path
         gameField.path.getLines().forEach {
             drawLine(
                 start = it.start,
@@ -31,6 +44,7 @@ fun GameField(gameField: GameField) {
             )
         }
 
+        // base
         gameField.path.base.let { base ->
             drawCircle(radius = base.radius, center = base.center, color = Color.Gray)
             drawIntoCanvas {
@@ -44,17 +58,7 @@ fun GameField(gameField: GameField) {
             }
         }
 
-        drawIntoCanvas {
-            it.nativeCanvas.drawString(
-                s = AppState.translate("enemy_counter")
-                    .format(gameField.enemiesOnField.size, gameField.enemiesIncoming.size),
-                x = 100f,
-                y = 20f,
-                font = Font(),
-                paint = textPaint
-            )
-        }
-
+        // enemies
         gameField.enemiesOnField.forEach { enemy ->
             drawIntoCanvas {
                 it.nativeCanvas.drawString(

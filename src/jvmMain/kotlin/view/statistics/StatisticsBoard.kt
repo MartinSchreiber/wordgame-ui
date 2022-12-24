@@ -19,17 +19,20 @@ import view.navigation.AppState
 fun StatisticsBoard() {
     val gameDataList = AppState.gameDataList()
     val displayedGameData = remember { mutableStateOf(gameDataList.firstOrNull()) }
+
     Row {
         Column(modifier = Modifier.fillMaxWidth(0.3f)) {
             gameDataList.forEach {
                 Text(text = it.timeStamp, modifier = Modifier.onClick { displayedGameData.value = it })
             }
         }
+
         Column {
             displayedGameData.value?.let {
                 GameData(it)
             }
         }
     }
+
     SimpleButton(text = AppState.translate("main_menu_button")) { AppState.screenState(ScreenType.MainMenu) }
 }
