@@ -36,5 +36,6 @@
   "stat_health_remaining": "Verbleibendes Leben: %.2f",
   "stat_looted_letters": "Gefundene Buchstaben: %s",
   "replay_level_button": "Level nochmal spielen",
-  "next_level_button": "Nächstes Level"
+  "next_level_button": "Nächstes Level",
+  "paused_title": "Pausiert"
 }

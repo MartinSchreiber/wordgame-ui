@@ -12,6 +12,7 @@ import model.WordGame
 import model.gameField.Base
 import model.gameField.Enemy
 import model.gameField.GameField
+import view.navigation.AppState
 
 
 @Composable
@@ -49,14 +50,16 @@ fun backgroundTasks(wordGame: WordGame, onGameOver: () -> Unit) {
 
 suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>, base: Base, isOver: () -> Boolean) = coroutineScope {
     while (!isOver()) {
-        enemies.forEach {
-            it.move()
-            if (it.distance <= 0) {
-                base.health.value -= it.health.value
+        if (!AppState.isPaused()) {
+            enemies.forEach {
+                it.move()
+                if (it.distance <= 0) {
+                    base.health.value -= it.health.value
+                }
             }
-        }
 
-        enemies.removeIf { it.reachedEnd() }
+            enemies.removeIf { it.reachedEnd() }
+        }
 
         delay(50)
     }
@@ -64,13 +67,23 @@ suspend fun moveEnemies(enemies: SnapshotStateList<Enemy>, base: Base, isOver: (
 
 suspend fun spawnEnemies(gameField: GameField) = coroutineScope {
     while (gameField.enemiesIncoming.isNotEmpty()) {
-        gameField.enemiesIncoming.firstOrNull()?.let {
-            delay(it.delay)
+        if (!AppState.isPaused()) {
+            gameField.enemiesIncoming.firstOrNull()?.let {
 
-            gameField.enemiesOnField.add(it)
+                repeat(it.delay.toInt() / 10) {
+                    while (AppState.isPaused()) {
+                        delay(50)
+                    }
+                    delay(10)
+                }
+
+                gameField.enemiesOnField.add(it)
+            }
+
+            gameField.enemiesIncoming.removeFirst()
+        } else {
+            delay(50)
         }
-
-        gameField.enemiesIncoming.removeFirst()
     }
 }
 
@@ -81,7 +94,7 @@ suspend fun fireLetters(
     isOver: () -> Boolean
 ) = coroutineScope {
     while (!isOver()) {
-        if (queue.isNotEmpty() && enemiesOnField.isNotEmpty()) {
+        if (queue.isNotEmpty() && enemiesOnField.isNotEmpty() && !AppState.isPaused()) {
             queue
                 .firstOrNull()
                 ?.removeFirstLetterOrNull()

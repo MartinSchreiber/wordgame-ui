@@ -14,6 +14,9 @@ import view.components.SimpleButton
 import view.navigation.AppState
 
 @OptIn(ExperimentalComposeUiApi::class)
+val directionKeys = listOf(Key.DirectionUp, Key.DirectionLeft, Key.DirectionRight, Key.DirectionDown)
+
+@OptIn(ExperimentalComposeUiApi::class)
 val onKeyEvent = { wordGame: WordGame, ev: KeyEvent ->
     when {
         // add word to queue
@@ -28,13 +31,24 @@ val onKeyEvent = { wordGame: WordGame, ev: KeyEvent ->
             true
         }
 
+        // prevent movement of text-cursor
+        (directionKeys.contains(ev.key) && ev.type == KeyEventType.KeyDown) -> {
+            true
+        }
+
         // disable text selection
         (ev.key == Key.A && ev.type == KeyEventType.KeyDown && ev.isCtrlPressed) -> {
             true
         }
 
-        // disable test pasting
+        // disable text pasting
         (ev.key == Key.V && ev.type == KeyEventType.KeyDown && ev.isCtrlPressed) -> {
+            true
+        }
+
+        // pause game
+        (ev.key == Key.P && ev.type == KeyEventType.KeyDown && ev.isCtrlPressed) -> {
+            AppState.togglePause()
             true
         }
 
@@ -44,12 +58,14 @@ val onKeyEvent = { wordGame: WordGame, ev: KeyEvent ->
 
 val onValueChange = { wordGame: WordGame, text: String ->
     // prevent 'ß' from being converted to 'SS'
-    wordGame.updateWord(
-        text.replace(oldChar = 'ß', newChar = '*')
-            .uppercase()
-            .replace(oldChar = '*', newChar = 'ß')
-            .filter { wordGame.isAllowedLetter(it) }
-    )
+    if (!AppState.isPaused()) {
+        wordGame.updateWord(
+            text.replace(oldChar = 'ß', newChar = '*')
+                .uppercase()
+                .replace(oldChar = '*', newChar = 'ß')
+                .filter { wordGame.isAllowedLetter(it) }
+        )
+    }
 }
 
 val onGameOver = {

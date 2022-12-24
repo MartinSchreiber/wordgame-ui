@@ -18,6 +18,7 @@ import util.LetterUtil
 object AppState {
     private var screen: MutableState<ScreenType> = mutableStateOf(ScreenType.PlayerMenu)
     private var language = mutableStateOf(Language.ENGLISH)
+    private var paused = mutableStateOf(false)
 
     private var languageUtil = LanguageUtil(language())
     private var wordGame: WordGame? = null
@@ -44,6 +45,12 @@ object AppState {
 
         playerData?.language = language
         languageUtil = LanguageUtil(language)
+    }
+
+    fun isPaused(): Boolean = paused.value
+
+    fun togglePause() {
+        paused.value = !paused.value
     }
 
     fun laboratory(): PlayerData.Laboratory = playerData!!.laboratory[language()]!!

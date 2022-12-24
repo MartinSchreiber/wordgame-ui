@@ -36,5 +36,6 @@
   "stat_health_remaining": "Health remaining: %.2f",
   "stat_looted_letters": "Looted Letters: %s",
   "replay_level_button": "Replay Level",
-  "next_level_button": "Next Level"
+  "next_level_button": "Next Level",
+  "paused_title": "Paused"
 }

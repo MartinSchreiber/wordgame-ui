@@ -22,6 +22,18 @@ fun GameField(gameField: GameField) {
     }
 
     Canvas(modifier = Modifier.size(width = 500f.dp, height = 400f.dp)) {
+        // paused text
+        if (AppState.isPaused()) {
+            drawIntoCanvas {
+                it.nativeCanvas.drawString(
+                    s = AppState.translate("paused_title"),
+                    x = 0f,
+                    y = 200f,
+                    font = Font().makeWithSize(100f),
+                    paint = textPaint
+                )
+            }
+        }
         // enemy-counter
         drawIntoCanvas {
             it.nativeCanvas.drawString(
