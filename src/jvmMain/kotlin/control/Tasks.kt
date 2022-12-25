@@ -70,7 +70,8 @@ suspend fun spawnEnemies(gameField: GameField) = coroutineScope {
         if (!AppState.isPaused()) {
             gameField.enemiesIncoming.firstOrNull()?.let {
 
-                repeat(it.delay.toInt() / 10) {
+                // factor of 95% to even out the inefficiency of current implementation
+                repeat(((it.delay.toInt() * 0.95f) / 10).toInt()) {
                     while (AppState.isPaused()) {
                         delay(50)
                     }
