@@ -10,8 +10,10 @@ import model.WordGame
 import persistence.Converter
 import persistence.GameData
 import persistence.PlayerData
+import persistence.StatisticsData
 import persistence.repos.AbstractJsonRepo
 import persistence.repos.GameDataRepo
+import persistence.repos.StatisticsDataRepo
 import util.LanguageUtil
 import util.LetterUtil
 
@@ -23,6 +25,9 @@ object AppState {
     private var languageUtil = LanguageUtil(language())
     private var wordGame: WordGame? = null
     private var loot: List<Letter> = listOf()
+
+    private var gameDataList: MutableList<GameData> = mutableListOf()
+    private var statisticsData: StatisticsData? = null
 
     var playerData: PlayerData? = null
     var level: Level = Level.L1
@@ -45,6 +50,8 @@ object AppState {
 
         playerData?.language = language
         languageUtil = LanguageUtil(language)
+
+        statisticsData = null
     }
 
     fun isPaused(): Boolean = paused.value
@@ -62,12 +69,38 @@ object AppState {
     }
 
     // access to virtual vars
-    fun gameDataList(): List<GameData> = GameDataRepo.getList(playerData!!.id, language())
+    fun gameDataList(): List<GameData> {
+        if (gameDataList.isEmpty()) {
+            gameDataList = GameDataRepo.getList(playerData!!.id, language()).toMutableList()
+        }
+        return gameDataList
+    }
 
     fun gameData(): GameData {
         val gameData = Converter.toGameData(wordGame!!, loot)
         gameData.persist(playerData!!.id, language())
+        gameDataList.add(gameData)
         return gameData
+    }
+
+    fun statisticsData(): StatisticsData? {
+        if (statisticsData == null) {
+            statisticsData = StatisticsDataRepo.getList(playerData!!.id, language()).firstOrNull()
+        }
+
+        if (statisticsData == null) {
+            generateStatisticsData()
+        }
+        return statisticsData
+    }
+
+    fun generateStatisticsData(): StatisticsData? {
+        if (gameDataList().isNotEmpty()) {
+            statisticsData = Converter.toStatisticsData(gameDataList())
+
+            statisticsData!!.persist(playerId = playerData!!.id, language = language())
+        }
+        return statisticsData
     }
 
     // game-functions

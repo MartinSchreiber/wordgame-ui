@@ -8,11 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ScrollableBox(content: @Composable ColumnScope.() -> Unit) {
+fun ScrollableBox(modifier: Modifier, content: @Composable ColumnScope.() -> Unit) {
     Box(
-        modifier = Modifier
-            .height(400f.dp)
-            .fillMaxWidth()
+        modifier = modifier
     ) {
         val stateVertical = rememberScrollState(0)
         val stateHorizontal = rememberScrollState(0)

@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import model.Word
 import persistence.GameData
-import view.gameplay.TypedWordList
+import view.components.WordList
 import view.navigation.AppState
 
 @Composable
@@ -24,7 +24,7 @@ fun GameData(gameData: GameData) {
     Row {
         Column(modifier = Modifier.fillMaxWidth(0.5f)) {
             Row {
-                TypedWordList(gameData.typedWords.sortedByDescending { it.totalValue() })
+                WordList(gameData.typedWords.sortedByDescending { it.totalValue() })
                 { _: Int, word: Word -> "${word.totalValue()} - $word" }
             }
         }

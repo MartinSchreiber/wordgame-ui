@@ -21,6 +21,16 @@ fun Laboratory() {
     val combinationChamber = remember { laboratory.combinationChamber.sortedBy { it.level }.toMutableStateList() }
     val resultChamber = remember { laboratory.resultChamber.sortedBy { it.level }.toMutableStateList() }
 
+    val persistLetters = {
+        laboratory.activeLetters = activeLetters.toList()
+        laboratory.inactiveLetters = inactiveLetters.toMutableList()
+        laboratory.combinationChamber = combinationChamber.toList()
+        laboratory.resultChamber = resultChamber.toList()
+
+        AppState.laboratory(laboratory)
+        AppState.playerData?.persist()
+    }
+
     Column {
         Row {
             Column(modifier = Modifier.fillMaxWidth(0.5f).fillMaxHeight(0.5f).padding(end = 20f.dp)) {
@@ -110,18 +120,14 @@ fun Laboratory() {
 
         Row {
             SimpleButton(text = AppState.translate("main_menu_button")) {
-                laboratory.activeLetters = activeLetters.toList()
-                laboratory.inactiveLetters = inactiveLetters.toMutableList()
-                laboratory.combinationChamber = combinationChamber.toList()
-                laboratory.resultChamber = resultChamber.toList()
-
-                AppState.laboratory(laboratory)
-                AppState.playerData?.persist()
-
+                persistLetters()
                 AppState.screenState(ScreenType.MainMenu)
             }
 
-            SimpleButton(text = AppState.translate("letter_overview_button")) { AppState.screenState(ScreenType.LetterOverview) }
+            SimpleButton(text = AppState.translate("letter_overview_button")) {
+                persistLetters()
+                AppState.screenState(ScreenType.LetterOverview)
+            }
         }
     }
 }

@@ -11,6 +11,7 @@ import control.backgroundTasks
 import model.Word
 import model.WordGame
 import view.components.SimpleButton
+import view.components.WordList
 import view.navigation.AppState
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -84,7 +85,7 @@ fun WordGame() {
         Row {
             GameField(wordGame.gameField)
 
-            TypedWordList(wordGame.typedWords.reversed()) { ind: Int, word: Word ->
+            WordList(wordGame.typedWords.reversed()) { ind: Int, word: Word ->
                 "${wordGame.typedWords.size - ind} - $word"
             }
         }

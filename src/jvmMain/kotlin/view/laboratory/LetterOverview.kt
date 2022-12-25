@@ -1,5 +1,6 @@
 package view.laboratory
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import constants.ScreenType
@@ -20,8 +21,13 @@ fun LetterOverview() {
         Text(text = AppState.translate("letter_overview_points_label").format(it.first, it.second))
         Text(text = "---")
     }
-    SimpleButton(text = AppState.translate("laboratory_button")) {
-        AppState.screenState(ScreenType.Laboratory)
+    Row {
+        SimpleButton(text = AppState.translate("laboratory_button")) {
+            AppState.screenState(ScreenType.Laboratory)
+        }
+        SimpleButton(text = AppState.translate("main_menu_button")) {
+            AppState.screenState(ScreenType.MainMenu)
+        }
     }
 
 }

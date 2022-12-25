@@ -1,5 +1,5 @@
 package constants
 
 enum class ScreenType {
-    MainMenu, PlayerMenu, LevelMenu, Settings, WordGame, GameStatistics, StatisticsBoard, Laboratory, LetterOverview
+    MainMenu, PlayerMenu, LevelMenu, Settings, WordGame, GameStatistics, StatisticsBoard, StatisticsOverview, Laboratory, LetterOverview
 }

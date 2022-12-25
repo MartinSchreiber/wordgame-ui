@@ -14,6 +14,7 @@ import view.menu.PlayerMenu
 import view.menu.Settings
 import view.statistics.GameStatistics
 import view.statistics.StatisticsBoard
+import view.statistics.StatisticsData
 
 @Composable
 fun AppUI() {
@@ -46,16 +47,20 @@ fun AppUI() {
                 GameStatistics()
             }
 
+            ScreenType.StatisticsBoard -> {
+                StatisticsBoard()
+            }
+
+            ScreenType.StatisticsOverview -> {
+                StatisticsData()
+            }
+
             ScreenType.Laboratory -> {
                 Laboratory()
             }
 
             ScreenType.LetterOverview -> {
                 LetterOverview()
-            }
-
-            ScreenType.StatisticsBoard -> {
-                StatisticsBoard()
             }
         }
     }

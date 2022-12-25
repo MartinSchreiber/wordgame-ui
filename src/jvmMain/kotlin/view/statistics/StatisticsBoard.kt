@@ -34,5 +34,9 @@ fun StatisticsBoard() {
         }
     }
 
-    SimpleButton(text = AppState.translate("main_menu_button")) { AppState.screenState(ScreenType.MainMenu) }
+    Row {
+        SimpleButton(text = AppState.translate("main_menu_button")) { AppState.screenState(ScreenType.MainMenu) }
+
+        SimpleButton(text = AppState.translate("statistics_overview_button")) { AppState.screenState(ScreenType.StatisticsOverview) }
+    }
 }
