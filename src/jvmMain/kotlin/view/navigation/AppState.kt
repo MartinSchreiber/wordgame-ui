@@ -57,6 +57,13 @@ object AppState {
     fun isPaused(): Boolean = paused.value
 
     fun togglePause() {
+        if (!paused.value) {
+            wordGame!!.startPause = System.currentTimeMillis()
+        } else {
+            wordGame!!.totalPauseTime += System.currentTimeMillis() - wordGame!!.startPause!!
+            wordGame!!.startPause = null
+        }
+
         paused.value = !paused.value
     }
 

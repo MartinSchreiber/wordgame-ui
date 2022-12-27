@@ -1,16 +1,17 @@
 package view.statistics
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.onClick
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import constants.ScreenType
+import view.components.ScrollableBox
 import view.components.SimpleButton
 import view.navigation.AppState
 
@@ -20,14 +21,20 @@ fun StatisticsBoard() {
     val gameDataList = AppState.gameDataList()
     val displayedGameData = remember { mutableStateOf(gameDataList.firstOrNull()) }
 
-    Row {
-        Column(modifier = Modifier.fillMaxWidth(0.3f)) {
+    Row(Modifier.fillMaxHeight(0.9f).fillMaxWidth()) {
+        ScrollableBox(modifier = Modifier.fillMaxWidth(0.3f).fillMaxHeight()) {
             gameDataList.forEach {
-                Text(text = it.timeStamp, modifier = Modifier.onClick { displayedGameData.value = it })
+                val modifier = if (it == displayedGameData.value!!) {
+                    Modifier.background(Color.LightGray)
+                } else {
+                    Modifier
+                }
+
+                Text(text = it.timeStamp, modifier = modifier.onClick { displayedGameData.value = it })
             }
         }
 
-        Column {
+        Column(modifier = Modifier.fillMaxSize()) {
             displayedGameData.value?.let {
                 GameData(it)
             }

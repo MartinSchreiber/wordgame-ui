@@ -21,6 +21,7 @@ class Converter {
                 lootedLetters = lootedLetters,
                 typedWords = wordGame.typedWords.toList(),
                 playTime = playTime,
+                pausedTime = wordGame.totalPauseTime,
                 timeStamp = LocalDateTime.now().toString(),
                 healthRemaining = wordGame.gameField.path.base.health.value,
                 enemiesRemaining = wordGame.gameField.enemiesOnField.size + wordGame.gameField.enemiesIncoming.size,
@@ -59,11 +60,15 @@ class Converter {
 
             val totalGamesPlayed = gameDataList.size
 
+            val totalTimePlayed = gameDataList.sumOf { it.playTime }
+
+            val totalPausedTime = gameDataList.sumOf { it.pausedTime }
+
             val totalWordDamage = gameDataList.sumOf { it.totalWordDamage.toDouble() }.toFloat()
 
             val averageWordDamage = allWords.sumOf { it.totalValue().toDouble() }.toFloat() / allWords.size
 
-            val lettersPerMinute = allWords.sumOf { it.size() } / (gameDataList.sumOf { it.playTime } / 60000f)
+            val lettersPerMinute = allWords.sumOf { it.size() } / (totalTimePlayed / 60000f)
 
             val levelData = gameDataList
                 .groupBy { it.level }
@@ -81,6 +86,8 @@ class Converter {
                 wordsByValue = wordsByValue,
                 wordsByNumber = wordsByNumber,
                 totalGamesPlayed = totalGamesPlayed,
+                totalTimePlayed = totalTimePlayed,
+                totalPausedTime = totalPausedTime,
                 totalWordDamage = totalWordDamage,
                 averageWordDamage = averageWordDamage,
                 lettersPerMinute = lettersPerMinute,

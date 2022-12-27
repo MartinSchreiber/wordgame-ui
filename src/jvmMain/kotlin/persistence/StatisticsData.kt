@@ -9,6 +9,8 @@ data class StatisticsData(
     val wordsByValue: List<Word>,
     val wordsByNumber: List<Pair<String, Int>>,
     val totalGamesPlayed: Int,
+    val totalTimePlayed: Long,
+    val totalPausedTime: Long,
     val totalWordDamage: Float,
     val averageWordDamage: Float,
     val lettersPerMinute: Float,

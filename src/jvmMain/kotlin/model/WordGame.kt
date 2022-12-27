@@ -37,6 +37,8 @@ class WordGame(
     // statistical fields and end-condition
     val startTime = System.currentTimeMillis()
     var endTime: Long? = null
+    var startPause: Long? = null
+    var totalPauseTime: Long = 0L
 
     var isOver = { gameField.isOver() }
 

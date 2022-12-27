@@ -17,10 +17,14 @@ fun StatisticsData() {
 
     statisticsData.value?.let {
         Row(modifier = Modifier.fillMaxHeight(0.4f).fillMaxWidth()) {
-            Column(modifier = Modifier.fillMaxHeight().fillMaxWidth(0.3f)) {
+            Column(modifier = Modifier.fillMaxHeight().fillMaxWidth(0.4f)) {
                 Text(text = AppState.translate("stat_general_title"))
 
                 Text(text = "Total Games Played: %d".format(it.totalGamesPlayed))
+
+                Text(text = AppState.translate("stat_total_time_played").format(it.totalTimePlayed / 60000f))
+
+                Text(text = AppState.translate("stat_total_paused_time").format(it.totalPausedTime / 60000f))
 
                 Text(text = AppState.translate("stat_total_word_damage").format(it.totalWordDamage))
 

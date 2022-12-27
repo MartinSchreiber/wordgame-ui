@@ -36,6 +36,8 @@ fun GameData(gameData: GameData) {
 
             Text(text = AppState.translate("stat_time_played").format(gameData.playTime / 1000f))
 
+            Text(text = AppState.translate("stat_paused_time").format(gameData.pausedTime / 1000f))
+
             Text(text = AppState.translate("stat_letters_per_minute").format(gameData.lettersPerMinute))
 
             Text(text = AppState.translate("stat_enemies_remaining").format(gameData.enemiesRemaining))

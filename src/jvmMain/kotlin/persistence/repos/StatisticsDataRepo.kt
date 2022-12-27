@@ -22,11 +22,7 @@ object StatisticsDataRepo : AbstractJsonRepo<StatisticsData>() {
 
         val all = getAll(playerId).mapValues { it.value.toMutableList() }.toMutableMap()
 
-        if (all.containsKey(language)) {
-            all[language]!!.add(entity)
-        } else {
-            all[language] = mutableListOf(entity)
-        }
+        all[language] = mutableListOf(entity)
 
         File(filePath.format(playerId)).writeText(gson.toJson(all))
     }

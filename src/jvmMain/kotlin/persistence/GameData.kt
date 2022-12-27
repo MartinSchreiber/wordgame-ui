@@ -12,6 +12,7 @@ data class GameData(
     val lootedLetters: List<Letter>,
     val typedWords: List<Word>,
     val playTime: Long,
+    val pausedTime: Long = 0L,
     val timeStamp: String,
     val healthRemaining: Float,
     val enemiesRemaining: Int,
