@@ -115,6 +115,8 @@ object AppState {
         wordGame = WordGame(
             language = language(), level = level, specialLetters = laboratory().activeLetters.shuffled()
         )
+        paused.value = false
+
         return wordGame!!
     }
 
