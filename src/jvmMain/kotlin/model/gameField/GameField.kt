@@ -8,7 +8,7 @@ import constants.Level
 
 class GameField(
     start: Offset = Offset(20f, 50f),
-    end: Offset = Offset(400f, 350f),
+    end: Offset = Offset(600f, 450f),
     numberOfTurns: Int = 4,
     level: Level
 ) {

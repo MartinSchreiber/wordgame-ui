@@ -18,18 +18,18 @@ import view.navigation.AppState
 fun GameField(gameField: GameField) {
     val textPaint = Paint().asFrameworkPaint().apply {
         isAntiAlias = true
-        color = Color.Black.toArgb()
+        color = Color.White.toArgb()
     }
 
-    Canvas(modifier = Modifier.size(width = 500f.dp, height = 400f.dp)) {
+    Canvas(modifier = Modifier.size(width = 700f.dp, height = 500f.dp)) {
         // paused text
         if (AppState.isPaused()) {
             drawIntoCanvas {
                 it.nativeCanvas.drawString(
                     s = AppState.translate("paused_title"),
                     x = 0f,
-                    y = 200f,
-                    font = Font().makeWithSize(100f),
+                    y = 300f,
+                    font = Font().makeWithSize(150f),
                     paint = textPaint
                 )
             }
@@ -51,14 +51,14 @@ fun GameField(gameField: GameField) {
             drawLine(
                 start = it.start,
                 end = it.end,
-                color = Color.DarkGray,
+                color = Color.LightGray,
                 strokeWidth = 2f
             )
         }
 
         // base
         gameField.path.base.let { base ->
-            drawCircle(radius = base.radius, center = base.center, color = Color.Gray)
+            drawCircle(radius = base.radius, center = base.center, color = Color.Blue)
             drawIntoCanvas {
                 it.nativeCanvas.drawString(
                     s = base.health.value.toString(),

@@ -31,103 +31,106 @@ fun Laboratory() {
         AppState.playerData?.persist()
     }
 
-    Column {
-        Row {
-            Column(modifier = Modifier.fillMaxWidth(0.5f).fillMaxHeight(0.5f).padding(end = 20f.dp)) {
-                LetterGrid(
-                    letters = activeLetters,
-                    title = AppState.translate("active_letters_title"),
-                    subTitle = AppState.translate("active_letters_sub_title")
-                ) { letterInd: Int, rightMouseBtn: Boolean ->
-                    if (activeLetters.size > 12) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.align(Alignment.Center)) {
+            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Column(modifier = Modifier.fillMaxWidth(0.5f).fillMaxHeight(0.5f).padding(end = 20f.dp)) {
+                    LetterGrid(
+                        letters = activeLetters,
+                        title = AppState.translate("active_letters_title"),
+                        subTitle = AppState.translate("active_letters_sub_title")
+                    ) { letterInd: Int, rightMouseBtn: Boolean ->
+                        if (activeLetters.size > 12) {
+                            if (rightMouseBtn) {
+                                combinationChamber.add(activeLetters[letterInd])
+                                combinationChamber.sortBy { it.level }
+                            } else {
+                                inactiveLetters.add(activeLetters[letterInd])
+                                inactiveLetters.sortBy { it.level }
+                            }
+                            activeLetters.removeAt(letterInd)
+                        }
+                    }
+                }
+
+                Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.5f)) {
+                    LetterGrid(
+                        letters = inactiveLetters,
+                        title = AppState.translate("inactive_letters_title"),
+                        subTitle = AppState.translate("inactive_letters_sub_title")
+                    ) { letterInd: Int, rightMouseBtn: Boolean ->
                         if (rightMouseBtn) {
-                            combinationChamber.add(activeLetters[letterInd])
+                            combinationChamber.add(inactiveLetters[letterInd])
                             combinationChamber.sortBy { it.level }
                         } else {
-                            inactiveLetters.add(activeLetters[letterInd])
+                            activeLetters.add(inactiveLetters[letterInd])
+                            activeLetters.sortBy { it.level }
+                        }
+                        inactiveLetters.removeAt(letterInd)
+                    }
+                }
+            }
+
+            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                Column(modifier = Modifier.fillMaxWidth(0.47f).fillMaxHeight(0.7f)) {
+                    LetterGrid(
+                        letters = combinationChamber,
+                        title = AppState.translate("combination_chamber_title"),
+                        subTitle = AppState.translate("combination_chamber_sub_title")
+                    ) { letterInd: Int, rightMouseBtn: Boolean ->
+                        if (rightMouseBtn) {
+                            activeLetters.add(combinationChamber[letterInd])
+                            activeLetters.sortBy { it.level }
+                        } else {
+                            inactiveLetters.add(combinationChamber[letterInd])
                             inactiveLetters.sortBy { it.level }
                         }
-                        activeLetters.removeAt(letterInd)
+                        combinationChamber.removeAt(letterInd)
                     }
                 }
-            }
 
-            Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.5f)) {
-                LetterGrid(
-                    letters = inactiveLetters,
-                    title = AppState.translate("inactive_letters_title"),
-                    subTitle = AppState.translate("inactive_letters_sub_title")
-                ) { letterInd: Int, rightMouseBtn: Boolean ->
-                    if (rightMouseBtn) {
-                        combinationChamber.add(inactiveLetters[letterInd])
-                        combinationChamber.sortBy { it.level }
-                    } else {
-                        activeLetters.add(inactiveLetters[letterInd])
-                        activeLetters.sortBy { it.level }
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                    SimpleButton(text = "=>") {
+                        LetterUtil.combine(combinationChamber, AppState.language())
+                            .takeIf { it.isNotEmpty() }
+                            ?.let {
+                                resultChamber.addAll(it)
+                                combinationChamber.clear()
+                            }
                     }
-                    inactiveLetters.removeAt(letterInd)
                 }
-            }
-        }
 
-        Row {
-            Column(modifier = Modifier.fillMaxWidth(0.47f).fillMaxHeight(0.7f)) {
-                LetterGrid(
-                    letters = combinationChamber,
-                    title = AppState.translate("combination_chamber_title"),
-                    subTitle = AppState.translate("combination_chamber_sub_title")
-                ) { letterInd: Int, rightMouseBtn: Boolean ->
-                    if (rightMouseBtn) {
-                        activeLetters.add(combinationChamber[letterInd])
-                        activeLetters.sortBy { it.level }
-                    } else {
-                        inactiveLetters.add(combinationChamber[letterInd])
-                        inactiveLetters.sortBy { it.level }
-                    }
-                    combinationChamber.removeAt(letterInd)
-                }
-            }
-
-            Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                SimpleButton(text = "=>") {
-                    LetterUtil.combine(combinationChamber, AppState.language())
-                        .takeIf { it.isNotEmpty() }
-                        ?.let {
-                            resultChamber.addAll(it)
-                            combinationChamber.clear()
+                Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.7f)) {
+                    LetterGrid(
+                        letters = resultChamber,
+                        title = AppState.translate("result_chamber_title"),
+                        subTitle = AppState.translate("result_chamber_sub_title")
+                    ) { letterInd: Int, rightMouseBtn: Boolean ->
+                        if (rightMouseBtn) {
+                            inactiveLetters.add(resultChamber[letterInd])
+                            inactiveLetters.sortBy { it.level }
+                        } else {
+                            activeLetters.add(resultChamber[letterInd])
+                            activeLetters.sortBy { it.level }
                         }
-                }
-            }
-
-            Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.7f)) {
-                LetterGrid(
-                    letters = resultChamber,
-                    title = AppState.translate("result_chamber_title"),
-                    subTitle = AppState.translate("result_chamber_sub_title")
-                ) { letterInd: Int, rightMouseBtn: Boolean ->
-                    if (rightMouseBtn) {
-                        inactiveLetters.add(resultChamber[letterInd])
-                        inactiveLetters.sortBy { it.level }
-                    } else {
-                        activeLetters.add(resultChamber[letterInd])
-                        activeLetters.sortBy { it.level }
+                        resultChamber.removeAt(letterInd)
                     }
-                    resultChamber.removeAt(letterInd)
                 }
+
             }
 
-        }
+            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                SimpleButton(text = AppState.translate("main_menu_button")) {
+                    persistLetters()
+                    AppState.screenState(ScreenType.MainMenu)
+                }
 
-        Row {
-            SimpleButton(text = AppState.translate("main_menu_button")) {
-                persistLetters()
-                AppState.screenState(ScreenType.MainMenu)
-            }
-
-            SimpleButton(text = AppState.translate("letter_overview_button")) {
-                persistLetters()
-                AppState.screenState(ScreenType.LetterOverview)
+                SimpleButton(text = AppState.translate("letter_overview_button")) {
+                    persistLetters()
+                    AppState.screenState(ScreenType.LetterOverview)
+                }
             }
         }
     }
+
 }

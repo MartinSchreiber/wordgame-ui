@@ -86,7 +86,6 @@ object AppState {
     fun gameData(): GameData {
         val gameData = Converter.toGameData(wordGame!!, loot)
         gameData.persist(playerData!!.id, language())
-        gameDataList.add(gameData)
         return gameData
     }
 

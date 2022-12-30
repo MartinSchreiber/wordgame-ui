@@ -1,10 +1,16 @@
 package view.gameplay
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import model.Letter
 import model.LetterChambers
 
@@ -23,10 +29,30 @@ fun LetterChambers(letterChambers: LetterChambers) {
 
 @Composable
 fun LetterChamber(letter: MutableState<Letter?>, open: Boolean) {
-    if (open) {
-        // on null letter is borrowed (in currently typed word)
-        Text(text = letter.value?.toString() ?: "(=)")
+    val painter = if (open) {
+        painterResource("svg/letter_chamber_open.svg")
     } else {
-        Text(text = "(?)")
+        painterResource("svg/letter_chamber_closed.svg")
+    }
+    Box {
+        Image(
+            painter = painter,
+            alignment = Alignment.Center,
+            contentDescription = letter.value?.letter.toString(),
+            modifier = Modifier.requiredSize(39f.dp)
+        )
+        if (open && letter.value != null) {
+            Letter(letter = letter.value!!, modifier = Modifier.align(Alignment.Center))
+        }
     }
 }
+
+//@Composable
+//fun LetterChamber(letter: MutableState<Letter?>, open: Boolean) {
+//    if (open) {
+//        // on null letter is borrowed (in currently typed word)
+//        Text(text = letter.value?.toString() ?: "(=)")
+//    } else {
+//        Text(text = "(?)")
+//    }
+//}

@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ScrollableBox(modifier: Modifier, content: @Composable ColumnScope.() -> Unit) {
+fun ScrollableBox(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
     Box(
         modifier = modifier
     ) {
