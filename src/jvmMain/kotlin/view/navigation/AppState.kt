@@ -124,6 +124,7 @@ object AppState {
         loot = LetterUtil.getLootedLetters(level, language())
 
         playerData?.laboratory?.get(language())?.inactiveLetters?.addAll(loot)
+        playerData?.persist()
     }
 
     // ui-functions

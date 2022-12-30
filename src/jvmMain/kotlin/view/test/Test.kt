@@ -40,7 +40,7 @@ fun TestLetter(letter: Letter) {
         Image(
             painter = painterMap[letter.type]!!,
             alignment = Alignment.Center,
-            contentDescription = null, //TODO
+            contentDescription = null,
             modifier = Modifier.requiredSize(30f.dp)
         )
         Text(

@@ -1,9 +1,7 @@
 package view.menu
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -46,45 +44,42 @@ val onKeyEvent = { newPlayerName: String, ev: KeyEvent ->
 }
 
 @Composable
-fun PlayerMenu() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.align(Alignment.Center)) {
-            val newPlayerName = remember { mutableStateOf("") }
+fun PlayerMenu(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        val newPlayerName = remember { mutableStateOf("") }
 
-            PlayerDataRepo.getList().forEach { playerData ->
-                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    SimpleButton(text = "${playerData.id} - ${playerData.name}") { redirect(playerData) }
-                }
-            }
-
-
+        PlayerDataRepo.getList().forEach { playerData ->
             Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                Text(text = AppState.translate("new_player_title"), color = Color.White)
-            }
-
-            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-
-                TextField(
-                    value = newPlayerName.value,
-                    onValueChange = { newPlayerName.value = it },
-                    label = { Text(AppState.translate("new_player_input_label")) },
-                    colors = TextFieldDefaults.textFieldColors(
-                        textColor = Color.White,
-                        placeholderColor = Color.White,
-                        focusedLabelColor = Color.White,
-                        unfocusedLabelColor = Color.LightGray
-                    ),
-                    singleLine = true,
-                    modifier = Modifier.onPreviewKeyEvent { ev ->
-                        onKeyEvent(newPlayerName.value, ev)
-                    }
-                )
-            }
-
-            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                SimpleButton(text = AppState.translate("add_player_button")) { persistAndRedirect(newPlayerName.value) }
+                SimpleButton(text = "${playerData.id} - ${playerData.name}") { redirect(playerData) }
             }
         }
-    }
 
+
+        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            Text(text = AppState.translate("new_player_title"), color = Color.White)
+        }
+
+        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+
+            TextField(
+                value = newPlayerName.value,
+                onValueChange = { newPlayerName.value = it },
+                label = { Text(AppState.translate("new_player_input_label")) },
+                colors = TextFieldDefaults.textFieldColors(
+                    textColor = Color.White,
+                    placeholderColor = Color.White,
+                    focusedLabelColor = Color.White,
+                    unfocusedLabelColor = Color.LightGray
+                ),
+                singleLine = true,
+                modifier = Modifier.onPreviewKeyEvent { ev ->
+                    onKeyEvent(newPlayerName.value, ev)
+                }
+            )
+        }
+
+        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            SimpleButton(text = AppState.translate("add_player_button")) { persistAndRedirect(newPlayerName.value) }
+        }
+    }
 }

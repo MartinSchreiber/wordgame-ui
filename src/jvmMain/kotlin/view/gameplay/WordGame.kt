@@ -1,10 +1,8 @@
 package view.gameplay
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -81,43 +79,40 @@ val onGameOver = {
 
 @Composable
 @Preview
-fun WordGame() {
+fun WordGame(modifier: Modifier = Modifier) {
     val wordGame = AppState.newGame()
 
     backgroundTasks(wordGame) { onGameOver() }
 
     MaterialTheme {
+        Column(modifier = modifier) {
+            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                GameField(wordGame.gameField)
 
-        Box(modifier = Modifier.fillMaxSize()) {
-            Column(modifier = Modifier.align(Alignment.Center)) {
-                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    GameField(wordGame.gameField)
-
-                    WordList(wordGame.typedWords.reversed()) { ind: Int, word: Word ->
-                        "${wordGame.typedWords.size - ind} - "
-                    }
+                WordList(wordGame.typedWords.reversed()) { ind: Int, word: Word ->
+                    "${wordGame.typedWords.size - ind} - "
                 }
+            }
 
-                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    WordQueue(wordGame.wordQueue)
-                }
+            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                WordQueue(wordGame.wordQueue)
+            }
 
-                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    LetterChambers(wordGame.letterChambers)
-                }
+            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                LetterChambers(wordGame.letterChambers)
+            }
 
-                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    WordInput(
-                        text = wordGame.textInput,
-                        word = wordGame.wordInput,
-                        onValueChange = { text -> onValueChange(wordGame, text) },
-                        onKeyEvent = { ev -> onKeyEvent(wordGame, ev) })
-                }
+            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                WordInput(
+                    text = wordGame.textInput,
+                    word = wordGame.wordInput,
+                    onValueChange = { text -> onValueChange(wordGame, text) },
+                    onKeyEvent = { ev -> onKeyEvent(wordGame, ev) })
+            }
 
-                Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                    SimpleButton(text = AppState.translate("main_menu_button")) {
-                        AppState.screenState(ScreenType.MainMenu)
-                    }
+            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                SimpleButton(text = AppState.translate("main_menu_button")) {
+                    AppState.screenState(ScreenType.MainMenu)
                 }
             }
         }

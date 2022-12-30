@@ -18,42 +18,39 @@ import view.navigation.AppState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun StatisticsBoard() {
+fun StatisticsBoard(modifier: Modifier = Modifier) {
     val gameDataList = AppState.gameDataList()
     val displayedGameData = remember { mutableStateOf(gameDataList.firstOrNull()) }
 
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.align(Alignment.Center)) {
-            Row(Modifier.fillMaxHeight(0.9f).fillMaxWidth().align(Alignment.CenterHorizontally)) {
-                ScrollableBox(modifier = Modifier.fillMaxWidth(0.3f).fillMaxHeight()) {
-                    gameDataList.forEach {
-                        val modifier = if (it == displayedGameData.value!!) {
-                            Modifier.background(Color.Gray)
-                        } else {
-                            Modifier
-                        }
-
-                        Text(
-                            text = it.timeStamp,
-                            modifier = modifier.onClick { displayedGameData.value = it },
-                            color = Color.White
-                        )
+    Column(modifier = modifier) {
+        Row(Modifier.fillMaxHeight(0.9f).fillMaxWidth().align(Alignment.CenterHorizontally)) {
+            ScrollableBox(modifier = Modifier.fillMaxWidth(0.3f).fillMaxHeight()) {
+                gameDataList.forEach {
+                    val modifierText = if (it == displayedGameData.value!!) {
+                        Modifier.background(Color.Gray)
+                    } else {
+                        Modifier
                     }
-                }
 
-                Column(modifier = Modifier.fillMaxSize()) {
-                    displayedGameData.value?.let {
-                        GameData(it)
-                    }
+                    Text(
+                        text = it.timeStamp,
+                        modifier = modifierText.onClick { displayedGameData.value = it },
+                        color = Color.White
+                    )
                 }
             }
 
-            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                SimpleButton(text = AppState.translate("main_menu_button")) { AppState.screenState(ScreenType.MainMenu) }
-
-                SimpleButton(text = AppState.translate("statistics_overview_button")) { AppState.screenState(ScreenType.StatisticsOverview) }
+            Column(modifier = Modifier.fillMaxSize()) {
+                displayedGameData.value?.let {
+                    GameData(it)
+                }
             }
+        }
+
+        Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+            SimpleButton(text = AppState.translate("main_menu_button")) { AppState.screenState(ScreenType.MainMenu) }
+
+            SimpleButton(text = AppState.translate("statistics_overview_button")) { AppState.screenState(ScreenType.StatisticsOverview) }
         }
     }
 }
