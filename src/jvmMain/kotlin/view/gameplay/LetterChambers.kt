@@ -28,7 +28,7 @@ fun LetterChambers(letterChambers: LetterChambers) {
 }
 
 @Composable
-fun LetterChamber(letter: MutableState<Letter?>, open: Boolean) {
+fun LetterChamber(letter: MutableState<Letter?>, open: Boolean, scale: Float = 1f) {
     val painter = if (open) {
         painterResource("svg/letter_chamber_open.svg")
     } else {
@@ -39,20 +39,10 @@ fun LetterChamber(letter: MutableState<Letter?>, open: Boolean) {
             painter = painter,
             alignment = Alignment.Center,
             contentDescription = letter.value?.letter.toString(),
-            modifier = Modifier.requiredSize(39f.dp)
+            modifier = Modifier.requiredSize((39f * scale).dp)
         )
         if (open && letter.value != null) {
-            Letter(letter = letter.value!!, modifier = Modifier.align(Alignment.Center))
+            LetterDisplay(letter = letter.value!!, modifier = Modifier.align(Alignment.Center), scale = scale)
         }
     }
 }
-
-//@Composable
-//fun LetterChamber(letter: MutableState<Letter?>, open: Boolean) {
-//    if (open) {
-//        // on null letter is borrowed (in currently typed word)
-//        Text(text = letter.value?.toString() ?: "(=)")
-//    } else {
-//        Text(text = "(?)")
-//    }
-//}

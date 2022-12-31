@@ -25,6 +25,7 @@
   "combination_chamber_sub_title": "Left Click: Move to Inactive Letters\nRight Click: Move to Active Letters",
   "result_chamber_title": "Result Chamber",
   "result_chamber_sub_title": "Left Click: Move to Active Letters\nRight Click: Move to Inactive Letters",
+  "combine_letters_button": "Combine Letters!",
   "letter_overview_title": "Letter Values Overview\n",
   "letter_overview_points_label": "%d Points: %s",
   "stat_level_won": "Level %s Won!",

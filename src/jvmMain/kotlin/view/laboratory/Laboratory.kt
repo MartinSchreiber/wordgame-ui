@@ -71,7 +71,7 @@ fun Laboratory(modifier: Modifier = Modifier) {
         }
 
         Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-            Column(modifier = Modifier.fillMaxWidth(0.47f).fillMaxHeight(0.7f)) {
+            Column(modifier = Modifier.fillMaxWidth(0.5f).fillMaxHeight(0.7f).padding(end = 20f.dp)) {
                 LetterGrid(
                     letters = combinationChamber,
                     title = AppState.translate("combination_chamber_title"),
@@ -89,14 +89,6 @@ fun Laboratory(modifier: Modifier = Modifier) {
             }
 
             Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                SimpleButton(text = "=>") {
-                    LetterUtil.combine(combinationChamber, AppState.language())
-                        .takeIf { it.isNotEmpty() }
-                        ?.let {
-                            resultChamber.addAll(it)
-                            combinationChamber.clear()
-                        }
-                }
             }
 
             Column(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.7f)) {
@@ -122,6 +114,15 @@ fun Laboratory(modifier: Modifier = Modifier) {
             SimpleButton(text = AppState.translate("main_menu_button")) {
                 persistLetters()
                 AppState.screenState(ScreenType.MainMenu)
+            }
+
+            SimpleButton(text = AppState.translate("combine_letters_button")) {
+                LetterUtil.combine(combinationChamber, AppState.language())
+                    .takeIf { it.isNotEmpty() }
+                    ?.let {
+                        resultChamber.addAll(it)
+                        combinationChamber.clear()
+                    }
             }
 
             SimpleButton(text = AppState.translate("letter_overview_button")) {

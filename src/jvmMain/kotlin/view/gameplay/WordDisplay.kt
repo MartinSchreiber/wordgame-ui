@@ -26,25 +26,30 @@ fun WordDisplay(word: Word) {
     val painterMap = LetterType.values().associateWith { painterResource(it.image) }
     Row {
         word.letters.forEach {
-            Letter(it, painterMap[it.type]!!)
+            LetterDisplay(it, painterMap[it.type]!!)
         }
     }
 }
 
 @OptIn(ExperimentalUnitApi::class)
 @Composable
-fun Letter(letter: Letter, painter: Painter = painterResource(letter.type.image), modifier: Modifier = Modifier) {
+fun LetterDisplay(
+    letter: Letter,
+    painter: Painter = painterResource(letter.type.image),
+    scale: Float = 1f,
+    modifier: Modifier = Modifier
+) {
     Box(modifier = modifier) {
         Image(
             painter = painter,
             alignment = Alignment.Center,
             contentDescription = letter.letter.toString(),
-            modifier = Modifier.requiredSize(30f.dp)
+            modifier = Modifier.requiredSize((30f * scale).dp)
         )
         Text(
             text = letter.letter.toString(),
             modifier = Modifier.align(Alignment.TopCenter),
-            fontSize = TextUnit(22.5f, TextUnitType.Sp),
+            fontSize = TextUnit((22.5f * scale), TextUnitType.Sp),
             fontWeight = FontWeight.Bold,
             fontFamily = FontFamily.Monospace,
             color = Color.LightGray
